@@ -1,0 +1,492 @@
+/* ------------------------------------------------------------------
+   style.css — 咕噜的美食餐车
+   固定 1280×720 舞台，整体等比缩放到任意屏幕。
+------------------------------------------------------------------ */
+
+:root {
+  --ink:   #2b2340;
+  --cream: #fff6e6;
+  --sun:   #ffd23f;
+  --grass: #4aa86b;
+  --deep:  #1f4a34;
+  --grape: #8b5fe0;
+  --shadow: 0 8px 0 rgba(43,35,64,.22);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #14352a;
+  font-family: "Nunito", "Baloo 2", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  user-select: none;
+  touch-action: manipulation;
+}
+
+#viewport {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, #2b6b4d, #14352a 70%);
+}
+
+#stage {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 26px;
+  background: #cfe8dd;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .45);
+  transform-origin: center center;
+}
+
+/* ---------------- 场景骨架 ---------------- */
+
+.scene { position: absolute; inset: 0; opacity: 1; transition: opacity .18s ease; }
+.scene.fade { opacity: 0; }
+
+.bg { position: absolute; inset: 0; }
+.bg svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.layer { position: absolute; inset: 0; }
+.pos   { position: absolute; }
+.pos > svg, .pos svg { width: 100%; height: auto; display: block; }
+
+.fg { position: absolute; inset: 0; pointer-events: none; }
+
+#fx { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
+
+/* ---------------- HUD ---------------- */
+
+#hud {
+  position: absolute;
+  inset: 14px 16px auto 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 50;
+  pointer-events: none;
+}
+.hud-left, .hud-right { display: flex; gap: 10px; pointer-events: auto; }
+
+.icon-btn {
+  width: 52px; height: 52px;
+  border: none; border-radius: 16px;
+  background: rgba(255, 246, 230, .92);
+  color: var(--deep);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .2);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: transform .1s ease;
+}
+.icon-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(43, 35, 64, .2); }
+.icon-btn svg { width: 26px; height: 26px; fill: currentColor; }
+.icon-btn.text-btn { font-size: 18px; font-weight: 800; }
+
+.ico-off { display: none; }
+body.muted .ico-on  { display: none; }
+body.muted .ico-off { display: block; }
+
+.stars-badge {
+  display: flex; align-items: center; gap: 8px;
+  height: 52px; padding: 0 20px 0 14px;
+  border-radius: 16px;
+  background: rgba(255, 246, 230, .92);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .2);
+  font-size: 24px; font-weight: 900; color: var(--deep);
+}
+.stars-badge svg { width: 28px; height: 28px; fill: var(--sun); }
+
+/* ---------------- 通用组件 ---------------- */
+
+.big-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 18px 44px;
+  font-size: 30px;
+  font-weight: 900;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(180deg, #ff9a3c, #f4722c);
+  box-shadow: 0 8px 0 #c9541c, 0 12px 24px rgba(0, 0, 0, .18);
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .1s ease;
+  white-space: nowrap;
+}
+.big-btn:hover { filter: brightness(1.05); }
+.big-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #c9541c; }
+.big-btn.bottom {
+  position: absolute; left: 50%; bottom: 34px;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+.big-btn.bottom:active { transform: translateX(-50%) translateY(6px); box-shadow: 0 2px 0 #c9541c; }
+/* 接单场景：按钮直接挂在对话气泡下面 */
+.big-btn.under-bubble { position: absolute; right: 96px; top: 288px; z-index: 20; }
+
+.banner {
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  max-width: 720px;
+  padding: 12px 34px;
+  border-radius: 999px;
+  background: rgba(255, 246, 230, .95);
+  box-shadow: var(--shadow);
+  font-size: 30px; font-weight: 900; color: var(--deep);
+  text-align: center;
+  z-index: 20;
+}
+
+.chip {
+  position: absolute; top: 96px; left: 50%; transform: translateX(-50%);
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: rgba(43, 35, 64, .55);
+  color: #fff6e6;
+  font-size: 20px; font-weight: 700;
+  z-index: 20;
+}
+.chip.bottom-chip { top: auto; bottom: 28px; }
+
+.card {
+  background: var(--cream);
+  border-radius: 28px;
+  padding: 26px 28px;
+  box-shadow: 0 12px 0 rgba(43, 35, 64, .18), 0 24px 50px rgba(0, 0, 0, .2);
+}
+
+/* 顶部飘字提示 */
+.toast {
+  position: absolute; top: 96px; left: 50%; transform: translateX(-50%);
+  padding: 12px 28px; border-radius: 999px;
+  background: #fff;
+  font-size: 24px; font-weight: 800; color: var(--ink);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .2);
+  animation: toastIn .3s cubic-bezier(.2,1.4,.4,1);
+  z-index: 70;
+}
+.toast.warn { background: #ffe8a8; color: #8a5a12; }
+.toast.good { background: #cdf0d8; color: #1f4a34; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(.9); } }
+
+/* 飞行中的道具 / 碎片 */
+.fly { position: absolute; transform: translate(-50%, -50%); z-index: 65; }
+.fly svg { width: 100%; height: 100%; }
+.particle {
+  position: absolute; width: 16px; height: 16px;
+  border-radius: 4px;
+  transform: translate(-50%, -50%);
+}
+.particle.confetti { width: 14px; height: 22px; border-radius: 3px; transform: none; }
+
+/* ---------------- 动画 ---------------- */
+
+@keyframes bob   { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+@keyframes sway  {
+  0%,100% { transform: rotate(calc(var(--rot) - 5deg)) scale(var(--sc)); }
+  50%     { transform: rotate(calc(var(--rot) + 5deg)) scale(var(--sc)); }
+}
+@keyframes popIn {
+  0%   { opacity: 0; transform: scale(.5); }
+  70%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes walkIn {
+  from { opacity: 0; transform: translateX(300px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shakeIt {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-10px) rotate(-5deg); }
+  40% { transform: translateX(10px) rotate(5deg); }
+  60% { transform: translateX(-7px) rotate(-3deg); }
+  80% { transform: translateX(7px) rotate(3deg); }
+}
+@keyframes bumpIt {
+  0%,100% { transform: scale(1) translateY(0); }
+  35% { transform: scale(1.07, .93) translateY(6px); }
+  70% { transform: scale(.97, 1.05) translateY(-6px); }
+}
+@keyframes nudgeIt { 0%,100% { transform: scale(1); } 40% { transform: scale(1.14) rotate(-6deg); } }
+
+.bob    { animation: bob 2.6s ease-in-out infinite; }
+.float  { animation: float 2.4s ease-in-out infinite; }
+.pop-in { animation: popIn .45s cubic-bezier(.2,1.5,.4,1) both; }
+.walk-in{ animation: walkIn .6s cubic-bezier(.2,.8,.3,1) both, bob 2.6s ease-in-out .6s infinite; }
+.shake  { animation: shakeIt .45s ease; }
+.bump   { animation: bumpIt .4s ease; }
+.nudge  { animation: nudgeIt .35s ease; }
+
+/* ---------------- 首页 & 通关页 ---------------- */
+
+.truck-title { left: 10px; bottom: 22px; width: 540px; }
+.chef-title  { left: 520px; bottom: 30px; width: 250px; }
+
+.title-card { right: 46px; top: 74px; width: 470px; position: absolute; text-align: center; }
+.title-card h1 { font-size: 46px; line-height: 1.15; color: var(--deep); }
+.title-card .sub { margin: 10px 0 20px; font-size: 21px; font-weight: 700; color: #7a6a55; }
+.title-card .big-btn { margin-bottom: 20px; }
+
+.how { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; }
+.how-item { display: flex; align-items: center; gap: 10px; }
+.how-art { width: 48px; height: 48px; flex: none; display: grid; place-items: center; }
+.how-art svg { width: 100%; height: 100%; }
+.how-item span { font-size: 16px; font-weight: 700; line-height: 1.25; color: #5c5040; }
+.how-item b {
+  display: inline-grid; place-items: center;
+  width: 20px; height: 20px; margin-right: 6px;
+  border-radius: 50%; background: var(--grape); color: #fff;
+  font-size: 13px; vertical-align: 1px;
+}
+
+.crowd {
+  position: absolute; left: 40px; bottom: 20px;
+  display: flex; align-items: flex-end; gap: 6px;
+}
+.crowd-one { width: 140px; }
+.crowd-one svg { width: 100%; height: auto; }
+/* 通关页：主厨站到右边，别挡住排队道谢的客人 */
+.sc-finale .chef-title { left: 832px; bottom: 24px; width: 212px; }
+
+/* ---------------- 接单 / 上菜 ---------------- */
+
+.truck-side { left: -30px; bottom: 34px; width: 610px; }
+.chef-side  { left: 520px; bottom: 40px; width: 235px; }
+.cust-order { right: 130px; bottom: 46px; width: 260px; }
+.cust-order.happy { animation: bumpIt .5s ease 2; }
+
+.bubble {
+  position: absolute; right: 60px; top: 96px; width: 400px;
+  background: var(--cream);
+  border-radius: 28px;
+  padding: 20px 24px;
+  display: flex; align-items: center; gap: 18px;
+  box-shadow: 0 10px 0 rgba(43,35,64,.18), 0 20px 40px rgba(0,0,0,.18);
+  z-index: 15;
+}
+.bubble::after {
+  content: ''; position: absolute; bottom: -22px; right: 90px;
+  border: 16px solid transparent;
+  border-top-color: var(--cream); border-bottom: 0;
+  filter: drop-shadow(0 8px 0 rgba(43,35,64,.14));
+}
+.bubble-dish { width: 92px; height: 92px; flex: none; }
+.bubble-dish svg { width: 100%; height: 100%; }
+.bubble p { font-size: 26px; font-weight: 900; color: var(--deep); line-height: 1.25; }
+
+.serve-dish { left: 752px; bottom: 152px; width: 160px; cursor: grab; z-index: 25; }
+.serve-dish.grabbing { cursor: grabbing; }
+.dish-inner { position: relative; }
+.dish-inner svg { width: 100%; height: auto; position: relative; z-index: 2; }
+.plate {
+  position: absolute; left: 50%; bottom: -14px;
+  width: 190px; height: 34px; margin-left: -95px;
+  border-radius: 50%;
+  background: #fffdf7;
+  box-shadow: 0 8px 0 #d9d2c2, 0 16px 26px rgba(0,0,0,.22);
+}
+
+/* ---------------- 开车 ---------------- */
+
+.road-scroll { display: flex; width: 200%; animation: roadRun 3s linear infinite; }
+.road-scroll svg { position: relative; width: 50%; height: 100%; flex: none; }
+@keyframes roadRun { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.drive-truck {
+  left: 50%; bottom: 78px; width: 620px; margin-left: -310px;
+  animation: bumpy .32s ease-in-out infinite;
+}
+@keyframes bumpy {
+  0%,100% { transform: translateY(0) rotate(-.5deg); }
+  50%     { transform: translateY(-9px) rotate(.5deg); }
+}
+.puff {
+  position: absolute; left: -10px; bottom: 30px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: rgba(255,255,255,.9);
+  animation: puffOut 1s linear infinite;
+}
+.puff.p2 { animation-delay: .5s; width: 34px; height: 34px; }
+@keyframes puffOut {
+  from { opacity: .8; transform: translate(0,0) scale(.5); }
+  to   { opacity: 0;  transform: translate(-150px,-40px) scale(1.6); }
+}
+
+/* ---------------- 采集 ---------------- */
+
+.forage-item {
+  position: absolute;
+  width: 118px; height: 118px;
+  margin: -59px 0 0 -59px;
+  border: none; background: none; padding: 0;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 8px rgba(20,50,35,.3));
+  animation: sway 3.2s ease-in-out infinite;
+  z-index: 10;
+}
+.forage-item svg { width: 100%; height: 100%; }
+.forage-item:hover { filter: drop-shadow(0 8px 12px rgba(20,50,35,.45)) brightness(1.06); }
+.forage-item.shake { animation: shakeIt .45s ease; }
+
+.basket-hud {
+  position: absolute; left: 24px; bottom: 22px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 22px 12px 14px;
+  border-radius: 26px;
+  background: rgba(255, 246, 230, .95);
+  box-shadow: var(--shadow);
+  z-index: 30;
+}
+.basket-art { width: 78px; flex: none; }
+.basket-art svg { width: 100%; height: auto; }
+.slots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 250px; }
+.slot {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: rgba(43, 35, 64, .1);
+  display: grid; place-items: center;
+}
+.slot.full { background: rgba(74, 168, 107, .22); animation: popIn .35s cubic-bezier(.2,1.5,.4,1); }
+.slot svg { width: 100%; height: 100%; }
+.count { font-size: 34px; font-weight: 900; color: var(--deep); }
+.count em { font-style: normal; font-size: 22px; opacity: .55; }
+
+.chef-forage { right: 40px; bottom: 30px; width: 200px; z-index: 25; }
+
+/* ---------------- 下厨 ---------------- */
+
+.recipe-card { position: absolute; left: 34px; top: 92px; width: 320px; padding: 20px 22px; }
+.recipe-card h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; text-align: center; }
+.recipe-card ol { list-style: none; display: grid; gap: 10px; }
+.recipe-card li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 16px;
+  background: rgba(43, 35, 64, .06);
+  transition: background .2s ease;
+}
+.recipe-card li .num {
+  width: 30px; height: 30px; flex: none;
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--grape); color: #fff; font-size: 17px;
+}
+.recipe-card li .ing { width: 44px; height: 44px; flex: none; }
+.recipe-card li .ing svg { width: 100%; height: 100%; }
+.recipe-card li .nm { font-size: 21px; font-weight: 800; color: #5c5040; flex: 1; }
+.recipe-card li .tick { font-size: 24px; font-weight: 900; color: var(--grass); opacity: 0; }
+.recipe-card li.done { background: rgba(74, 168, 107, .2); }
+.recipe-card li.done .tick { opacity: 1; }
+.recipe-card li.done .nm { color: var(--deep); }
+.recipe-card li.now {
+  background: var(--sun);
+  box-shadow: 0 0 0 4px rgba(255, 210, 63, .45);
+  animation: nowPulse 1.4s ease-in-out infinite;
+}
+@keyframes nowPulse { 0%,100% { box-shadow: 0 0 0 4px rgba(255,210,63,.45); } 50% { box-shadow: 0 0 0 12px rgba(255,210,63,0); } }
+
+.appliance-wrap { left: 690px; bottom: 244px; width: 290px; z-index: 12; }
+.appliance-wrap svg { width: 100%; height: auto; }
+.appliance-wrap.ready { filter: drop-shadow(0 0 22px rgba(255, 210, 63, .8)); }
+
+.steam {
+  position: absolute; left: 50%; top: -30px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.85);
+  opacity: 0;
+}
+.appliance-wrap.ready .steam { animation: steamUp 2.2s ease-in-out infinite; }
+.steam.s1 { margin-left: -46px; animation-delay: .1s; }
+.steam.s2 { margin-left: -8px; animation-delay: .8s; }
+.steam.s3 { margin-left: 26px; animation-delay: 1.5s; }
+@keyframes steamUp {
+  0%   { opacity: 0; transform: translateY(0) scale(.5); }
+  35%  { opacity: .8; }
+  100% { opacity: 0; transform: translateY(-90px) scale(1.5); }
+}
+
+.chef-cook { left: 400px; bottom: 232px; width: 210px; z-index: 12; }
+
+.shelf {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  display: flex; gap: 14px;
+  padding: 16px 20px;
+  border-radius: 26px;
+  background: rgba(255, 246, 230, .95);
+  box-shadow: var(--shadow);
+  z-index: 30;
+}
+.ing-tile {
+  width: 122px; padding: 10px 6px 8px;
+  border: none; border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 5px 0 rgba(43, 35, 64, .16);
+  cursor: grab;
+  display: grid; justify-items: center; gap: 2px;
+  font-family: inherit;
+  touch-action: none;
+  transition: box-shadow .1s ease;
+}
+.ing-tile svg { width: 74px; height: 74px; }
+.ing-tile span { font-size: 18px; font-weight: 800; color: #5c5040; }
+.ing-tile.grabbing { cursor: grabbing; box-shadow: 0 14px 22px rgba(0,0,0,.28); z-index: 40; position: relative; }
+.ing-tile:disabled, .ing-tile.used { opacity: .32; cursor: default; box-shadow: none; }
+
+.cook-controls {
+  position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%);
+  width: 480px; text-align: center;
+  z-index: 30;
+  transition: opacity .3s ease, transform .3s ease;
+}
+.cook-controls.hide { opacity: 0; transform: translateX(-50%) translateY(30px); pointer-events: none; }
+.cook-controls .big-btn { width: 100%; }
+.progress {
+  margin: 14px auto 8px; width: 100%; height: 22px;
+  border-radius: 999px; background: rgba(43,35,64,.28); overflow: hidden;
+}
+.progress i { display: block; height: 100%; width: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--sun), #7ad48f); transition: width .18s ease; }
+.cook-controls .hint { font-size: 18px; font-weight: 700; color: #fff6e6;
+  text-shadow: 0 2px 6px rgba(0,0,0,.5); }
+
+/* 做好的菜端到台面正中央亮个相 */
+.dish-pop {
+  left: 50%; margin-left: -115px; bottom: 148px; width: 230px;
+  animation: popIn .5s cubic-bezier(.2,1.6,.4,1) both, float 2.4s ease-in-out .5s infinite;
+  z-index: 35;
+  filter: drop-shadow(0 12px 16px rgba(0,0,0,.3));
+}
+
+/* ---------------- 过关面板 ---------------- */
+
+.overlay {
+  position: absolute; inset: 0; z-index: 55;
+  display: grid; place-items: center;
+  background: rgba(20, 40, 32, .55);
+  backdrop-filter: blur(3px);
+}
+.panel { width: 460px; text-align: center; }
+.panel h2 { font-size: 40px; color: var(--deep); }
+.panel .sub { margin: 6px 0 22px; font-size: 24px; font-weight: 700; color: #7a6a55; }
+.big-star { width: 120px; height: 120px; margin: -70px auto 8px;
+  animation: popIn .6s cubic-bezier(.2,1.7,.4,1) both; }
+.big-star svg { width: 100%; height: 100%; filter: drop-shadow(0 8px 12px rgba(0,0,0,.25)); }
+
+/* ---------------- 竖屏提示 ---------------- */
+
+#rotate-hint { display: none; }
+@media (orientation: portrait) and (max-width: 900px) {
+  #rotate-hint {
+    display: grid; place-items: center;
+    position: fixed; inset: 0; z-index: 100;
+    background: #1f4a34; color: var(--cream); text-align: center; padding: 30px;
+  }
+  .rotate-inner svg { width: 90px; height: 90px; fill: var(--cream);
+    animation: tilt 1.8s ease-in-out infinite; }
+  .rotate-inner p { margin-top: 18px; font-size: 22px; font-weight: 800; }
+  @keyframes tilt { 0%,100% { transform: rotate(0); } 50% { transform: rotate(90deg); } }
+}

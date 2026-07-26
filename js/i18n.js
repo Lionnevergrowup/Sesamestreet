@@ -1,0 +1,106 @@
+/* ------------------------------------------------------------------
+   i18n.js — 中英双语文案 / bilingual copy
+------------------------------------------------------------------ */
+
+const I18N = (() => {
+  const STR = {
+    zh: {
+      rotate: '把设备横过来玩更好哦！',
+      gameTitle: '咕噜的美食餐车',
+      gameSub: '接单 · 采食材 · 下厨 · 上菜',
+      play: '开始营业',
+      how1: '听听客人想吃什么',
+      how2: '开车去把新鲜食材摘回来',
+      how3: '照着食谱一步一步做',
+      how4: '把热腾腾的菜端给客人',
+      customerLine: '我想吃一份{dish}！',
+      orderBtn: '好的，交给我！',
+      needTitle: '今天要做：{dish}',
+      driveTitle: '去{place}摘{ing}',
+      driveBtn: '出发！',
+      driving: '路上颠颠颠…',
+      forageTitle: '摘{count}个{ing}',
+      forageOops: '这不是{ing}呀，再找找！',
+      forageDone: '食材齐啦，回餐车！',
+      backBtn: '回餐车做菜',
+      cookTitle: '照着食谱放食材',
+      recipeTitle: '{dish}食谱',
+      nextIng: '接下来放：{ing}',
+      wrongIng: '先看看食谱第{n}步哦！',
+      cookNow: '食材都放好了，开工！',
+      cookBtn: { blender: '搅一搅', griddle: '煎一煎', oven: '烤一烤', pot: '煮一煮', freezer: '冻一冻' },
+      cookHint: '连续点击直到做好',
+      dishReady: '{dish}做好啦！',
+      serveBtn: '端给客人',
+      serveTitle: '把{dish}端给客人',
+      serveHint: '把菜拖给客人，或者点一下它',
+      yum: '哇！太好吃啦，谢谢咕噜！',
+      levelClear: '第{n}关完成！',
+      nextBtn: '下一位客人',
+      allDone: '今天的客人都吃饱啦！',
+      allDoneSub: '你一共得到{n}颗星星',
+      replay: '再来一次'
+    },
+    en: {
+      rotate: 'Turn your device sideways to play!',
+      gameTitle: "Gulu's Foodie Truck",
+      gameSub: 'Take the order · Gather · Cook · Serve',
+      play: 'Open the truck',
+      how1: 'Listen to what the customer wants',
+      how2: 'Drive out and pick fresh ingredients',
+      how3: 'Follow the recipe step by step',
+      how4: 'Serve it up while it is hot',
+      customerLine: 'I would love some {dish}!',
+      orderBtn: 'You got it!',
+      needTitle: "Today's dish: {dish}",
+      driveTitle: 'Off to the {place} for {ing}',
+      driveBtn: "Let's go!",
+      driving: 'Bumpity bump…',
+      forageTitle: 'Pick {count} {ing}',
+      forageOops: 'That is not a {ing} — keep looking!',
+      forageDone: 'All picked. Back to the truck!',
+      backBtn: 'Back to the truck',
+      cookTitle: 'Add them in recipe order',
+      recipeTitle: '{dish} recipe',
+      nextIng: 'Add next: {ing}',
+      wrongIng: 'Check step {n} of the recipe!',
+      cookNow: 'Everything is in. Let us cook!',
+      cookBtn: { blender: 'Blend it', griddle: 'Flip it', oven: 'Bake it', pot: 'Stir it', freezer: 'Freeze it' },
+      cookHint: 'Keep tapping until it is done',
+      dishReady: '{dish} is ready!',
+      serveBtn: 'Serve it up',
+      serveTitle: 'Serve the {dish}',
+      serveHint: 'Drag the dish to the customer, or tap it',
+      yum: 'Yum! Thank you, Gulu!',
+      levelClear: 'Order {n} complete!',
+      nextBtn: 'Next customer',
+      allDone: 'Everyone is full and happy!',
+      allDoneSub: 'You earned {n} stars',
+      replay: 'Play again'
+    }
+  };
+
+  let lang = localStorage.getItem('gulu.lang') || 'zh';
+
+  function t(key, vars = {}) {
+    let s = STR[lang][key];
+    if (s === undefined) s = STR.zh[key] ?? key;
+    if (typeof s !== 'string') return s;
+    return s.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{${k}}`));
+  }
+
+  return {
+    t,
+    get lang() { return lang; },
+    /* 数据文件里的名字都是 {zh, en} 结构 */
+    name(obj) { return obj ? (obj[lang] ?? obj.zh) : ''; },
+    ing(id) { return this.name(INGREDIENTS[id]); },
+    place(id) { return this.name(PLACES[id]); },
+    toggle() {
+      lang = lang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('gulu.lang', lang);
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      return lang;
+    }
+  };
+})();
