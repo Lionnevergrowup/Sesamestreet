@@ -7,6 +7,8 @@
 
 直接用浏览器打开 `index.html` 就能玩，不需要装东西、不需要联网、没有构建步骤。
 
+**在线试玩：** <https://claude.ai/code/artifact/f640ed65-6f1e-4061-babe-8209f8ecc5c4>
+
 ## 玩法
 
 | 步骤 | 做什么 | 练到什么 |
@@ -48,7 +50,9 @@
 ## 项目结构
 
 ```
-index.html          页面骨架和 HUD
+index.html          页面骨架和 HUD（开发时用这个）
+build.js            打包脚本：node build.js → play.html
+play.html           单文件版本（所有样式和脚本内联），部署用的就是它
 css/style.css       全部样式；1280×720 固定舞台，等比缩放到任意屏幕
 js/audio.js         WebAudio 实时合成音效（无音频文件）
 js/art.js           全部美术：角色、食材、菜品、厨具、场景，都是生成的 SVG
@@ -65,7 +69,13 @@ js/game.js          场景状态机与交互
 # 双击 index.html 就行；想用服务器的话：
 python3 -m http.server 8000
 # 然后打开 http://localhost:8000
+
+# 改完源文件后重新打包单文件版：
+node build.js
 ```
+
+`play.html` 是从源文件生成的，别直接改它——改 `index.html` / `css/` / `js/`，然后重新跑 `node build.js`。
+打包时会把所有非 ASCII 字符转义成 `\uXXXX` 和数字字符引用，这样文件不管被当成什么编码读，中文都不会乱码。
 
 ---
 
