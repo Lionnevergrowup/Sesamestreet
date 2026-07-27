@@ -236,13 +236,14 @@ body.muted .ico-off { display: block; }
 }
 
 .crowd {
-  position: absolute; left: 40px; bottom: 20px;
-  display: flex; align-items: flex-end; gap: 6px;
+  position: absolute; left: 36px; bottom: 14px;
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  gap: 4px; width: 700px;
 }
-.crowd-one { width: 140px; }
+.crowd-one { width: 112px; }
 .crowd-one svg { width: 100%; height: auto; }
 
-.sc-finale .chef-title { left: 832px; bottom: 24px; width: 212px; }
+.sc-finale .chef-title { left: 908px; bottom: 16px; width: 202px; }
 
 .truck-side { left: -30px; bottom: 34px; width: 610px; }
 .chef-side  { left: 520px; bottom: 40px; width: 235px; }
@@ -328,26 +329,41 @@ body.muted .ico-off { display: block; }
   z-index: 30;
 }
 .basket-art { width: 78px; flex: none; }
+.basket-hud.two .basket-art { width: 66px; }
 .basket-art svg { width: 100%; height: auto; }
-.slots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 250px; }
+
+.basket-rows { display: flex; flex-direction: column; gap: 8px; }
+.basket-row { display: flex; align-items: center; gap: 12px; }
+.slots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 280px; }
 .slot {
   width: 40px; height: 40px; border-radius: 12px;
   background: rgba(43, 35, 64, .1);
   display: grid; place-items: center;
 }
+.basket-hud.two .slot { width: 32px; height: 32px; border-radius: 10px; }
 .slot.full { background: rgba(74, 168, 107, .22); animation: popIn .35s cubic-bezier(.2,1.5,.4,1); }
 .slot svg { width: 100%; height: 100%; }
-.count { font-size: 34px; font-weight: 900; color: var(--deep); }
+.count { font-size: 34px; font-weight: 900; color: var(--deep); min-width: 74px; }
+.basket-hud.two .count { font-size: 26px; min-width: 60px; }
 .count em { font-style: normal; font-size: 22px; opacity: .55; }
+.basket-hud.two .count em { font-size: 17px; }
+
+@keyframes driftAbout {
+  0%,100% { margin-left: -59px; margin-top: -59px; }
+  25%     { margin-left: -34px; margin-top: -74px; }
+  50%     { margin-left: -12px; margin-top: -52px; }
+  75%     { margin-left: -40px; margin-top: -40px; }
+}
+.forage-item.drift { animation: sway 3.2s ease-in-out infinite, driftAbout 9s ease-in-out infinite; }
 
 .chef-forage { right: 40px; bottom: 30px; width: 200px; z-index: 25; }
 
 .recipe-card { position: absolute; left: 34px; top: 92px; width: 320px; padding: 20px 22px; }
 .recipe-card h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; text-align: center; }
-.recipe-card ol { list-style: none; display: grid; gap: 10px; }
+.recipe-card ol { list-style: none; display: grid; gap: 7px; }
 .recipe-card li {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 10px; border-radius: 16px;
+  padding: 6px 10px; border-radius: 16px;
   background: rgba(43, 35, 64, .06);
   transition: background .2s ease;
 }
@@ -394,7 +410,7 @@ body.muted .ico-off { display: block; }
 
 .shelf {
   position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
-  display: flex; gap: 14px;
+  display: flex; gap: 10px;
   padding: 16px 20px;
   border-radius: 26px;
   background: rgba(255, 246, 230, .95);
@@ -402,7 +418,7 @@ body.muted .ico-off { display: block; }
   z-index: 30;
 }
 .ing-tile {
-  width: 122px; padding: 10px 6px 8px;
+  width: 116px; padding: 10px 6px 8px;
   border: none; border-radius: 20px;
   background: #fff;
   box-shadow: 0 5px 0 rgba(43, 35, 64, .16);
@@ -463,7 +479,7 @@ body.muted .ico-off { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bob, .float, .walk-in, .forage-item.sway,
+  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift,
   .road-scroll, .drive-truck, .puff,
   .appliance-wrap.ready .steam, .recipe-card li.now {
     animation: none !important;
@@ -493,6 +509,9 @@ body.muted .ico-off { display: block; }
       <div class="hud-left">
         <button id="btn-home" class="icon-btn" title="&#22238;&#21040;&#39318;&#39029;" aria-label="&#22238;&#21040;&#39318;&#39029;">
           <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+        </button>
+        <button id="btn-reload" class="icon-btn" title="&#37325;&#26032;&#21152;&#36733;" aria-label="&#37325;&#26032;&#21152;&#36733;">
+          <svg viewBox="0 0 24 24"><path d="M12 5V2L8 6l4 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
         </button>
         <button id="btn-sound" class="icon-btn" title="&#22768;&#38899;&#24320;&#20851;" aria-label="&#22768;&#38899;&#24320;&#20851;">
           <svg class="ico-on" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.7 5.8a9 9 0 0 1 0 12.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -569,55 +588,70 @@ const Store = (() => {
 
 <script>
 /* ------------------------------------------------------------------
-   audio.js \u2014 \u7528 WebAudio \u73b0\u573a\u5408\u6210\u97f3\u6548\uff0c\u4e0d\u4f9d\u8d56\u4efb\u4f55\u5916\u90e8\u6587\u4ef6\u3002
-   All sound effects are synthesised with WebAudio \u2014 no asset files,
-   so the game works offline / straight off the filesystem.
+   audio.js \u2014 \u58f0\u97f3\u5168\u90e8\u7528 WebAudio \u73b0\u573a\u5408\u6210\uff0c\u4e0d\u4f9d\u8d56\u4efb\u4f55\u97f3\u9891\u6587\u4ef6\u3002
+   All audio is synthesised with WebAudio \u2014 no asset files, works offline.
+
+   \u5206\u4e24\u6761\u7ebf\uff1a
+     sfx   \u2014\u2014 \u6458\u83dc\u3001\u4e0b\u9505\u3001\u8fc7\u5173\u8fd9\u4e9b\u5373\u65f6\u53cd\u9988
+     music \u2014\u2014 \u4e00\u76f4\u5728\u5e95\u4e0b\u8d70\u7684\u56db\u5c0f\u8282\u5faa\u73af\uff0c\u8ba9\u753b\u9762\u4e0d\u81f3\u4e8e\u6b7b\u6c14\u6c89\u6c89
+   \u4e24\u6761\u7ebf\u6c47\u5230\u4e00\u4e2a\u538b\u7f29\u5668\u518d\u51fa\u53bb\uff0c\u97f3\u91cf\u62c9\u9ad8\u4e5f\u4e0d\u4f1a\u7834\u97f3\u3002
 ------------------------------------------------------------------ */
 
 const Sound = (() => {
-  let ctx = null;
-  let master = null;
+  let ctx = null, master = null, sfxBus = null, musicBus = null;
   let enabled = Store.get('gulu.sound') !== 'off';
 
   function ensure() {
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return null;
-      ctx = new AC();
-      master = ctx.createGain();
-      master.gain.value = 0.35;
+      try { ctx = new AC(); } catch (e) { return null; }
+
+      /* \u538b\u7f29\u5668\u515c\u5e95\uff1a\u540c\u65f6\u54cd\u597d\u51e0\u4e2a\u97f3\u4e5f\u4e0d\u4f1a\u524a\u9876 */
+      master = ctx.createDynamicsCompressor();
+      master.threshold.value = -14;
+      master.ratio.value = 12;
+      master.attack.value = 0.003;
+      master.release.value = 0.2;
       master.connect(ctx.destination);
+
+      sfxBus = ctx.createGain();
+      sfxBus.gain.value = 0.9;
+      sfxBus.connect(master);
+
+      musicBus = ctx.createGain();
+      musicBus.gain.value = 0.34;      // \u97f3\u4e50\u8981\u57ab\u5728\u5e95\u4e0b\uff0c\u522b\u76d6\u4f4f\u97f3\u6548
+      musicBus.connect(master);
     }
-    if (ctx.state === 'suspended') ctx.resume();
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
     return ctx;
   }
 
-  /* \u4e00\u4e2a\u57fa\u7840\u97f3\u7b26\uff1a\u6ce2\u5f62 + \u97f3\u91cf\u5305\u7edc */
+  /* \u4e00\u4e2a\u97f3\u7b26\u3002when \u7ed9\u7edd\u5bf9\u65f6\u95f4\uff08\u97f3\u4e50\u7528\uff09\uff0c\u4e0d\u7ed9\u5c31\u662f"\u9a6c\u4e0a"\uff08\u97f3\u6548\u7528\uff09\u3002 */
   function note(freq, {
-    type = 'sine', at = 0, dur = 0.22, gain = 0.5,
-    attack = 0.008, glide = 0, detune = 0
+    type = 'sine', when = null, at = 0, dur = 0.22, gain = 0.5,
+    attack = 0.008, glide = 0, bus = null
   } = {}) {
     if (!enabled || !ensure()) return;
-    const t = ctx.currentTime + at;
+    const t = when !== null ? when : ctx.currentTime + at;
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.type = type;
-    osc.detune.value = detune;
     osc.frequency.setValueAtTime(freq, t);
     if (glide) osc.frequency.exponentialRampToValueAtTime(Math.max(40, freq * glide), t + dur);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(gain, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g).connect(master);
+    osc.connect(g).connect(bus || sfxBus);
     osc.start(t);
     osc.stop(t + dur + 0.02);
   }
 
-  /* \u566a\u58f0\u8109\u51b2\uff0c\u7528\u6765\u505a\u201c\u6c99\u6c99\u201d\u201c\u5636\u5636\u201d\u4e00\u7c7b\u7684\u58f0\u97f3 */
-  function noise({ at = 0, dur = 0.3, gain = 0.2, freq = 1200, q = 1 } = {}) {
+  /* \u566a\u58f0\u8109\u51b2\uff1a\u6c99\u6c99\u58f0\u3001\u5636\u5636\u58f0\u3001\u9f13\u70b9 */
+  function noise({ when = null, at = 0, dur = 0.3, gain = 0.2, freq = 1200, q = 1, bus = null } = {}) {
     if (!enabled || !ensure()) return;
-    const t = ctx.currentTime + at;
-    const frames = Math.floor(ctx.sampleRate * dur);
+    const t = when !== null ? when : ctx.currentTime + at;
+    const frames = Math.max(1, Math.floor(ctx.sampleRate * dur));
     const buf = ctx.createBuffer(1, frames, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < frames; i++) data[i] = Math.random() * 2 - 1;
@@ -630,13 +664,69 @@ const Sound = (() => {
     const g = ctx.createGain();
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(filter).connect(g).connect(master);
+    src.connect(filter).connect(g).connect(bus || sfxBus);
     src.start(t);
     src.stop(t + dur);
   }
 
-  /* C \u5927\u8c03\u4e94\u58f0\u97f3\u9636\uff0c\u600e\u4e48\u5f39\u90fd\u597d\u542c \u2014\u2014 \u9002\u5408\u8fde\u7eed\u91c7\u96c6\u65f6\u9010\u7ea7\u5347\u9ad8 */
-  const SCALE = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
+  /* C \u5927\u8c03\u4e94\u58f0\u97f3\u9636\uff0c\u600e\u4e48\u5f39\u90fd\u597d\u542c */
+  const SCALE = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
+  const PICK  = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
+
+  /* ---------------- \u80cc\u666f\u97f3\u4e50 ----------------
+     \u56db\u5c0f\u8282\u5faa\u73af\uff0cI\u2013vi\u2013IV\u2013V\u3002\u65cb\u5f8b\u662f\u5199\u6b7b\u7684\u4e00\u53e5\uff0c
+     \u4e0d\u662f\u968f\u673a\u97f3\u7b26\uff0c\u6240\u4ee5\u542c\u591a\u4e45\u90fd\u4e0d\u4f1a\u8dd1\u8c03\u6216\u53d8\u5435\u3002 */
+  const CHORDS = [
+    { root: 130.81, pad: [261.63, 329.63, 392.00] },   // C
+    { root: 110.00, pad: [261.63, 329.63, 440.00] },   // Am
+    { root: 174.61, pad: [261.63, 349.23, 440.00] },   // F
+    { root: 196.00, pad: [293.66, 392.00, 493.88] }    // G
+  ];
+  const MELODY = [
+    [5, null, 4, null, 3, 4, 5, null],
+    [4, null, 3, null, 2, 3, 4, null],
+    [3, null, 4, null, 5, 4, 3, null],
+    [2, 3, 4, null, 5, null, null, null]
+  ];
+  const BPM = 104;
+
+  let musicTimer = null, nextTime = 0, stepIx = 0, musicWanted = false;
+
+  function scheduleAhead() {
+    if (!ctx) return;
+    const eighth = (60 / BPM) / 2;
+    while (nextTime < ctx.currentTime + 0.25) {
+      const bar = Math.floor(stepIx / 8) % 4;
+      const pos = stepIx % 8;
+      const ch = CHORDS[bar];
+
+      if (pos === 0 || pos === 4)                       // \u4f4e\u97f3
+        note(ch.root, { type: 'sine', when: nextTime, dur: eighth * 1.9, gain: 0.55, bus: musicBus });
+      if (pos === 0)                                    // \u548c\u5f26\u57ab
+        ch.pad.forEach(f => note(f, { type: 'triangle', when: nextTime, dur: eighth * 3.4, gain: 0.13, bus: musicBus }));
+      const m = MELODY[bar][pos];                       // \u65cb\u5f8b
+      if (m !== null)
+        note(SCALE[m], { type: 'triangle', when: nextTime, dur: eighth * 1.7, gain: 0.3, bus: musicBus });
+      if (pos % 2 === 1)                                // \u8f7b\u8f7b\u7684\u8282\u62cd
+        noise({ when: nextTime, dur: 0.045, gain: 0.06, freq: 6500, q: 1.6, bus: musicBus });
+
+      nextTime += eighth;
+      stepIx++;
+    }
+  }
+
+  function startMusic() {
+    musicWanted = true;
+    if (!enabled || musicTimer || !ensure()) return;
+    nextTime = ctx.currentTime + 0.12;
+    scheduleAhead();
+    musicTimer = setInterval(scheduleAhead, 60);
+  }
+
+  function stopMusic() {
+    clearInterval(musicTimer);
+    musicTimer = null;
+  }
 
   return {
     get enabled() { return enabled; },
@@ -644,75 +734,79 @@ const Sound = (() => {
     toggle() {
       enabled = !enabled;
       Store.set('gulu.sound', enabled ? 'on' : 'off');
-      if (enabled) { ensure(); this.tap(); }
+      if (enabled) { ensure(); this.tap(); if (musicWanted) startMusic(); }
+      else stopMusic();
       return enabled;
     },
 
-    unlock() { ensure(); },
+    /* \u6d4f\u89c8\u5668\u8981\u6c42\u9996\u6b21\u4ea4\u4e92\u540e\u624d\u80fd\u51fa\u58f0 */
+    unlock() { ensure(); startMusic(); },
 
-    /* \u6309\u94ae\u8f7b\u70b9 */
+    music(on) { on ? startMusic() : (musicWanted = false, stopMusic()); },
+
     tap() {
-      note(660, { type: 'triangle', dur: 0.08, gain: 0.28 });
+      note(660, { type: 'triangle', dur: 0.1, gain: 0.5 });
+      note(990, { type: 'sine', at: 0.02, dur: 0.08, gain: 0.2 });
     },
 
-    /* \u6458\u5230\u4e00\u4e2a\u98df\u6750\uff0c\u97f3\u9ad8\u968f\u7bee\u5b50\u91cc\u7684\u6570\u91cf\u5f80\u4e0a\u8d70 */
+    /* \u6458\u5230\u4e00\u4e2a\uff0c\u97f3\u9ad8\u968f\u7bee\u5b50\u91cc\u7684\u6570\u91cf\u5f80\u4e0a\u8d70 */
     pick(index = 0) {
-      const f = SCALE[Math.min(index, SCALE.length - 1)];
-      note(f, { type: 'triangle', dur: 0.18, gain: 0.4 });
-      note(f * 2, { type: 'sine', at: 0.02, dur: 0.14, gain: 0.14 });
+      const f = PICK[Math.min(index, PICK.length - 1)];
+      note(f, { type: 'triangle', dur: 0.2, gain: 0.6 });
+      note(f * 2, { type: 'sine', at: 0.02, dur: 0.16, gain: 0.24 });
+      noise({ dur: 0.09, gain: 0.12, freq: 3200, q: 2 });
     },
 
-    /* \u6458\u9519\u4e86 \u2014\u2014 \u4e0d\u523a\u8033\uff0c\u53ea\u662f\u201c\u54a6\uff1f\u201d */
+    /* \u6458\u9519\u4e86 \u2014\u2014 \u4e0d\u523a\u8033\uff0c\u53ea\u662f"\u54a6\uff1f" */
     oops() {
-      note(320, { type: 'sine', dur: 0.16, gain: 0.3, glide: 0.75 });
-      note(240, { type: 'sine', at: 0.1, dur: 0.18, gain: 0.22 });
+      note(330, { type: 'sine', dur: 0.18, gain: 0.5, glide: 0.75 });
+      note(247, { type: 'sine', at: 0.11, dur: 0.2, gain: 0.36 });
     },
 
-    /* \u4e1c\u897f\u98de\u8fc7\u53bb */
-    whoosh() {
-      noise({ dur: 0.28, gain: 0.12, freq: 900, q: 0.7 });
-    },
+    whoosh() { noise({ dur: 0.26, gain: 0.16, freq: 900, q: 0.7 }); },
 
     /* \u98df\u6750\u6389\u8fdb\u9505\u91cc */
     plop() {
-      note(420, { type: 'sine', dur: 0.16, gain: 0.4, glide: 0.5 });
-      noise({ at: 0.02, dur: 0.12, gain: 0.08, freq: 500 });
+      note(430, { type: 'sine', dur: 0.18, gain: 0.62, glide: 0.5 });
+      noise({ at: 0.02, dur: 0.13, gain: 0.14, freq: 520 });
     },
 
     /* \u6405\u62cc / \u714e / \u70e4 \u7684\u5faa\u73af\u58f0 */
     cookStep(i = 0) {
-      noise({ dur: 0.16, gain: 0.14, freq: 700 + i * 120, q: 2 });
-      note(180 + i * 24, { type: 'sawtooth', dur: 0.14, gain: 0.12 });
+      noise({ dur: 0.17, gain: 0.2, freq: 700 + i * 130, q: 2 });
+      note(180 + i * 26, { type: 'sawtooth', dur: 0.15, gain: 0.2 });
     },
 
     /* \u83dc\u505a\u597d\u4e86 */
     ding() {
-      note(1046.5, { type: 'sine', dur: 0.5, gain: 0.4 });
-      note(1567.98, { type: 'sine', at: 0.06, dur: 0.45, gain: 0.2 });
+      note(1046.5, { type: 'sine', dur: 0.55, gain: 0.6 });
+      note(1567.98, { type: 'sine', at: 0.06, dur: 0.5, gain: 0.3 });
+      note(2093, { type: 'sine', at: 0.12, dur: 0.4, gain: 0.14 });
     },
 
     /* \u987e\u5ba2\u5403\u5f97\u5f88\u5f00\u5fc3 */
     yum() {
-      [0, 0.12, 0.24].forEach((t, i) =>
-        note([392, 523.25, 659.25][i], { type: 'triangle', at: t, dur: 0.22, gain: 0.35 }));
+      [392, 523.25, 659.25].forEach((f, i) =>
+        note(f, { type: 'triangle', at: i * 0.12, dur: 0.24, gain: 0.55 }));
+      note(783.99, { at: 0.36, dur: 0.4, gain: 0.4, type: 'sine' });
     },
 
     /* \u8fc7\u5173\u5c0f\u53f7\u89d2 */
     fanfare() {
-      const seq = [523.25, 659.25, 783.99, 1046.5];
-      seq.forEach((f, i) => {
-        note(f, { type: 'triangle', at: i * 0.11, dur: 0.3, gain: 0.4 });
-        note(f * 1.5, { type: 'sine', at: i * 0.11 + 0.01, dur: 0.26, gain: 0.14 });
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        note(f, { type: 'triangle', at: i * 0.11, dur: 0.32, gain: 0.6 });
+        note(f * 1.5, { type: 'sine', at: i * 0.11 + 0.01, dur: 0.28, gain: 0.22 });
       });
-      note(1046.5, { type: 'triangle', at: 0.5, dur: 0.6, gain: 0.4 });
+      note(1046.5, { type: 'triangle', at: 0.5, dur: 0.7, gain: 0.6 });
+      note(1567.98, { type: 'sine', at: 0.5, dur: 0.7, gain: 0.28 });
     },
 
     /* \u9910\u8f66\u5f15\u64ce */
     engine() {
-      note(90, { type: 'sawtooth', dur: 0.9, gain: 0.12, glide: 1.25 });
-      noise({ dur: 0.9, gain: 0.06, freq: 300, q: 0.6 });
-      note(520, { type: 'square', at: 0.05, dur: 0.12, gain: 0.18 });
-      note(660, { type: 'square', at: 0.2, dur: 0.14, gain: 0.18 });
+      note(92, { type: 'sawtooth', dur: 0.95, gain: 0.22, glide: 1.25 });
+      noise({ dur: 0.95, gain: 0.1, freq: 320, q: 0.6 });
+      note(520, { type: 'square', at: 0.05, dur: 0.13, gain: 0.3 });
+      note(660, { type: 'square', at: 0.2, dur: 0.15, gain: 0.3 });
     }
   };
 })();
@@ -837,11 +931,18 @@ const Art = (() => {
   /* ---------- \u987e\u5ba2 / customers ---------- */
 
   const CUSTOMERS = {
-    birdie: { c: '#ffcb3d', d: '#e0a212', shape: 'round', top: 'tuft', beak: true },
+    birdie: { c: '#ffcb3d', d: '#e0a212', shape: 'round', top: 'tuft',    beak: true },
     pip:    { c: '#ff8a5c', d: '#e2653a', shape: 'wide',  top: 'ears' },
     moss:   { c: '#5fbf7d', d: '#3d9a5c', shape: 'round', top: 'leaf' },
     nib:    { c: '#5aa8e8', d: '#3a83c4', shape: 'tall',  top: 'antenna' },
-    lulu:   { c: '#f38fc4', d: '#d466a2', shape: 'wide',  top: 'buns' }
+    lulu:   { c: '#f38fc4', d: '#d466a2', shape: 'wide',  top: 'buns' },
+    tuk:    { c: '#8b5fe0', d: '#6b41c0', shape: 'tall',  top: 'horns' },
+    coco:   { c: '#c98a4b', d: '#8b5a2b', shape: 'round', top: 'ears' },
+    zip:    { c: '#4fd0c0', d: '#2fa89a', shape: 'wide',  top: 'crest' },
+    plum:   { c: '#e8637f', d: '#c2445d', shape: 'round', top: 'antenna' },
+    olly:   { c: '#a8c840', d: '#82a01e', shape: 'tall',  top: 'leaf' },
+    bumbo:  { c: '#6f8fe0', d: '#4c6ac0', shape: 'wide',  top: 'horns' },
+    sunny:  { c: '#ffa63d', d: '#e07f12', shape: 'round', top: 'crest',   beak: true }
   };
 
   function customer(id, happy = false, look = [0, 0]) {
@@ -861,7 +962,12 @@ const Art = (() => {
       antenna: `<path d="M100 ${cy - ry}v-26" stroke="${k.d}" stroke-width="6" stroke-linecap="round"/>
                 <circle cx="100" cy="${cy - ry - 32}" r="11" fill="#ffd23f"/>`,
       buns: `<circle cx="56" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>
-             <circle cx="144" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>`
+             <circle cx="144" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>`,
+      horns: `<path d="M74 ${cy - ry + 6}c-8-16-6-30 2-38 8 10 10 24 6 38Z" fill="${k.d}"/>
+              <path d="M126 ${cy - ry + 6}c8-16 6-30-2-38-8 10-10 24-6 38Z" fill="${k.d}"/>`,
+      crest: `<path d="M100 ${cy - ry - 6}c-16-4-24-16-22-30 12 2 18 10 22 30Z" fill="${k.d}"/>
+              <path d="M100 ${cy - ry - 6}c16-4 24-16 22-30-12 2-18 10-22 30Z" fill="${k.d}"/>
+              <path d="M100 ${cy - ry - 10}c0-18 0-28 0-34 6 10 6 24 0 34Z" fill="${k.c}"/>`
     };
 
     const face = k.beak
@@ -1008,7 +1114,83 @@ const Art = (() => {
       <path d="M50 92c-14 0-24-12-24-26 0-8 10-14 24-14s24 6 24 14c0 14-10 26-24 26Z" fill="#c98a4b"/>
       <path d="M24 48c0-9 12-16 26-16s26 7 26 16c0 4-4 6-26 6s-26-2-26-6Z" fill="#8b5a2b"/>
       <path d="M50 32V18" stroke="#6b4420" stroke-width="6" stroke-linecap="round"/>
-      <path d="M34 62c4 8 10 12 16 13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".3"/>`
+      <path d="M34 62c4 8 10 12 16 13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".3"/>`,
+
+    apple: `
+      <path d="M50 34c14-8 34-2 34 20 0 20-14 40-24 40-4 0-6-3-10-3s-6 3-10 3c-10 0-24-20-24-40 0-22 20-28 34-20Z" fill="#e8453c"/>
+      <path d="M34 46c4-6 10-9 15-9-6 4-11 8-15 16Z" fill="#fff" opacity=".4"/>
+      <path d="M50 34V18" stroke="#6b4420" stroke-width="6" stroke-linecap="round"/>
+      <path d="M52 26c10-10 20-10 24-8-2 10-12 14-24 12Z" fill="#4fae63"/>`,
+
+    lemon: `
+      <ellipse cx="50" cy="60" rx="30" ry="24" fill="#ffd23f"/>
+      <path d="M80 60c6 0 8 2 8 4s-4 4-9 3ZM20 60c-6 0-8 2-8 4s4 4 9 3Z" fill="#e8ab1e"/>
+      <ellipse cx="40" cy="50" rx="10" ry="6" fill="#fff" opacity=".45" transform="rotate(-18 40 50)"/>
+      <path d="M50 36V24" stroke="#6b4420" stroke-width="5" stroke-linecap="round"/>
+      <path d="M52 30c8-8 16-8 19-6-2 8-10 11-19 6Z" fill="#4fae63"/>`,
+
+    corn: `
+      <path d="M50 94c-14 0-22-16-22-34S36 26 50 26s22 16 22 34-8 34-22 34Z" fill="#ffd23f"/>
+      <g fill="#e8ab1e">
+        <circle cx="42" cy="44" r="3.4"/><circle cx="58" cy="44" r="3.4"/><circle cx="50" cy="52" r="3.4"/>
+        <circle cx="40" cy="60" r="3.4"/><circle cx="60" cy="60" r="3.4"/><circle cx="50" cy="68" r="3.4"/>
+        <circle cx="42" cy="78" r="3.4"/><circle cx="58" cy="78" r="3.4"/>
+      </g>
+      <path d="M28 46c-14-6-20-18-18-28 12 2 20 12 22 26ZM72 46c14-6 20-18 18-28-12 2-20 12-22 26Z" fill="#4fae63"/>`,
+
+    pumpkin: `
+      <ellipse cx="50" cy="62" rx="34" ry="28" fill="#f4842c"/>
+      <ellipse cx="50" cy="62" rx="14" ry="28" fill="#ff9f4d"/>
+      <path d="M28 42c-5 12-5 28 0 40M72 42c5 12 5 28 0 40" fill="none" stroke="#d96a15" stroke-width="3.5"/>
+      <path d="M50 36V24" stroke="#4a7c3a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M52 28c10-8 18-6 20-4-4 8-12 10-20 4Z" fill="#4fae63"/>`,
+
+    honey: `
+      <path d="M28 46h44v40a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10Z" fill="#ffb03a"/>
+      <path d="M28 46h44v14H28Z" fill="#ffd23f"/>
+      <rect x="24" y="34" width="52" height="14" rx="7" fill="#c98a4b"/>
+      <path d="M40 66l5 8 5-8 5 8 5-8" fill="none" stroke="#fff6e6" stroke-width="4" stroke-linecap="round" opacity=".75"/>
+      <path d="M62 22l4 7 8 1-6 6 2 8-8-4-8 4 2-8-6-6 8-1Z" fill="#ffd23f" opacity=".85"/>`,
+
+    mushroom: `
+      <path d="M40 60h20v26a10 10 0 0 1-20 0Z" fill="#fff3dc"/>
+      <path d="M16 60c0-20 15-34 34-34s34 14 34 34Z" fill="#e8453c"/>
+      <circle cx="34" cy="46" r="7" fill="#fff6e6"/>
+      <circle cx="58" cy="40" r="5.5" fill="#fff6e6"/>
+      <circle cx="68" cy="52" r="4.5" fill="#fff6e6"/>
+      <circle cx="46" cy="54" r="4" fill="#fff6e6"/>`,
+
+    grape: `
+      <path d="M50 28V16" stroke="#6b4420" stroke-width="5" stroke-linecap="round"/>
+      <path d="M52 22c9-8 17-7 20-5-3 8-11 10-20 5Z" fill="#4fae63"/>
+      <g fill="#8b5fe0">
+        <circle cx="50" cy="38" r="11"/><circle cx="36" cy="52" r="11"/><circle cx="64" cy="52" r="11"/>
+        <circle cx="50" cy="60" r="11"/><circle cx="40" cy="74" r="11"/><circle cx="60" cy="74" r="11"/>
+      </g>
+      <g fill="#a888f0">
+        <circle cx="47" cy="35" r="3.5"/><circle cx="33" cy="49" r="3.5"/><circle cx="61" cy="49" r="3.5"/>
+      </g>`,
+
+    chocolate: `
+      <path d="M24 34h52v52a8 8 0 0 1-8 8H32a8 8 0 0 1-8-8Z" fill="#6b4420"/>
+      <path d="M24 34h52v10H24Z" fill="#8b5a2b"/>
+      <g stroke="#4a2e16" stroke-width="3">
+        <path d="M50 44v50M24 60h52M24 78h52"/>
+      </g>
+      <path d="M30 48h14v8H30Z" fill="#8b5a2b" opacity=".6"/>`,
+
+    butter: `
+      <path d="M22 56 44 40h36v30l-22 16H22Z" fill="#ffd23f"/>
+      <path d="M22 56h36v30H22Z" fill="#ffe08a"/>
+      <path d="M58 56 80 40v30L58 86Z" fill="#e8ab1e"/>
+      <path d="M28 64h20M28 74h14" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".6"/>`,
+
+    peach: `
+      <path d="M50 90c-18 0-32-14-32-30 0-14 14-24 32-24s32 10 32 24c0 16-14 30-32 30Z" fill="#ff9f7a"/>
+      <path d="M50 36c10 0 20 4 26 12-8 20-16 32-26 42V36Z" fill="#ff8a5c" opacity=".55"/>
+      <path d="M50 40c-4 14-4 34 0 48" fill="none" stroke="#e2653a" stroke-width="3" opacity=".6"/>
+      <ellipse cx="36" cy="50" rx="9" ry="6" fill="#fff" opacity=".4" transform="rotate(-20 36 50)"/>
+      <path d="M52 34c9-9 18-8 21-6-3 9-12 11-21 6Z" fill="#4fae63"/>`
   };
 
   const ingredient = (id, cls = '') => svg(ING[id] || ING.acorn, '0 0 100 100', `art-ing ${cls}`);
@@ -1059,7 +1241,68 @@ const Art = (() => {
       <circle cx="60" cy="44" r="15" fill="#4a5fc1"/>
       <circle cx="51" cy="28" r="13" fill="#7d92e8"/>
       <circle cx="36" cy="42" r="5" fill="#fff" opacity=".35"/>
-      <path d="M51 16l3-8 3 8 8 2-8 3-3 8-3-8-8-3Z" fill="#ffd23f"/>`
+      <path d="M51 16l3-8 3 8 8 2-8 3-3 8-3-8-8-3Z" fill="#ffd23f"/>`,
+
+    applepie: `
+      <path d="M12 60h76c0 20-16 32-38 32S12 80 12 60Z" fill="#e0a44f"/>
+      <path d="M14 56c0-16 16-26 36-26s36 10 36 26Z" fill="#f0bb68"/>
+      <g stroke="#c98a4b" stroke-width="5" stroke-linecap="round">
+        <path d="M26 44 40 32M38 50 56 30M52 52 70 34M64 54l14-10"/>
+      </g>
+      <path d="M10 58h80" stroke="#c98a4b" stroke-width="7" stroke-linecap="round"/>
+      <path d="M50 26c-6-6 4-10 0-14" fill="none" stroke="#e0d0b8" stroke-width="4" stroke-linecap="round"/>`,
+
+    cornsoup: `
+      <path d="M16 52h68c0 24-15 36-34 36S16 76 16 52Z" fill="#fdfdfd"/>
+      <ellipse cx="50" cy="52" rx="34" ry="9" fill="#ffd23f"/>
+      <ellipse cx="42" cy="50" rx="7" ry="3" fill="#ffe89a"/>
+      <ellipse cx="60" cy="54" rx="5" ry="2.5" fill="#ffe89a"/>
+      <path d="M14 60h72" stroke="#dfe7ee" stroke-width="6" stroke-linecap="round"/>
+      <path d="M40 32c-6-6 6-10 0-16M58 32c-6-6 6-10 0-16" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>`,
+
+    lemonade: `
+      <path d="M32 22h44l-6 64a10 10 0 0 1-10 8H48a10 10 0 0 1-10-8Z" fill="#eaf4fa" opacity=".85"/>
+      <path d="M35 40h38l-5 46a10 10 0 0 1-10 8H50a10 10 0 0 1-10-8Z" fill="#ffd23f"/>
+      <g fill="#fff" opacity=".65">
+        <circle cx="46" cy="58" r="4"/><circle cx="60" cy="68" r="3"/><circle cx="52" cy="78" r="3.4"/>
+      </g>
+      <path d="M64 32l12-20" stroke="#5fbf7d" stroke-width="7" stroke-linecap="round"/>
+      <path d="M74 40a13 13 0 1 1 0-1Z" fill="#ffe08a" stroke="#e8ab1e" stroke-width="3"/>`,
+
+    pumpkinpie: `
+      <path d="M12 66 50 22l38 44Z" fill="#f4842c"/>
+      <path d="M12 66 50 22l38 44Z" fill="none" stroke="#e0a44f" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M10 70h80v8a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6Z" fill="#e0a44f"/>
+      <path d="M50 34c-8 10-14 18-18 28h36c-4-10-10-18-18-28Z" fill="#ff9f4d" opacity=".55"/>
+      <path d="M50 30c6-4 14-2 16 2-6 4-12 3-16-2Z" fill="#fffdf7"/>`,
+
+    grapejuice: `
+      <path d="M32 24h44l-6 62a10 10 0 0 1-10 9H48a10 10 0 0 1-10-9Z" fill="#eaf4fa" opacity=".85"/>
+      <path d="M35 42h38l-5 44a10 10 0 0 1-10 9H50a10 10 0 0 1-10-9Z" fill="#8b5fe0"/>
+      <ellipse cx="54" cy="42" rx="19" ry="6" fill="#a888f0"/>
+      <path d="M66 34l14-22" stroke="#5fbf7d" stroke-width="7" stroke-linecap="round"/>
+      <g fill="#a888f0"><circle cx="46" cy="60" r="4" opacity=".7"/><circle cx="60" cy="72" r="3" opacity=".7"/></g>`,
+
+    mushroompizza: `
+      <circle cx="50" cy="56" r="38" fill="#e8b96a"/>
+      <circle cx="50" cy="56" r="31" fill="#e8453c"/>
+      <circle cx="50" cy="56" r="29" fill="#ffcf4d" opacity=".55"/>
+      <g fill="#fff3dc" stroke="#c98a4b" stroke-width="2.5">
+        <path d="M32 44c0-6 5-10 11-10s11 4 11 10Zm4 0h14v9a7 7 0 0 1-14 0Z"/>
+        <path d="M56 66c0-5 4-9 9-9s9 4 9 9Zm3 0h12v7a6 6 0 0 1-12 0Z"/>
+      </g>
+      <circle cx="66" cy="42" r="5" fill="#e8453c"/>
+      <circle cx="36" cy="70" r="5" fill="#e8453c"/>`,
+
+    peachcake: `
+      <path d="M18 54h64v30a8 8 0 0 1-8 8H26a8 8 0 0 1-8-8Z" fill="#fff3dc"/>
+      <path d="M18 66h64v8H18Z" fill="#ff9f7a"/>
+      <path d="M18 54c0-8 14-12 32-12s32 4 32 12Z" fill="#fffdf7"/>
+      <g fill="#fffdf7">
+        <circle cx="30" cy="48" r="7"/><circle cx="50" cy="44" r="8"/><circle cx="70" cy="48" r="7"/>
+      </g>
+      <path d="M50 40c-7 0-12-5-12-10s5-8 12-8 12 3 12 8-5 10-12 10Z" fill="#ff9f7a"/>
+      <path d="M52 22c6-6 12-5 14-4-2 6-8 8-14 4Z" fill="#4fae63"/>`
   };
 
   const dish = (id, cls = '') => svg(DISH[id] || DISH.smoothie, '0 0 100 100', `art-dish ${cls}`);
@@ -1224,6 +1467,65 @@ const Art = (() => {
         <g fill="#4aa86b">
           ${[80, 240, 400, 560, 720, 880, 1040, 1200].map(x =>
             `<path d="M${x} 660c-26-4-40-22-38-44 22-2 36 14 38 44Zm0 0c26-4 40-22 38-44-22-2-36 14-38 44Z"/>`).join('')}
+        </g>`);
+    }
+
+    if (place === 'orchard') {
+      const fruitTree = (x, y, s, fruit) => `
+        <g transform="translate(${x} ${y}) scale(${s})">
+          <rect x="-14" y="-10" width="28" height="120" rx="12" fill="#8b5a2b"/>
+          <path d="M0 20c-20 0-34-14-34-30" fill="none" stroke="#8b5a2b" stroke-width="12" stroke-linecap="round"/>
+          <circle cx="0" cy="-46" r="72" fill="#3f7d5b"/>
+          <circle cx="-52" cy="-8" r="46" fill="#4aa86b"/>
+          <circle cx="52" cy="-8" r="46" fill="#4aa86b"/>
+          <g fill="${fruit}">
+            <circle cx="-40" cy="-30" r="11"/><circle cx="18" cy="-64" r="11"/>
+            <circle cx="48" cy="-18" r="11"/><circle cx="-14" cy="-6" r="11"/>
+            <circle cx="26" cy="-14" r="11"/>
+          </g>
+        </g>`;
+      return wrap(`
+        <rect width="${W}" height="${H}" fill="#cfeaf7"/>
+        <circle cx="180" cy="110" r="60" fill="#ffd23f"/>
+        <g fill="#fff" opacity=".9">
+          <ellipse cx="640" cy="100" rx="72" ry="28"/><ellipse cx="694" cy="88" rx="46" ry="24"/>
+          <ellipse cx="1080" cy="140" rx="58" ry="24"/>
+        </g>
+        <path d="M0 340q320-60 640 0t640-20V720H0Z" fill="#7cc48c"/>
+        ${fruitTree(150, 250, 0.95, '#e8453c')}
+        ${fruitTree(1130, 240, 1.0, '#ffd23f')}
+        ${fruitTree(640, 210, 0.8, '#8b5fe0')}
+        <path d="M0 470q300-50 640 0t640-20V720H0Z" fill="#5fbf7d"/>
+        ${fruitTree(400, 470, 0.6, '#ff9f7a')}
+        ${fruitTree(880, 480, 0.6, '#e8453c')}
+        <path d="M0 610q320-40 640 0t640-16V720H0Z" fill="#4aa86b"/>
+        <g fill="#3d8a4e" opacity=".45">
+          ${[120, 420, 720, 1020, 1240].map(x => `<ellipse cx="${x}" cy="690" rx="80" ry="15"/>`).join('')}
+        </g>`);
+    }
+
+    if (place === 'field') {
+      return wrap(`
+        <rect width="${W}" height="${H}" fill="#bfe4f5"/>
+        <rect width="${W}" height="240" fill="#a8dcf0"/>
+        <circle cx="1090" cy="120" r="66" fill="#ffd23f"/>
+        <g fill="#fff" opacity=".92">
+          <ellipse cx="240" cy="120" rx="80" ry="32"/><ellipse cx="300" cy="104" rx="52" ry="28"/>
+          <ellipse cx="700" cy="90" rx="60" ry="26"/><ellipse cx="748" cy="80" rx="40" ry="20"/>
+        </g>
+        <path d="M0 300q220-40 440-10t400-20 440 16V720H0Z" fill="#a8c840"/>
+        <path d="M0 400q300-40 640 0t640-20V720H0Z" fill="#c2d94e"/>
+        <g fill="#e0a44f">
+          ${[80, 250, 420, 590, 760, 930, 1100, 1250].map((x, i) => `
+            <g transform="translate(${x} ${430 + (i % 3) * 14})">
+              <rect x="-5" y="0" width="10" height="120" rx="5"/>
+              <ellipse cx="0" cy="-14" rx="17" ry="26" fill="#ffd23f"/>
+              <path d="M0 -34c-10 8-14 20-12 30 8-4 12-16 12-30Z" fill="#e8ab1e"/>
+            </g>`).join('')}
+        </g>
+        <path d="M0 560q320-36 640 0t640-14V720H0Z" fill="#8fb02e"/>
+        <g stroke="#6d8a1e" stroke-width="7" stroke-linecap="round">
+          <path d="M140 700v-44M380 710v-40M620 702v-46M860 712v-42M1120 700v-44"/>
         </g>`);
     }
 
@@ -1398,6 +1700,13 @@ const INGREDIENTS = {
   tomato:     { zh: '\u756a\u8304',   en: 'Tomato' },
   carrot:     { zh: '\u80e1\u841d\u535c', en: 'Carrot' },
   blueberry:  { zh: '\u84dd\u8393',   en: 'Blueberry' },
+  apple:      { zh: '\u82f9\u679c',   en: 'Apple' },
+  lemon:      { zh: '\u67e0\u6aac',   en: 'Lemon' },
+  corn:       { zh: '\u7389\u7c73',   en: 'Corn' },
+  pumpkin:    { zh: '\u5357\u74dc',   en: 'Pumpkin' },
+  mushroom:   { zh: '\u8611\u83c7',   en: 'Mushroom' },
+  grape:      { zh: '\u8461\u8404',   en: 'Grape' },
+  peach:      { zh: '\u6843\u5b50',   en: 'Peach' },
   milk:       { zh: '\u725b\u5976',   en: 'Milk' },
   ice:        { zh: '\u51b0\u5757',   en: 'Ice' },
   flour:      { zh: '\u9762\u7c89',   en: 'Flour' },
@@ -1408,106 +1717,151 @@ const INGREDIENTS = {
   salt:       { zh: '\u76d0',     en: 'Salt' },
   cream:      { zh: '\u5976\u6cb9',   en: 'Cream' },
   sugar:      { zh: '\u7cd6',     en: 'Sugar' },
+  honey:      { zh: '\u8702\u871c',   en: 'Honey' },
+  butter:     { zh: '\u9ec4\u6cb9',   en: 'Butter' },
+  chocolate:  { zh: '\u5de7\u514b\u529b', en: 'Chocolate' },
   bug:        { zh: '\u5c0f\u866b\u5b50', en: 'Little Bug' },
   acorn:      { zh: '\u6a61\u679c',   en: 'Acorn' }
 };
 
 /* \u91c7\u96c6\u573a\u666f\u7684\u80cc\u666f\u4e3b\u9898 / foraging backdrops */
 const PLACES = {
-  jungle: { zh: '\u9999\u8549\u4e1b\u6797', en: 'Banana Jungle' },
-  farm:   { zh: '\u8349\u8393\u519c\u573a', en: 'Strawberry Farm' },
-  garden: { zh: '\u83dc\u56ed\u5b50',   en: 'Veggie Garden' },
-  forest: { zh: '\u84dd\u8393\u6811\u6797', en: 'Blueberry Woods' }
+  jungle:  { zh: '\u9999\u8549\u4e1b\u6797', en: 'Banana Jungle' },
+  farm:    { zh: '\u8349\u8393\u519c\u573a', en: 'Strawberry Farm' },
+  garden:  { zh: '\u83dc\u56ed\u5b50',   en: 'Veggie Garden' },
+  forest:  { zh: '\u8393\u679c\u6811\u6797', en: 'Berry Woods' },
+  orchard: { zh: '\u679c\u56ed',     en: 'Orchard' },
+  field:   { zh: '\u7389\u7c73\u5730',   en: 'Corn Field' }
 };
 
 /*
   \u6bcf\u4e00\u5173 / each level:
-    dish       \u83dc\u54c1 id\uff08\u51b3\u5b9a\u6210\u54c1\u56fe\uff09
-    customer   \u987e\u5ba2\u9020\u578b id
+    dish       \u83dc\u54c1\uff08\u51b3\u5b9a\u6210\u54c1\u56fe\uff0cid \u540c\u65f6\u662f Art.dish \u7684\u952e\uff09
+    customer   \u987e\u5ba2\u9020\u578b
     place      \u91c7\u96c6\u5730\u70b9\uff08\u80cc\u666f\uff09
-    target     \u8981\u91c7\u96c6\u7684\u98df\u6750
-    count      \u8981\u91c7\u96c6\u51e0\u4e2a\uff08\u968f\u5173\u5361\u9012\u589e\uff0c\u7ec3\u4e60\u6570\u6570\uff09
+    targets    \u8981\u91c7\u56de\u6765\u7684\u4e1c\u897f\uff0c[{ id, count }]\uff1b\u540e\u671f\u4f1a\u6709\u4e24\u79cd\uff0c\u4e00\u6b21\u8981\u8bb0\u4e24\u4e2a\u6570
     decoys     \u91c7\u96c6\u573a\u666f\u91cc\u7684\u5e72\u6270\u7269
-    steps      \u98df\u8c31\u6b65\u9aa4\uff0c\u5fc5\u987b\u6309\u987a\u5e8f\u653e\u8fdb\u9505\u91cc
-    appliance  \u70f9\u996a\u5668\u5177\uff0c\u51b3\u5b9a\u6700\u540e\u7684\u5c0f\u6e38\u620f\u52a8\u753b
-    taps       \u70f9\u996a\u9700\u8981\u70b9\u51e0\u4e0b
+    steps      \u98df\u8c31\u6b65\u9aa4\uff0c\u5fc5\u987b\u6309\u987a\u5e8f\u653e\u8fdb\u9505\u91cc\uff08\u540e\u671f\u4ece 3 \u6b65\u6da8\u5230 5 \u6b65\uff09
+    shelfExtra \u8d27\u67b6\u4e0a\u591a\u51fa\u6765\u7684\u5e72\u6270\u98df\u6750
+    appliance  \u70f9\u996a\u5668\u5177
+    taps       \u70f9\u996a\u8981\u70b9\u51e0\u4e0b
+    drift      true = \u91c7\u96c6\u7269\u4f1a\u7f13\u7f13\u98d8\u52a8\uff0c\u66f4\u96be\u70b9\u4e2d
+
+  \u96be\u5ea6\u662f\u4e09\u6761\u7ebf\u4e00\u8d77\u6da8\u7684\uff1a\u8981\u6570\u7684\u6570\u91cf\u3001\u8981\u8bb0\u7684\u98df\u8c31\u957f\u5ea6\u3001\u8fd8\u6709\u624b\u4e0a\u7684\u51c6\u5934\u3002
 */
 const LEVELS = [
   {
-    id: 'smoothie',
-    dish: { zh: '\u9999\u8549\u5976\u6614', en: 'Banana Smoothie' },
-    customer: 'birdie',
-    place: 'jungle',
-    target: 'banana',
-    count: 3,
+    id: 'smoothie', dish: { zh: '\u9999\u8549\u5976\u6614', en: 'Banana Smoothie' },
+    customer: 'birdie', place: 'jungle',
+    targets: [{ id: 'banana', count: 3 }],
     decoys: ['bug', 'acorn'],
-    steps: ['banana', 'milk', 'ice'],
-    shelfExtra: ['cheese', 'carrot'],
-    appliance: 'blender',
-    taps: 5
+    steps: ['banana', 'milk', 'ice'], shelfExtra: ['cheese', 'carrot'],
+    appliance: 'blender', taps: 5
   },
   {
-    id: 'pancake',
-    dish: { zh: '\u8349\u8393\u677e\u997c', en: 'Strawberry Pancakes' },
-    customer: 'pip',
-    place: 'farm',
-    target: 'strawberry',
-    count: 4,
+    id: 'pancake', dish: { zh: '\u8349\u8393\u677e\u997c', en: 'Strawberry Pancakes' },
+    customer: 'pip', place: 'farm',
+    targets: [{ id: 'strawberry', count: 4 }],
     decoys: ['bug', 'acorn'],
-    steps: ['flour', 'egg', 'strawberry'],
-    shelfExtra: ['salt', 'tomato'],
-    appliance: 'griddle',
-    taps: 6
+    steps: ['flour', 'egg', 'strawberry'], shelfExtra: ['salt', 'tomato'],
+    appliance: 'griddle', taps: 6
   },
   {
-    id: 'pizza',
-    dish: { zh: '\u756a\u8304\u6bd4\u8428', en: 'Tomato Pizza' },
-    customer: 'moss',
-    place: 'garden',
-    target: 'tomato',
-    count: 5,
+    id: 'pizza', dish: { zh: '\u756a\u8304\u6bd4\u8428', en: 'Tomato Pizza' },
+    customer: 'moss', place: 'garden',
+    targets: [{ id: 'tomato', count: 5 }],
     decoys: ['bug', 'acorn'],
-    steps: ['dough', 'tomato', 'cheese'],
-    shelfExtra: ['sugar', 'blueberry'],
-    appliance: 'oven',
-    taps: 6
+    steps: ['dough', 'tomato', 'cheese'], shelfExtra: ['sugar', 'blueberry'],
+    appliance: 'oven', taps: 6
   },
   {
-    id: 'soup',
-    dish: { zh: '\u80e1\u841d\u535c\u6d53\u6c64', en: 'Carrot Soup' },
-    customer: 'nib',
-    place: 'garden',
-    target: 'carrot',
-    count: 6,
+    id: 'soup', dish: { zh: '\u80e1\u841d\u535c\u6d53\u6c64', en: 'Carrot Soup' },
+    customer: 'nib', place: 'garden',
+    targets: [{ id: 'carrot', count: 6 }],
     decoys: ['bug', 'acorn'],
-    steps: ['carrot', 'water', 'salt'],
-    shelfExtra: ['cream', 'strawberry'],
-    appliance: 'pot',
-    taps: 7
+    steps: ['carrot', 'water', 'salt'], shelfExtra: ['cream', 'strawberry'],
+    appliance: 'pot', taps: 7
   },
   {
-    id: 'icecream',
-    dish: { zh: '\u84dd\u8393\u51b0\u6dc7\u6dcb', en: 'Blueberry Ice Cream' },
-    customer: 'lulu',
-    place: 'forest',
-    target: 'blueberry',
-    count: 7,
+    id: 'icecream', dish: { zh: '\u84dd\u8393\u51b0\u6dc7\u6dcb', en: 'Blueberry Ice Cream' },
+    customer: 'lulu', place: 'forest',
+    targets: [{ id: 'blueberry', count: 7 }],
     decoys: ['bug', 'acorn'],
-    steps: ['blueberry', 'cream', 'sugar'],
-    shelfExtra: ['egg', 'dough'],
-    appliance: 'freezer',
-    taps: 7
+    steps: ['blueberry', 'cream', 'sugar'], shelfExtra: ['egg', 'dough'],
+    appliance: 'freezer', taps: 7
+  },
+
+  /* ---- \u4ece\u8fd9\u91cc\u5f00\u59cb\u4e00\u6b21\u8981\u91c7\u4e24\u79cd\uff0c\u98df\u8c31\u4e5f\u53d8\u6210\u56db\u6b65 ---- */
+  {
+    id: 'applepie', dish: { zh: '\u82f9\u679c\u6d3e', en: 'Apple Pie' },
+    customer: 'tuk', place: 'orchard',
+    targets: [{ id: 'apple', count: 5 }, { id: 'lemon', count: 2 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['dough', 'apple', 'sugar', 'butter'], shelfExtra: ['salt', 'corn'],
+    appliance: 'oven', taps: 7
+  },
+  {
+    id: 'cornsoup', dish: { zh: '\u7389\u7c73\u6d53\u6c64', en: 'Corn Soup' },
+    customer: 'coco', place: 'field',
+    targets: [{ id: 'corn', count: 5 }, { id: 'mushroom', count: 3 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['corn', 'water', 'cream', 'salt'], shelfExtra: ['sugar', 'grape'],
+    appliance: 'pot', taps: 8
+  },
+  {
+    id: 'lemonade', dish: { zh: '\u67e0\u6aac\u6c7d\u6c34', en: 'Lemonade' },
+    customer: 'zip', place: 'orchard',
+    targets: [{ id: 'lemon', count: 6 }, { id: 'honey', count: 2 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['lemon', 'water', 'honey', 'ice'], shelfExtra: ['butter', 'mushroom'],
+    appliance: 'blender', taps: 8, drift: true
+  },
+  {
+    id: 'pumpkinpie', dish: { zh: '\u5357\u74dc\u6d3e', en: 'Pumpkin Pie' },
+    customer: 'plum', place: 'field',
+    targets: [{ id: 'pumpkin', count: 5 }, { id: 'corn', count: 4 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['dough', 'pumpkin', 'honey', 'cream'], shelfExtra: ['ice', 'lemon'],
+    appliance: 'oven', taps: 8, drift: true
+  },
+
+  /* ---- \u6700\u540e\u4e09\u5173\uff1a\u4e94\u6b65\u98df\u8c31 ---- */
+  {
+    id: 'grapejuice', dish: { zh: '\u8461\u8404\u6c41', en: 'Grape Juice' },
+    customer: 'olly', place: 'orchard',
+    targets: [{ id: 'grape', count: 6 }, { id: 'peach', count: 4 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['grape', 'peach', 'water', 'sugar', 'ice'], shelfExtra: ['salt', 'cheese'],
+    appliance: 'blender', taps: 9, drift: true
+  },
+  {
+    id: 'mushroompizza', dish: { zh: '\u8611\u83c7\u6bd4\u8428', en: 'Mushroom Pizza' },
+    customer: 'bumbo', place: 'forest',
+    targets: [{ id: 'mushroom', count: 5 }, { id: 'tomato', count: 5 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['dough', 'tomato', 'mushroom', 'cheese', 'salt'], shelfExtra: ['honey', 'peach'],
+    appliance: 'oven', taps: 9, drift: true
+  },
+  {
+    id: 'peachcake', dish: { zh: '\u6843\u5b50\u86cb\u7cd5', en: 'Peach Cake' },
+    customer: 'sunny', place: 'orchard',
+    targets: [{ id: 'peach', count: 6 }, { id: 'grape', count: 5 }],
+    decoys: ['bug', 'acorn'],
+    steps: ['flour', 'egg', 'peach', 'chocolate', 'cream'], shelfExtra: ['water', 'corn'],
+    appliance: 'oven', taps: 10, drift: true
   }
 ];
 
 /*
   \u91c7\u96c6\u573a\u666f\u91cc\u7269\u54c1\u7684\u843d\u70b9\uff081280\u00d7720 \u821e\u53f0\u5750\u6807\uff09\u3002
   \u523b\u610f\u907f\u5f00\u4e86\u9876\u90e8\u6a2a\u5e45\u3001\u5de6\u4e0b\u89d2\u7684\u7bee\u5b50\u548c\u5e95\u90e8\u7684\u6309\u94ae\u3002
+  \u540e\u9762\u51e0\u5173\u4e00\u5c4f\u6700\u591a\u8981\u653e 11 \u4e2a\u76ee\u6807 + 3 \u4e2a\u5e72\u6270\u7269\uff0c\u6240\u4ee5\u70b9\u4f4d\u8981\u591f\u3002
 */
 const FORAGE_SPOTS = [
-  [ 230, 215 ], [ 450, 170 ], [ 690, 205 ], [ 900, 165 ], [ 1120, 215 ],
-  [ 150, 395 ], [ 370, 340 ], [ 590, 400 ], [ 810, 340 ], [ 1030, 395 ], [ 1200, 350 ],
-  [ 430, 545 ], [ 860, 555 ], [ 1120, 545 ]
+  [ 230, 205 ], [ 420, 158 ], [ 610, 200 ], [ 800, 155 ], [ 990, 200 ], [ 1160, 158 ],
+  [ 140, 335 ], [ 330, 296 ], [ 520, 344 ], [ 710, 296 ], [ 900, 344 ], [ 1090, 296 ], [ 1215, 420 ],
+  [ 250, 462 ], [ 440, 470 ], [ 640, 448 ], [ 840, 470 ], [ 1030, 458 ],
+  [ 700, 606 ], [ 930, 600 ], [ 1160, 598 ]
 ];
 </script>
 
@@ -1530,9 +1884,11 @@ const I18N = (() => {
       customerLine: '\u6211\u60f3\u5403\u4e00\u4efd{dish}\uff01',
       orderBtn: '\u597d\u7684\uff0c\u4ea4\u7ed9\u6211\uff01',
       needTitle: '\u4eca\u5929\u8981\u505a\uff1a{dish}',
-      driveTitle: '\u53bb{place}\u6458{ing}',
+      driveTitle: '\u51fa\u53d1\u53bb{place}\uff01',
       driving: '\u8def\u4e0a\u98a0\u98a0\u98a0\u2026',
       forageTitle: '\u6458{count}\u4e2a{ing}',
+      forageTitle2: '\u6458{count}\u4e2a{ing}\uff0c\u8fd8\u8981{count2}\u4e2a{ing2}',
+      forageEnough: '{ing}\u5df2\u7ecf\u591f\u5566\uff0c\u770b\u770b\u8fd8\u7f3a\u4ec0\u4e48\uff1f',
       forageOops: '\u8fd9\u4e0d\u662f{ing}\u5440\uff0c\u518d\u627e\u627e\uff01',
       forageDone: '\u98df\u6750\u9f50\u5566\uff0c\u56de\u9910\u8f66\uff01',
       backBtn: '\u56de\u9910\u8f66\u505a\u83dc',
@@ -1548,6 +1904,7 @@ const I18N = (() => {
       serveHint: '\u628a\u83dc\u62d6\u7ed9\u5ba2\u4eba\uff0c\u6216\u8005\u70b9\u4e00\u4e0b\u5b83',
       yum: '\u54c7\uff01\u592a\u597d\u5403\u5566\uff0c\u8c22\u8c22\u5495\u565c\uff01',
       levelClear: '\u7b2c{n}\u5173\u5b8c\u6210\uff01',
+      reload: '\u91cd\u65b0\u52a0\u8f7d',
       nextBtn: '\u4e0b\u4e00\u4f4d\u5ba2\u4eba',
       allDone: '\u4eca\u5929\u7684\u5ba2\u4eba\u90fd\u5403\u9971\u5566\uff01',
       allDoneSub: '\u4f60\u4e00\u5171\u5f97\u5230{n}\u9897\u661f\u661f',
@@ -1565,9 +1922,11 @@ const I18N = (() => {
       customerLine: 'I would love some {dish}!',
       orderBtn: 'You got it!',
       needTitle: "Today's dish: {dish}",
-      driveTitle: 'Off to the {place} for {ing}',
+      driveTitle: 'Off to the {place}!',
       driving: 'Bumpity bump\u2026',
       forageTitle: 'Pick {count} {ing}',
+      forageTitle2: 'Pick {count} {ing} and {count2} {ing2}',
+      forageEnough: 'You have enough {ing} \u2014 what else is missing?',
       forageOops: 'That is not a {ing} \u2014 keep looking!',
       forageDone: 'All picked. Back to the truck!',
       backBtn: 'Back to the truck',
@@ -1583,6 +1942,7 @@ const I18N = (() => {
       serveHint: 'Drag the dish to the customer, or tap it',
       yum: 'Yum! Thank you, Gulu!',
       levelClear: 'Order {n} complete!',
+      reload: 'Reload',
       nextBtn: 'Next customer',
       allDone: 'Everyone is full and happy!',
       allDoneSub: 'You earned {n} stars',
@@ -1848,7 +2208,8 @@ const I18N = (() => {
   function startLevel() {
     const L = level();
     S.forage = {
-      picked: 0,
+      /* \u6bcf\u79cd\u76ee\u6807\u5404\u8bb0\u4e00\u4e2a\u6570 \u2014\u2014 \u540e\u9762\u7684\u5173\u5361\u8981\u540c\u65f6\u6570\u4e24\u6837\u4e1c\u897f */
+      picked: L.targets.map(() => 0),
       items: buildForageItems(L)
     };
     S.cook = { stepIndex: 0, shelf: shuffle([...L.steps, ...L.shelfExtra]), taps: 0, cooked: false };
@@ -1856,17 +2217,21 @@ const I18N = (() => {
     renderOrder();
   }
 
+  /* \u8fd9\u4e00\u5173\u7684\u91c7\u96c6\u6709\u6ca1\u6709\u5168\u90e8\u5b8c\u6210 */
+  const forageDone = () => level().targets.every((t, i) => S.forage.picked[i] >= t.count);
+
   function buildForageItems(L) {
-    const spots = shuffle(FORAGE_SPOTS).slice(0, L.count + 3);
-    const ids = [...Array(L.count).fill(L.target),
-                 ...Array(3).fill(0).map((_, i) => L.decoys[i % L.decoys.length])];
+    const ids = [];
+    L.targets.forEach(t => { for (let i = 0; i < t.count; i++) ids.push(t.id); });
+    L.decoys.forEach((d, i) => { ids.push(d); if (i === 0) ids.push(d); });   // 3 \u4e2a\u5e72\u6270\u7269
+    const spots = shuffle(FORAGE_SPOTS).slice(0, ids.length);
     return shuffle(ids).map((id, i) => ({
       id,
       x: spots[i][0],
       y: spots[i][1],
       rot: Math.round(Math.random() * 40 - 20),
       sc: 0.9 + Math.random() * 0.25,
-      delay: (i * 0.17).toFixed(2),
+      delay: (i * 0.13).toFixed(2),
       taken: false
     }));
   }
@@ -1905,7 +2270,7 @@ const I18N = (() => {
         <div class="pos drive-truck">${Art.truck()}
           <div class="puff p1"></div><div class="puff p2"></div>
         </div>
-        <div class="banner">${t('driveTitle', { place: I18N.place(L.place), ing: I18N.ing(L.target) })}</div>
+        <div class="banner">${t('driveTitle', { place: I18N.place(L.place) })}</div>
         <div class="chip bottom-chip">${t('driving')}</div>
       </div>
     `, () => {
@@ -1928,7 +2293,7 @@ const I18N = (() => {
     S.phase = 'forage';
     const L = level();
     const F = S.forage;
-    const done = F.picked >= L.count;
+    const done = forageDone();
 
     const foreground = L.place === 'jungle'
       ? Art.svg(
@@ -1939,23 +2304,37 @@ const I18N = (() => {
           '0 0 1280 720', 'art-bg')
       : '';
 
+    /* \u8981\u91c7\u4e00\u79cd\u8fd8\u662f\u4e24\u79cd\uff0c\u6a2a\u5e45\u7684\u8bf4\u6cd5\u4e0d\u4e00\u6837 */
+    const title = L.targets.length === 1
+      ? t('forageTitle', { count: L.targets[0].count, ing: I18N.ing(L.targets[0].id) })
+      : t('forageTitle2', {
+          count: L.targets[0].count, ing: I18N.ing(L.targets[0].id),
+          count2: L.targets[1].count, ing2: I18N.ing(L.targets[1].id)
+        });
+
+    /* \u7bee\u5b50\uff1a\u4e00\u79cd\u76ee\u6807\u4e00\u884c\uff0c\u5404\u6570\u5404\u7684 */
+    const rows = L.targets.map((tg, ti) => `
+      <div class="basket-row" data-t="${ti}">
+        <span class="slots">
+          ${Array.from({ length: tg.count }, (_, i) =>
+            `<span class="slot ${i < F.picked[ti] ? 'full' : ''}">${i < F.picked[ti] ? Art.ingredient(tg.id) : ''}</span>`).join('')}
+        </span>
+        <span class="count">${F.picked[ti]}<em>/${tg.count}</em></span>
+      </div>`).join('');
+
     paint('sc-forage', `
       <div class="bg">${Art.backdrop(L.place)}</div>
       <div class="layer">
         ${F.items.map((it, i) => it.taken ? '' : `
-          <button class="forage-item sway" data-i="${i}" aria-label="${I18N.ing(it.id)}"
+          <button class="forage-item sway${L.drift ? ' drift' : ''}" data-i="${i}" aria-label="${I18N.ing(it.id)}"
             style="left:${it.x}px;top:${it.y}px;--rot:${it.rot}deg;--sc:${it.sc};animation-delay:${it.delay}s">
             ${Art.ingredient(it.id)}
           </button>`).join('')}
         <div class="fg">${foreground}</div>
-        <div class="banner">${t('forageTitle', { count: L.count, ing: I18N.ing(L.target) })}</div>
-        <div class="basket-hud">
+        <div class="banner">${title}</div>
+        <div class="basket-hud${L.targets.length > 1 ? ' two' : ''}">
           <div class="basket-art">${Art.basket()}</div>
-          <div class="slots">
-            ${Array.from({ length: L.count }, (_, i) =>
-              `<span class="slot ${i < F.picked ? 'full' : ''}">${i < F.picked ? Art.ingredient(L.target) : ''}</span>`).join('')}
-          </div>
-          <div class="count">${F.picked}<em>/${L.count}</em></div>
+          <div class="basket-rows">${rows}</div>
         </div>
         ${done ? `
           <div class="pos chef-forage pop-in bob">${Art.chef('cheer')}</div>
@@ -1968,27 +2347,36 @@ const I18N = (() => {
           if (busy) return;
           const it = F.items[+btn.dataset.i];
           if (it.taken) return;
-          if (it.id !== L.target) {
+
+          const ti = L.targets.findIndex(tg => tg.id === it.id);
+          /* \u4e0d\u662f\u8981\u91c7\u7684\u4e1c\u897f\uff0c\u6216\u8005\u8fd9\u4e00\u79cd\u5df2\u7ecf\u91c7\u591f\u4e86 */
+          if (ti < 0 || F.picked[ti] >= L.targets[ti].count) {
             shake(btn);
             Sound.oops();
-            toast(t('forageOops', { ing: I18N.ing(L.target) }), 'warn');
+            toast(ti >= 0
+              ? t('forageEnough', { ing: I18N.ing(it.id) })
+              : t('forageOops', { ing: I18N.ing(L.targets[0].id) }), 'warn');
             return;
           }
+
           it.taken = true;
-          F.picked++;
-          const slotIndex = F.picked - 1;   // \u8bb0\u4f4f\u81ea\u5df1\u7684\u683c\u5b50\uff0c\u591a\u4e2a\u98df\u6750\u540c\u65f6\u5728\u98de\u4e5f\u4e0d\u4f1a\u586b\u9519
+          F.picked[ti]++;
+          const slotIndex = F.picked[ti] - 1;   // \u8bb0\u4f4f\u81ea\u5df1\u7684\u683c\u5b50\uff0c\u591a\u4e2a\u98df\u6750\u540c\u65f6\u5728\u98de\u4e5f\u4e0d\u4f1a\u586b\u9519
+          const wasLast = forageDone();
           Sound.pick(slotIndex);
           btn.style.pointerEvents = 'none';
           burst(btn, 8);
           flyItem(Art.ingredient(it.id), btn, basketEl, {
             onDone: () => {
-              const slots = sceneEl.querySelectorAll('.slot');
-              const slot = slots[slotIndex];
-              if (slot) { slot.innerHTML = Art.ingredient(L.target); slot.classList.add('full'); }
-              const c = $('.basket-hud .count');
-              if (c) c.innerHTML = `${F.picked}<em>/${L.count}</em>`;
+              const row = sceneEl.querySelector(`.basket-row[data-t="${ti}"]`);
+              if (row) {
+                const slot = row.querySelectorAll('.slot')[slotIndex];
+                if (slot) { slot.innerHTML = Art.ingredient(it.id); slot.classList.add('full'); }
+                const c = row.querySelector('.count');
+                if (c) c.innerHTML = `${F.picked[ti]}<em>/${L.targets[ti].count}</em>`;
+              }
               if (basketEl) { basketEl.classList.remove('nudge'); void basketEl.offsetWidth; basketEl.classList.add('nudge'); }
-              if (slotIndex === L.count - 1) {      // \u6700\u540e\u4e00\u4e2a\u843d\u8fdb\u7bee\u5b50\u624d\u7b97\u9f50
+              if (wasLast) {      // \u6700\u540e\u4e00\u4e2a\u843d\u8fdb\u7bee\u5b50\u624d\u7b97\u9f50
                 toast(t('forageDone'), 'good');
                 Sound.ding();
                 later(renderForage, 700);
@@ -2267,6 +2655,12 @@ const I18N = (() => {
 
   /* ---------------- HUD ---------------- */
   document.getElementById('btn-home').addEventListener('click', () => { Sound.tap(); renderTitle(); });
+
+  /* \u91cd\u65b0\u52a0\u8f7d\u6574\u4e2a\u9875\u9762 \u2014\u2014 \u5361\u4f4f\u4e86\u6216\u8005\u60f3\u4ece\u5934\u6765\uff0c\u8fd9\u4e2a\u6700\u76f4\u63a5 */
+  document.getElementById('btn-reload').addEventListener('click', () => {
+    Sound.tap();
+    location.reload();
+  });
 
   const soundBtn = document.getElementById('btn-sound');
   document.body.classList.toggle('muted', !Sound.enabled);

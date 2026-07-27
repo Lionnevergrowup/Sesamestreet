@@ -248,14 +248,16 @@ body.muted .ico-off { display: block; }
   font-size: 13px; vertical-align: 1px;
 }
 
+/* 通关合影：12 位客人一排放不下，改成前后两排 */
 .crowd {
-  position: absolute; left: 40px; bottom: 20px;
-  display: flex; align-items: flex-end; gap: 6px;
+  position: absolute; left: 36px; bottom: 14px;
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  gap: 4px; width: 700px;
 }
-.crowd-one { width: 140px; }
+.crowd-one { width: 112px; }
 .crowd-one svg { width: 100%; height: auto; }
 /* 通关页：主厨站到右边，别挡住排队道谢的客人 */
-.sc-finale .chef-title { left: 832px; bottom: 24px; width: 212px; }
+.sc-finale .chef-title { left: 908px; bottom: 16px; width: 202px; }
 
 /* ---------------- 接单 / 上菜 ---------------- */
 
@@ -347,17 +349,34 @@ body.muted .ico-off { display: block; }
   z-index: 30;
 }
 .basket-art { width: 78px; flex: none; }
+.basket-hud.two .basket-art { width: 66px; }
 .basket-art svg { width: 100%; height: auto; }
-.slots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 250px; }
+
+/* 一种要采的东西一行，各数各的 */
+.basket-rows { display: flex; flex-direction: column; gap: 8px; }
+.basket-row { display: flex; align-items: center; gap: 12px; }
+.slots { display: flex; flex-wrap: wrap; gap: 6px; max-width: 280px; }
 .slot {
   width: 40px; height: 40px; border-radius: 12px;
   background: rgba(43, 35, 64, .1);
   display: grid; place-items: center;
 }
+.basket-hud.two .slot { width: 32px; height: 32px; border-radius: 10px; }
 .slot.full { background: rgba(74, 168, 107, .22); animation: popIn .35s cubic-bezier(.2,1.5,.4,1); }
 .slot svg { width: 100%; height: 100%; }
-.count { font-size: 34px; font-weight: 900; color: var(--deep); }
+.count { font-size: 34px; font-weight: 900; color: var(--deep); min-width: 74px; }
+.basket-hud.two .count { font-size: 26px; min-width: 60px; }
 .count em { font-style: normal; font-size: 22px; opacity: .55; }
+.basket-hud.two .count em { font-size: 17px; }
+
+/* 后面几关食材会缓缓飘动，手上要更准一点 */
+@keyframes driftAbout {
+  0%,100% { margin-left: -59px; margin-top: -59px; }
+  25%     { margin-left: -34px; margin-top: -74px; }
+  50%     { margin-left: -12px; margin-top: -52px; }
+  75%     { margin-left: -40px; margin-top: -40px; }
+}
+.forage-item.drift { animation: sway 3.2s ease-in-out infinite, driftAbout 9s ease-in-out infinite; }
 
 .chef-forage { right: 40px; bottom: 30px; width: 200px; z-index: 25; }
 
@@ -365,10 +384,10 @@ body.muted .ico-off { display: block; }
 
 .recipe-card { position: absolute; left: 34px; top: 92px; width: 320px; padding: 20px 22px; }
 .recipe-card h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; text-align: center; }
-.recipe-card ol { list-style: none; display: grid; gap: 10px; }
+.recipe-card ol { list-style: none; display: grid; gap: 7px; }
 .recipe-card li {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 10px; border-radius: 16px;
+  padding: 6px 10px; border-radius: 16px;
   background: rgba(43, 35, 64, .06);
   transition: background .2s ease;
 }
@@ -415,7 +434,7 @@ body.muted .ico-off { display: block; }
 
 .shelf {
   position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
-  display: flex; gap: 14px;
+  display: flex; gap: 10px;
   padding: 16px 20px;
   border-radius: 26px;
   background: rgba(255, 246, 230, .95);
@@ -423,7 +442,7 @@ body.muted .ico-off { display: block; }
   z-index: 30;
 }
 .ing-tile {
-  width: 122px; padding: 10px 6px 8px;
+  width: 116px; padding: 10px 6px 8px;
   border: none; border-radius: 20px;
   background: #fff;
   box-shadow: 0 5px 0 rgba(43, 35, 64, .16);
@@ -494,7 +513,7 @@ body.muted .ico-off { display: block; }
   但食材飞进锅里、庆祝的碎片这些是游戏反馈，保留。
 */
 @media (prefers-reduced-motion: reduce) {
-  .bob, .float, .walk-in, .forage-item.sway,
+  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift,
   .road-scroll, .drive-truck, .puff,
   .appliance-wrap.ready .steam, .recipe-card li.now {
     animation: none !important;

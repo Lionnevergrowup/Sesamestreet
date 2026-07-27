@@ -21,13 +21,30 @@
 | 下厨 | 按食谱 1→2→3 的顺序把食材放进厨具，再连续点击直到做好 | **按顺序执行**、因果关系 |
 | 上菜 | 把做好的菜拖给客人 | 精细动作、分享的成就感 |
 
-一共 5 关，要采集的数量从 3 个递增到 7 个：
+一共 12 关，难度沿三条线一起涨：**要数的数量**、**要记的食谱长度**、**手上的准头**。
 
-1. 香蕉奶昔（丛林 · 摘 3 根香蕉 · 搅拌）
-2. 草莓松饼（农场 · 摘 4 颗草莓 · 煎）
-3. 番茄比萨（菜园 · 摘 5 个番茄 · 烤）
-4. 胡萝卜浓汤（菜园 · 摘 6 根胡萝卜 · 煮）
-5. 蓝莓冰淇淋（树林 · 摘 7 颗蓝莓 · 冷冻）
+| 关 | 菜 | 去哪儿 | 要采什么 | 食谱 |
+| --- | --- | --- | --- | --- |
+| 1 | 香蕉奶昔 | 丛林 | 香蕉 ×3 | 3 步 |
+| 2 | 草莓松饼 | 农场 | 草莓 ×4 | 3 步 |
+| 3 | 番茄比萨 | 菜园 | 番茄 ×5 | 3 步 |
+| 4 | 胡萝卜浓汤 | 菜园 | 胡萝卜 ×6 | 3 步 |
+| 5 | 蓝莓冰淇淋 | 树林 | 蓝莓 ×7 | 3 步 |
+| 6 | 苹果派 | 果园 | 苹果 ×5 **+ 柠檬 ×2** | 4 步 |
+| 7 | 玉米浓汤 | 玉米地 | 玉米 ×5 + 蘑菇 ×3 | 4 步 |
+| 8 | 柠檬汽水 | 果园 | 柠檬 ×6 + 蜂蜜 ×2 | 4 步 · 食材开始飘 |
+| 9 | 南瓜派 | 玉米地 | 南瓜 ×5 + 玉米 ×4 | 4 步 · 飘 |
+| 10 | 葡萄汁 | 果园 | 葡萄 ×6 + 桃子 ×4 | **5 步** · 飘 |
+| 11 | 蘑菇比萨 | 树林 | 蘑菇 ×5 + 番茄 ×5 | 5 步 · 飘 |
+| 12 | 桃子蛋糕 | 果园 | 桃子 ×6 + 葡萄 ×5 | 5 步 · 飘 |
+
+三处变化让后半段不至于变成重复劳动：
+
+- **第 6 关起要同时采两种**，篮子分两行各数各的 —— 一次记两个数。
+- **食谱从 3 步涨到 5 步**，货架上的干扰食材也更多。
+- **第 8 关起采集物会缓缓飘动**，需要瞄准。
+
+12 位客人各不相同，6 种采集场景，25 种食材。
 
 每通一关得一颗星，星星数存在浏览器本地。
 
@@ -37,7 +54,7 @@
 - **不会"输"。** 摘错、放错只会晃一下 + 提示"再看看食谱"，不扣分、不重来。
 - **不打断。** 中间步骤就地更新，不整屏重绘，连点的时候不会吞掉点击。
 - **横屏提示。** 手机竖着拿会提示转横屏。
-- **声音可关。** 右上角随时静音，设置会记住。
+- **有声音。** 一直在走的背景音乐，加上采摘、下锅、上菜各自的音效，全部是实时合成的，没有音频文件。左上角随时静音。
 - **存不了也能玩。** 隐私模式或存储被禁用时，只是记不住星星，不会白屏。
 - **尊重系统设置。** 开了「减少动态效果」就不放氛围动画，键盘操作有可见焦点圈。
 
@@ -46,7 +63,8 @@
 | 按钮 | 作用 |
 | --- | --- |
 | 🏠 | 回首页 |
-| 🔊 | 静音开关 |
+| ↻ | 重新加载（卡住了或想从头来） |
+| 🔊 | 静音开关（音乐和音效一起） |
 | EN / 中 | 中英文切换（游戏中随时可切） |
 
 开车途中点一下屏幕可以跳过。
@@ -59,7 +77,7 @@ build.js            打包脚本：node build.js → play.html
 play.html           单文件版本（所有样式和脚本内联），部署用的就是它
 css/style.css       全部样式；1280×720 固定舞台，等比缩放到任意屏幕
 js/store.js         存进度；localStorage 不可用时自动退回内存
-js/audio.js         WebAudio 实时合成音效（无音频文件）
+js/audio.js         WebAudio 实时合成：背景音乐 + 全部音效（无音频文件）
 js/art.js           全部美术：角色、食材、菜品、厨具、场景，都是生成的 SVG
 js/recipes.js       游戏数据：食材、关卡、食谱、采集点位
 js/i18n.js          中英文案
@@ -93,6 +111,12 @@ and serve it up. The gameplay structure is modelled on the food-truck game on th
 Street site, but **all code, characters, and artwork here are original** — Gulu is a purple
 monster of our own, and no Sesame Street assets or characters are used.
 
-Open `index.html` in a browser. No install, no build, no network. Five levels; the
-ingredient count grows from 3 to 7 for counting practice. Tap or drag both work, nothing
-can be failed, and the whole UI toggles between Chinese and English at any time.
+Open `index.html` in a browser. No install, no build, no network. Twelve levels across six
+foraging locations, with twelve customers and twenty-five ingredients. Difficulty climbs on
+three axes: how many things to count, how long the recipe is, and how steady the aim needs
+to be — from level 6 two different ingredients must be gathered at once, recipes grow from
+three steps to five, and from level 8 the ingredients drift as you reach for them.
+
+Music and every sound effect are synthesised live in the browser, so there are no audio
+files. Tap or drag both work, nothing can be failed, and the whole UI toggles between
+Chinese and English at any time.

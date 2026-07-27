@@ -229,7 +229,8 @@
   function startLevel() {
     const L = level();
     S.forage = {
-      picked: 0,
+      /* 每种目标各记一个数 —— 后面的关卡要同时数两样东西 */
+      picked: L.targets.map(() => 0),
       items: buildForageItems(L)
     };
     S.cook = { stepIndex: 0, shelf: shuffle([...L.steps, ...L.shelfExtra]), taps: 0, cooked: false };
@@ -237,17 +238,21 @@
     renderOrder();
   }
 
+  /* 这一关的采集有没有全部完成 */
+  const forageDone = () => level().targets.every((t, i) => S.forage.picked[i] >= t.count);
+
   function buildForageItems(L) {
-    const spots = shuffle(FORAGE_SPOTS).slice(0, L.count + 3);
-    const ids = [...Array(L.count).fill(L.target),
-                 ...Array(3).fill(0).map((_, i) => L.decoys[i % L.decoys.length])];
+    const ids = [];
+    L.targets.forEach(t => { for (let i = 0; i < t.count; i++) ids.push(t.id); });
+    L.decoys.forEach((d, i) => { ids.push(d); if (i === 0) ids.push(d); });   // 3 个干扰物
+    const spots = shuffle(FORAGE_SPOTS).slice(0, ids.length);
     return shuffle(ids).map((id, i) => ({
       id,
       x: spots[i][0],
       y: spots[i][1],
       rot: Math.round(Math.random() * 40 - 20),
       sc: 0.9 + Math.random() * 0.25,
-      delay: (i * 0.17).toFixed(2),
+      delay: (i * 0.13).toFixed(2),
       taken: false
     }));
   }
@@ -286,7 +291,7 @@
         <div class="pos drive-truck">${Art.truck()}
           <div class="puff p1"></div><div class="puff p2"></div>
         </div>
-        <div class="banner">${t('driveTitle', { place: I18N.place(L.place), ing: I18N.ing(L.target) })}</div>
+        <div class="banner">${t('driveTitle', { place: I18N.place(L.place) })}</div>
         <div class="chip bottom-chip">${t('driving')}</div>
       </div>
     `, () => {
@@ -309,7 +314,7 @@
     S.phase = 'forage';
     const L = level();
     const F = S.forage;
-    const done = F.picked >= L.count;
+    const done = forageDone();
 
     const foreground = L.place === 'jungle'
       ? Art.svg(
@@ -320,23 +325,37 @@
           '0 0 1280 720', 'art-bg')
       : '';
 
+    /* 要采一种还是两种，横幅的说法不一样 */
+    const title = L.targets.length === 1
+      ? t('forageTitle', { count: L.targets[0].count, ing: I18N.ing(L.targets[0].id) })
+      : t('forageTitle2', {
+          count: L.targets[0].count, ing: I18N.ing(L.targets[0].id),
+          count2: L.targets[1].count, ing2: I18N.ing(L.targets[1].id)
+        });
+
+    /* 篮子：一种目标一行，各数各的 */
+    const rows = L.targets.map((tg, ti) => `
+      <div class="basket-row" data-t="${ti}">
+        <span class="slots">
+          ${Array.from({ length: tg.count }, (_, i) =>
+            `<span class="slot ${i < F.picked[ti] ? 'full' : ''}">${i < F.picked[ti] ? Art.ingredient(tg.id) : ''}</span>`).join('')}
+        </span>
+        <span class="count">${F.picked[ti]}<em>/${tg.count}</em></span>
+      </div>`).join('');
+
     paint('sc-forage', `
       <div class="bg">${Art.backdrop(L.place)}</div>
       <div class="layer">
         ${F.items.map((it, i) => it.taken ? '' : `
-          <button class="forage-item sway" data-i="${i}" aria-label="${I18N.ing(it.id)}"
+          <button class="forage-item sway${L.drift ? ' drift' : ''}" data-i="${i}" aria-label="${I18N.ing(it.id)}"
             style="left:${it.x}px;top:${it.y}px;--rot:${it.rot}deg;--sc:${it.sc};animation-delay:${it.delay}s">
             ${Art.ingredient(it.id)}
           </button>`).join('')}
         <div class="fg">${foreground}</div>
-        <div class="banner">${t('forageTitle', { count: L.count, ing: I18N.ing(L.target) })}</div>
-        <div class="basket-hud">
+        <div class="banner">${title}</div>
+        <div class="basket-hud${L.targets.length > 1 ? ' two' : ''}">
           <div class="basket-art">${Art.basket()}</div>
-          <div class="slots">
-            ${Array.from({ length: L.count }, (_, i) =>
-              `<span class="slot ${i < F.picked ? 'full' : ''}">${i < F.picked ? Art.ingredient(L.target) : ''}</span>`).join('')}
-          </div>
-          <div class="count">${F.picked}<em>/${L.count}</em></div>
+          <div class="basket-rows">${rows}</div>
         </div>
         ${done ? `
           <div class="pos chef-forage pop-in bob">${Art.chef('cheer')}</div>
@@ -349,27 +368,36 @@
           if (busy) return;
           const it = F.items[+btn.dataset.i];
           if (it.taken) return;
-          if (it.id !== L.target) {
+
+          const ti = L.targets.findIndex(tg => tg.id === it.id);
+          /* 不是要采的东西，或者这一种已经采够了 */
+          if (ti < 0 || F.picked[ti] >= L.targets[ti].count) {
             shake(btn);
             Sound.oops();
-            toast(t('forageOops', { ing: I18N.ing(L.target) }), 'warn');
+            toast(ti >= 0
+              ? t('forageEnough', { ing: I18N.ing(it.id) })
+              : t('forageOops', { ing: I18N.ing(L.targets[0].id) }), 'warn');
             return;
           }
+
           it.taken = true;
-          F.picked++;
-          const slotIndex = F.picked - 1;   // 记住自己的格子，多个食材同时在飞也不会填错
+          F.picked[ti]++;
+          const slotIndex = F.picked[ti] - 1;   // 记住自己的格子，多个食材同时在飞也不会填错
+          const wasLast = forageDone();
           Sound.pick(slotIndex);
           btn.style.pointerEvents = 'none';
           burst(btn, 8);
           flyItem(Art.ingredient(it.id), btn, basketEl, {
             onDone: () => {
-              const slots = sceneEl.querySelectorAll('.slot');
-              const slot = slots[slotIndex];
-              if (slot) { slot.innerHTML = Art.ingredient(L.target); slot.classList.add('full'); }
-              const c = $('.basket-hud .count');
-              if (c) c.innerHTML = `${F.picked}<em>/${L.count}</em>`;
+              const row = sceneEl.querySelector(`.basket-row[data-t="${ti}"]`);
+              if (row) {
+                const slot = row.querySelectorAll('.slot')[slotIndex];
+                if (slot) { slot.innerHTML = Art.ingredient(it.id); slot.classList.add('full'); }
+                const c = row.querySelector('.count');
+                if (c) c.innerHTML = `${F.picked[ti]}<em>/${L.targets[ti].count}</em>`;
+              }
               if (basketEl) { basketEl.classList.remove('nudge'); void basketEl.offsetWidth; basketEl.classList.add('nudge'); }
-              if (slotIndex === L.count - 1) {      // 最后一个落进篮子才算齐
+              if (wasLast) {      // 最后一个落进篮子才算齐
                 toast(t('forageDone'), 'good');
                 Sound.ding();
                 later(renderForage, 700);
@@ -648,6 +676,12 @@
 
   /* ---------------- HUD ---------------- */
   document.getElementById('btn-home').addEventListener('click', () => { Sound.tap(); renderTitle(); });
+
+  /* 重新加载整个页面 —— 卡住了或者想从头来，这个最直接 */
+  document.getElementById('btn-reload').addEventListener('click', () => {
+    Sound.tap();
+    location.reload();
+  });
 
   const soundBtn = document.getElementById('btn-sound');
   document.body.classList.toggle('muted', !Sound.enabled);

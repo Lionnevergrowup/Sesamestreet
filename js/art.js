@@ -116,11 +116,18 @@ const Art = (() => {
   /* ---------- 顾客 / customers ---------- */
 
   const CUSTOMERS = {
-    birdie: { c: '#ffcb3d', d: '#e0a212', shape: 'round', top: 'tuft', beak: true },
+    birdie: { c: '#ffcb3d', d: '#e0a212', shape: 'round', top: 'tuft',    beak: true },
     pip:    { c: '#ff8a5c', d: '#e2653a', shape: 'wide',  top: 'ears' },
     moss:   { c: '#5fbf7d', d: '#3d9a5c', shape: 'round', top: 'leaf' },
     nib:    { c: '#5aa8e8', d: '#3a83c4', shape: 'tall',  top: 'antenna' },
-    lulu:   { c: '#f38fc4', d: '#d466a2', shape: 'wide',  top: 'buns' }
+    lulu:   { c: '#f38fc4', d: '#d466a2', shape: 'wide',  top: 'buns' },
+    tuk:    { c: '#8b5fe0', d: '#6b41c0', shape: 'tall',  top: 'horns' },
+    coco:   { c: '#c98a4b', d: '#8b5a2b', shape: 'round', top: 'ears' },
+    zip:    { c: '#4fd0c0', d: '#2fa89a', shape: 'wide',  top: 'crest' },
+    plum:   { c: '#e8637f', d: '#c2445d', shape: 'round', top: 'antenna' },
+    olly:   { c: '#a8c840', d: '#82a01e', shape: 'tall',  top: 'leaf' },
+    bumbo:  { c: '#6f8fe0', d: '#4c6ac0', shape: 'wide',  top: 'horns' },
+    sunny:  { c: '#ffa63d', d: '#e07f12', shape: 'round', top: 'crest',   beak: true }
   };
 
   function customer(id, happy = false, look = [0, 0]) {
@@ -140,7 +147,12 @@ const Art = (() => {
       antenna: `<path d="M100 ${cy - ry}v-26" stroke="${k.d}" stroke-width="6" stroke-linecap="round"/>
                 <circle cx="100" cy="${cy - ry - 32}" r="11" fill="#ffd23f"/>`,
       buns: `<circle cx="56" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>
-             <circle cx="144" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>`
+             <circle cx="144" cy="${cy - ry + 10}" r="20" fill="${k.d}"/>`,
+      horns: `<path d="M74 ${cy - ry + 6}c-8-16-6-30 2-38 8 10 10 24 6 38Z" fill="${k.d}"/>
+              <path d="M126 ${cy - ry + 6}c8-16 6-30-2-38-8 10-10 24-6 38Z" fill="${k.d}"/>`,
+      crest: `<path d="M100 ${cy - ry - 6}c-16-4-24-16-22-30 12 2 18 10 22 30Z" fill="${k.d}"/>
+              <path d="M100 ${cy - ry - 6}c16-4 24-16 22-30-12 2-18 10-22 30Z" fill="${k.d}"/>
+              <path d="M100 ${cy - ry - 10}c0-18 0-28 0-34 6 10 6 24 0 34Z" fill="${k.c}"/>`
     };
 
     const face = k.beak
@@ -287,7 +299,83 @@ const Art = (() => {
       <path d="M50 92c-14 0-24-12-24-26 0-8 10-14 24-14s24 6 24 14c0 14-10 26-24 26Z" fill="#c98a4b"/>
       <path d="M24 48c0-9 12-16 26-16s26 7 26 16c0 4-4 6-26 6s-26-2-26-6Z" fill="#8b5a2b"/>
       <path d="M50 32V18" stroke="#6b4420" stroke-width="6" stroke-linecap="round"/>
-      <path d="M34 62c4 8 10 12 16 13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".3"/>`
+      <path d="M34 62c4 8 10 12 16 13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".3"/>`,
+
+    apple: `
+      <path d="M50 34c14-8 34-2 34 20 0 20-14 40-24 40-4 0-6-3-10-3s-6 3-10 3c-10 0-24-20-24-40 0-22 20-28 34-20Z" fill="#e8453c"/>
+      <path d="M34 46c4-6 10-9 15-9-6 4-11 8-15 16Z" fill="#fff" opacity=".4"/>
+      <path d="M50 34V18" stroke="#6b4420" stroke-width="6" stroke-linecap="round"/>
+      <path d="M52 26c10-10 20-10 24-8-2 10-12 14-24 12Z" fill="#4fae63"/>`,
+
+    lemon: `
+      <ellipse cx="50" cy="60" rx="30" ry="24" fill="#ffd23f"/>
+      <path d="M80 60c6 0 8 2 8 4s-4 4-9 3ZM20 60c-6 0-8 2-8 4s4 4 9 3Z" fill="#e8ab1e"/>
+      <ellipse cx="40" cy="50" rx="10" ry="6" fill="#fff" opacity=".45" transform="rotate(-18 40 50)"/>
+      <path d="M50 36V24" stroke="#6b4420" stroke-width="5" stroke-linecap="round"/>
+      <path d="M52 30c8-8 16-8 19-6-2 8-10 11-19 6Z" fill="#4fae63"/>`,
+
+    corn: `
+      <path d="M50 94c-14 0-22-16-22-34S36 26 50 26s22 16 22 34-8 34-22 34Z" fill="#ffd23f"/>
+      <g fill="#e8ab1e">
+        <circle cx="42" cy="44" r="3.4"/><circle cx="58" cy="44" r="3.4"/><circle cx="50" cy="52" r="3.4"/>
+        <circle cx="40" cy="60" r="3.4"/><circle cx="60" cy="60" r="3.4"/><circle cx="50" cy="68" r="3.4"/>
+        <circle cx="42" cy="78" r="3.4"/><circle cx="58" cy="78" r="3.4"/>
+      </g>
+      <path d="M28 46c-14-6-20-18-18-28 12 2 20 12 22 26ZM72 46c14-6 20-18 18-28-12 2-20 12-22 26Z" fill="#4fae63"/>`,
+
+    pumpkin: `
+      <ellipse cx="50" cy="62" rx="34" ry="28" fill="#f4842c"/>
+      <ellipse cx="50" cy="62" rx="14" ry="28" fill="#ff9f4d"/>
+      <path d="M28 42c-5 12-5 28 0 40M72 42c5 12 5 28 0 40" fill="none" stroke="#d96a15" stroke-width="3.5"/>
+      <path d="M50 36V24" stroke="#4a7c3a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M52 28c10-8 18-6 20-4-4 8-12 10-20 4Z" fill="#4fae63"/>`,
+
+    honey: `
+      <path d="M28 46h44v40a10 10 0 0 1-10 10H38a10 10 0 0 1-10-10Z" fill="#ffb03a"/>
+      <path d="M28 46h44v14H28Z" fill="#ffd23f"/>
+      <rect x="24" y="34" width="52" height="14" rx="7" fill="#c98a4b"/>
+      <path d="M40 66l5 8 5-8 5 8 5-8" fill="none" stroke="#fff6e6" stroke-width="4" stroke-linecap="round" opacity=".75"/>
+      <path d="M62 22l4 7 8 1-6 6 2 8-8-4-8 4 2-8-6-6 8-1Z" fill="#ffd23f" opacity=".85"/>`,
+
+    mushroom: `
+      <path d="M40 60h20v26a10 10 0 0 1-20 0Z" fill="#fff3dc"/>
+      <path d="M16 60c0-20 15-34 34-34s34 14 34 34Z" fill="#e8453c"/>
+      <circle cx="34" cy="46" r="7" fill="#fff6e6"/>
+      <circle cx="58" cy="40" r="5.5" fill="#fff6e6"/>
+      <circle cx="68" cy="52" r="4.5" fill="#fff6e6"/>
+      <circle cx="46" cy="54" r="4" fill="#fff6e6"/>`,
+
+    grape: `
+      <path d="M50 28V16" stroke="#6b4420" stroke-width="5" stroke-linecap="round"/>
+      <path d="M52 22c9-8 17-7 20-5-3 8-11 10-20 5Z" fill="#4fae63"/>
+      <g fill="#8b5fe0">
+        <circle cx="50" cy="38" r="11"/><circle cx="36" cy="52" r="11"/><circle cx="64" cy="52" r="11"/>
+        <circle cx="50" cy="60" r="11"/><circle cx="40" cy="74" r="11"/><circle cx="60" cy="74" r="11"/>
+      </g>
+      <g fill="#a888f0">
+        <circle cx="47" cy="35" r="3.5"/><circle cx="33" cy="49" r="3.5"/><circle cx="61" cy="49" r="3.5"/>
+      </g>`,
+
+    chocolate: `
+      <path d="M24 34h52v52a8 8 0 0 1-8 8H32a8 8 0 0 1-8-8Z" fill="#6b4420"/>
+      <path d="M24 34h52v10H24Z" fill="#8b5a2b"/>
+      <g stroke="#4a2e16" stroke-width="3">
+        <path d="M50 44v50M24 60h52M24 78h52"/>
+      </g>
+      <path d="M30 48h14v8H30Z" fill="#8b5a2b" opacity=".6"/>`,
+
+    butter: `
+      <path d="M22 56 44 40h36v30l-22 16H22Z" fill="#ffd23f"/>
+      <path d="M22 56h36v30H22Z" fill="#ffe08a"/>
+      <path d="M58 56 80 40v30L58 86Z" fill="#e8ab1e"/>
+      <path d="M28 64h20M28 74h14" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".6"/>`,
+
+    peach: `
+      <path d="M50 90c-18 0-32-14-32-30 0-14 14-24 32-24s32 10 32 24c0 16-14 30-32 30Z" fill="#ff9f7a"/>
+      <path d="M50 36c10 0 20 4 26 12-8 20-16 32-26 42V36Z" fill="#ff8a5c" opacity=".55"/>
+      <path d="M50 40c-4 14-4 34 0 48" fill="none" stroke="#e2653a" stroke-width="3" opacity=".6"/>
+      <ellipse cx="36" cy="50" rx="9" ry="6" fill="#fff" opacity=".4" transform="rotate(-20 36 50)"/>
+      <path d="M52 34c9-9 18-8 21-6-3 9-12 11-21 6Z" fill="#4fae63"/>`
   };
 
   const ingredient = (id, cls = '') => svg(ING[id] || ING.acorn, '0 0 100 100', `art-ing ${cls}`);
@@ -338,7 +426,68 @@ const Art = (() => {
       <circle cx="60" cy="44" r="15" fill="#4a5fc1"/>
       <circle cx="51" cy="28" r="13" fill="#7d92e8"/>
       <circle cx="36" cy="42" r="5" fill="#fff" opacity=".35"/>
-      <path d="M51 16l3-8 3 8 8 2-8 3-3 8-3-8-8-3Z" fill="#ffd23f"/>`
+      <path d="M51 16l3-8 3 8 8 2-8 3-3 8-3-8-8-3Z" fill="#ffd23f"/>`,
+
+    applepie: `
+      <path d="M12 60h76c0 20-16 32-38 32S12 80 12 60Z" fill="#e0a44f"/>
+      <path d="M14 56c0-16 16-26 36-26s36 10 36 26Z" fill="#f0bb68"/>
+      <g stroke="#c98a4b" stroke-width="5" stroke-linecap="round">
+        <path d="M26 44 40 32M38 50 56 30M52 52 70 34M64 54l14-10"/>
+      </g>
+      <path d="M10 58h80" stroke="#c98a4b" stroke-width="7" stroke-linecap="round"/>
+      <path d="M50 26c-6-6 4-10 0-14" fill="none" stroke="#e0d0b8" stroke-width="4" stroke-linecap="round"/>`,
+
+    cornsoup: `
+      <path d="M16 52h68c0 24-15 36-34 36S16 76 16 52Z" fill="#fdfdfd"/>
+      <ellipse cx="50" cy="52" rx="34" ry="9" fill="#ffd23f"/>
+      <ellipse cx="42" cy="50" rx="7" ry="3" fill="#ffe89a"/>
+      <ellipse cx="60" cy="54" rx="5" ry="2.5" fill="#ffe89a"/>
+      <path d="M14 60h72" stroke="#dfe7ee" stroke-width="6" stroke-linecap="round"/>
+      <path d="M40 32c-6-6 6-10 0-16M58 32c-6-6 6-10 0-16" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>`,
+
+    lemonade: `
+      <path d="M32 22h44l-6 64a10 10 0 0 1-10 8H48a10 10 0 0 1-10-8Z" fill="#eaf4fa" opacity=".85"/>
+      <path d="M35 40h38l-5 46a10 10 0 0 1-10 8H50a10 10 0 0 1-10-8Z" fill="#ffd23f"/>
+      <g fill="#fff" opacity=".65">
+        <circle cx="46" cy="58" r="4"/><circle cx="60" cy="68" r="3"/><circle cx="52" cy="78" r="3.4"/>
+      </g>
+      <path d="M64 32l12-20" stroke="#5fbf7d" stroke-width="7" stroke-linecap="round"/>
+      <path d="M74 40a13 13 0 1 1 0-1Z" fill="#ffe08a" stroke="#e8ab1e" stroke-width="3"/>`,
+
+    pumpkinpie: `
+      <path d="M12 66 50 22l38 44Z" fill="#f4842c"/>
+      <path d="M12 66 50 22l38 44Z" fill="none" stroke="#e0a44f" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M10 70h80v8a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6Z" fill="#e0a44f"/>
+      <path d="M50 34c-8 10-14 18-18 28h36c-4-10-10-18-18-28Z" fill="#ff9f4d" opacity=".55"/>
+      <path d="M50 30c6-4 14-2 16 2-6 4-12 3-16-2Z" fill="#fffdf7"/>`,
+
+    grapejuice: `
+      <path d="M32 24h44l-6 62a10 10 0 0 1-10 9H48a10 10 0 0 1-10-9Z" fill="#eaf4fa" opacity=".85"/>
+      <path d="M35 42h38l-5 44a10 10 0 0 1-10 9H50a10 10 0 0 1-10-9Z" fill="#8b5fe0"/>
+      <ellipse cx="54" cy="42" rx="19" ry="6" fill="#a888f0"/>
+      <path d="M66 34l14-22" stroke="#5fbf7d" stroke-width="7" stroke-linecap="round"/>
+      <g fill="#a888f0"><circle cx="46" cy="60" r="4" opacity=".7"/><circle cx="60" cy="72" r="3" opacity=".7"/></g>`,
+
+    mushroompizza: `
+      <circle cx="50" cy="56" r="38" fill="#e8b96a"/>
+      <circle cx="50" cy="56" r="31" fill="#e8453c"/>
+      <circle cx="50" cy="56" r="29" fill="#ffcf4d" opacity=".55"/>
+      <g fill="#fff3dc" stroke="#c98a4b" stroke-width="2.5">
+        <path d="M32 44c0-6 5-10 11-10s11 4 11 10Zm4 0h14v9a7 7 0 0 1-14 0Z"/>
+        <path d="M56 66c0-5 4-9 9-9s9 4 9 9Zm3 0h12v7a6 6 0 0 1-12 0Z"/>
+      </g>
+      <circle cx="66" cy="42" r="5" fill="#e8453c"/>
+      <circle cx="36" cy="70" r="5" fill="#e8453c"/>`,
+
+    peachcake: `
+      <path d="M18 54h64v30a8 8 0 0 1-8 8H26a8 8 0 0 1-8-8Z" fill="#fff3dc"/>
+      <path d="M18 66h64v8H18Z" fill="#ff9f7a"/>
+      <path d="M18 54c0-8 14-12 32-12s32 4 32 12Z" fill="#fffdf7"/>
+      <g fill="#fffdf7">
+        <circle cx="30" cy="48" r="7"/><circle cx="50" cy="44" r="8"/><circle cx="70" cy="48" r="7"/>
+      </g>
+      <path d="M50 40c-7 0-12-5-12-10s5-8 12-8 12 3 12 8-5 10-12 10Z" fill="#ff9f7a"/>
+      <path d="M52 22c6-6 12-5 14-4-2 6-8 8-14 4Z" fill="#4fae63"/>`
   };
 
   const dish = (id, cls = '') => svg(DISH[id] || DISH.smoothie, '0 0 100 100', `art-dish ${cls}`);
@@ -503,6 +652,65 @@ const Art = (() => {
         <g fill="#4aa86b">
           ${[80, 240, 400, 560, 720, 880, 1040, 1200].map(x =>
             `<path d="M${x} 660c-26-4-40-22-38-44 22-2 36 14 38 44Zm0 0c26-4 40-22 38-44-22-2-36 14-38 44Z"/>`).join('')}
+        </g>`);
+    }
+
+    if (place === 'orchard') {
+      const fruitTree = (x, y, s, fruit) => `
+        <g transform="translate(${x} ${y}) scale(${s})">
+          <rect x="-14" y="-10" width="28" height="120" rx="12" fill="#8b5a2b"/>
+          <path d="M0 20c-20 0-34-14-34-30" fill="none" stroke="#8b5a2b" stroke-width="12" stroke-linecap="round"/>
+          <circle cx="0" cy="-46" r="72" fill="#3f7d5b"/>
+          <circle cx="-52" cy="-8" r="46" fill="#4aa86b"/>
+          <circle cx="52" cy="-8" r="46" fill="#4aa86b"/>
+          <g fill="${fruit}">
+            <circle cx="-40" cy="-30" r="11"/><circle cx="18" cy="-64" r="11"/>
+            <circle cx="48" cy="-18" r="11"/><circle cx="-14" cy="-6" r="11"/>
+            <circle cx="26" cy="-14" r="11"/>
+          </g>
+        </g>`;
+      return wrap(`
+        <rect width="${W}" height="${H}" fill="#cfeaf7"/>
+        <circle cx="180" cy="110" r="60" fill="#ffd23f"/>
+        <g fill="#fff" opacity=".9">
+          <ellipse cx="640" cy="100" rx="72" ry="28"/><ellipse cx="694" cy="88" rx="46" ry="24"/>
+          <ellipse cx="1080" cy="140" rx="58" ry="24"/>
+        </g>
+        <path d="M0 340q320-60 640 0t640-20V720H0Z" fill="#7cc48c"/>
+        ${fruitTree(150, 250, 0.95, '#e8453c')}
+        ${fruitTree(1130, 240, 1.0, '#ffd23f')}
+        ${fruitTree(640, 210, 0.8, '#8b5fe0')}
+        <path d="M0 470q300-50 640 0t640-20V720H0Z" fill="#5fbf7d"/>
+        ${fruitTree(400, 470, 0.6, '#ff9f7a')}
+        ${fruitTree(880, 480, 0.6, '#e8453c')}
+        <path d="M0 610q320-40 640 0t640-16V720H0Z" fill="#4aa86b"/>
+        <g fill="#3d8a4e" opacity=".45">
+          ${[120, 420, 720, 1020, 1240].map(x => `<ellipse cx="${x}" cy="690" rx="80" ry="15"/>`).join('')}
+        </g>`);
+    }
+
+    if (place === 'field') {
+      return wrap(`
+        <rect width="${W}" height="${H}" fill="#bfe4f5"/>
+        <rect width="${W}" height="240" fill="#a8dcf0"/>
+        <circle cx="1090" cy="120" r="66" fill="#ffd23f"/>
+        <g fill="#fff" opacity=".92">
+          <ellipse cx="240" cy="120" rx="80" ry="32"/><ellipse cx="300" cy="104" rx="52" ry="28"/>
+          <ellipse cx="700" cy="90" rx="60" ry="26"/><ellipse cx="748" cy="80" rx="40" ry="20"/>
+        </g>
+        <path d="M0 300q220-40 440-10t400-20 440 16V720H0Z" fill="#a8c840"/>
+        <path d="M0 400q300-40 640 0t640-20V720H0Z" fill="#c2d94e"/>
+        <g fill="#e0a44f">
+          ${[80, 250, 420, 590, 760, 930, 1100, 1250].map((x, i) => `
+            <g transform="translate(${x} ${430 + (i % 3) * 14})">
+              <rect x="-5" y="0" width="10" height="120" rx="5"/>
+              <ellipse cx="0" cy="-14" rx="17" ry="26" fill="#ffd23f"/>
+              <path d="M0 -34c-10 8-14 20-12 30 8-4 12-16 12-30Z" fill="#e8ab1e"/>
+            </g>`).join('')}
+        </g>
+        <path d="M0 560q320-36 640 0t640-14V720H0Z" fill="#8fb02e"/>
+        <g stroke="#6d8a1e" stroke-width="7" stroke-linecap="round">
+          <path d="M140 700v-44M380 710v-40M620 702v-46M860 712v-42M1120 700v-44"/>
         </g>`);
     }
 
