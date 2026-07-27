@@ -7,7 +7,9 @@
 
 直接用浏览器打开 `index.html` 就能玩，不需要装东西、不需要联网、没有构建步骤。
 
-**在线试玩：** <https://claude.ai/code/artifact/f640ed65-6f1e-4061-babe-8209f8ecc5c4>
+**在线试玩：** <https://lionnevergrowup.github.io/Sesamestreet/>
+
+推到 `main` 之后 GitHub Actions 会自动重新发布，链接永远是最新版。
 
 ## 玩法
 
@@ -59,6 +61,7 @@ js/art.js           全部美术：角色、食材、菜品、厨具、场景，
 js/recipes.js       游戏数据：食材、关卡、食谱、采集点位
 js/i18n.js          中英文案
 js/game.js          场景状态机与交互
+.github/workflows/  推到 main 自动发布到 GitHub Pages
 ```
 
 没有依赖、没有打包、没有外部请求，整个游戏就是这 7 个文件。

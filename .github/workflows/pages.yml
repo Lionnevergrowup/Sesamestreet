@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+# 每次推到 main 就重新发布，游戏地址永远是最新的。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同时只发布一版，但不打断已经在跑的那次
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 单文件版本在这里重新生成，保证线上的 play.html 一定跟源码一致，
+      # 不会因为有人忘了跑 build.js 而发布旧的那份。
+      - name: Assemble the site
+        run: |
+          node build.js
+          mkdir -p _site
+          cp index.html play.html _site/
+          cp -r css js _site/
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
