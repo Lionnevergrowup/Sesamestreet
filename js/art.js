@@ -901,6 +901,21 @@ const Art = (() => {
       <ellipse cx="470" cy="164" rx="30" ry="22" fill="#5b6b7c"/>
       <path d="M500 150h44" stroke="#5b6b7c" stroke-width="9" stroke-linecap="round"/>
       <ellipse cx="540" cy="152" rx="22" ry="16" fill="#8b9aa8"/>
+      <!-- 窗户左边那片墙原本空着，挂一排香草和小铲子填一填 -->
+      <rect x="700" y="120" width="250" height="12" rx="6" fill="#8b5a2b"/>
+      <g stroke="#5b6b7c" stroke-width="5" fill="none">
+        <path d="M742 132v26"/><path d="M800 132v20"/>
+      </g>
+      <ellipse cx="742" cy="172" rx="20" ry="15" fill="#8b9aa8"/>
+      <path d="M800 152h30" stroke="#5b6b7c" stroke-width="8" stroke-linecap="round"/>
+      <path d="M828 140h26a10 10 0 0 1 0 24h-26Z" fill="#8b9aa8"/>
+      <g transform="translate(898 132)">
+        <path d="M0 0v58" stroke="#6b4420" stroke-width="5"/>
+        <path d="M0 14c-16 2-26 14-28 26 14 0 26-10 28-26Z" fill="#4aa86b"/>
+        <path d="M0 30c16 2 26 14 28 26-14 0-26-10-28-26Z" fill="#5fbf7d"/>
+        <path d="M0 42c-13 2-21 12-23 22 12 0 21-8 23-22Z" fill="#4aa86b"/>
+      </g>
+
       <!-- 台面 -->
       <rect y="440" width="1280" height="34" fill="#e0a44f"/>
       <rect y="466" width="1280" height="254" fill="#c98a4b"/>
