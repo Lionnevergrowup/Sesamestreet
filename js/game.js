@@ -20,10 +20,27 @@
     stars: +(Store.get('gulu.stars') || 0),
     forage: null,
     cook: null,
-    serve: null
+    serve: null,
+    drive: null
   };
 
   const level = () => LEVELS[S.level];
+
+  /*
+    哪些关通过了，单独存一份 —— 有了它才能做选关，
+    小朋友想玩哪一关就玩哪一关，不用每次从第一关重打。
+  */
+  const doneSet = () => new Set((Store.get('gulu.done') || '').split(',').filter(Boolean));
+  const markDone = id => {
+    const d = doneSet(); d.add(id);
+    Store.set('gulu.done', [...d].join(','));
+  };
+  /* 第一个还没通的关，"开始闯关"从这里接着玩 */
+  function firstUndone() {
+    const d = doneSet();
+    const i = LEVELS.findIndex(L => !d.has(L.id));
+    return i < 0 ? 0 : i;
+  }
 
   /* ---------------- 舞台缩放 ---------------- */
   function fit() {
@@ -209,6 +226,7 @@
       [Art.appliance('pot'), t('how3')],
       [Art.dish('smoothie'), t('how4')]
     ];
+    const done = doneSet().size;
     paint('sc-title', `
       <div class="bg">${Art.street()}</div>
       <div class="layer">
@@ -217,7 +235,11 @@
         <div class="card title-card">
           <h1>${t('gameTitle')}</h1>
           <p class="sub">${t('gameSub')}</p>
-          <button class="big-btn" id="play">${t('play')}</button>
+          <button class="big-btn" id="play">${done ? t('resume') : t('play')}</button>
+          <div class="btn-row">
+            <button class="mid-btn" id="pick">${t('pickLevel')}</button>
+            <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
+          </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
               <div class="how-item"><div class="how-art">${art}</div>
@@ -226,7 +248,42 @@
         </div>
       </div>
     `, () => {
-      on('#play', () => { S.level = 0; startLevel(); });
+      on('#play', () => { S.level = firstUndone(); startLevel(); });
+      on('#pick', renderLevelSelect);
+      on('#free', renderFree);
+    });
+  }
+
+  /* ================================================================
+     1b. 选关 —— 12 关任选，不必按顺序
+  ================================================================ */
+  function renderLevelSelect() {
+    S.phase = 'select';
+    const d = doneSet();
+    paint('sc-select', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('pickLevel')}</div>
+        <div class="lv-grid">
+          ${LEVELS.map((L, i) => `
+            <button class="lv-card${d.has(L.id) ? ' cleared' : ''}" data-i="${i}"
+                    aria-label="${i + 1}. ${I18N.name(L.dish)}">
+              <span class="lv-no">${i + 1}</span>
+              <span class="lv-art">${Art.dish(L.id)}</span>
+              <span class="lv-name">${I18N.name(L.dish)}</span>
+              ${d.has(L.id) ? `<span class="lv-star">${Art.star()}</span>` : ''}
+            </button>`).join('')}
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => {
+      sceneEl.querySelectorAll('.lv-card').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        Sound.tap();
+        S.level = +b.dataset.i;
+        startLevel();
+      }));
+      on('#backHome', renderTitle);
     });
   }
 
@@ -292,25 +349,50 @@
   function renderDrive() {
     S.phase = 'drive';
     const L = level();
+    /*
+      以前这里是干等 2.4 秒的过场动画。
+      现在路上会飘来水果和星星，点到就收进兜里 ——
+      整局游戏的操作原本全是"看准了点"，这一段加了点手快的成分，换换口味。
+      收多少都不影响过关，纯属好玩，所以捡不到也不会有挫败感。
+    */
+    const goodies = shuffle([...FREE_INGREDIENTS]).slice(0, 5).concat(['star', 'star']);
+    S.drive = { got: 0 };
+
     paint('sc-drive', `
       <div class="bg road-scroll">${Art.road()}${Art.road()}</div>
       <div class="layer">
         <div class="pos drive-truck">${Art.truck()}
           <div class="puff p1"></div><div class="puff p2"></div>
         </div>
+        ${shuffle(goodies).map((id, i) => `
+          <button class="road-item" data-id="${id}"
+            style="--lane:${[188, 258, 330][i % 3]}px;--delay:${(i * 0.62).toFixed(2)}s">
+            ${id === 'star' ? Art.star() : Art.ingredient(id)}
+          </button>`).join('')}
         <div class="banner">${t('driveTitle', { place: I18N.place(L.place) })}</div>
-        <div class="chip bottom-chip">${t('driving')}</div>
+        <div class="drive-bag"><span class="bag-ico">${Art.basket()}</span><b id="driveGot">0</b></div>
+        <button class="skip-btn" id="skipDrive">${t('skip')}</button>
       </div>
     `, () => {
       Sound.engine();
       const myGen = gen;
-      /* 到点自动开到，或者中途点一下直接跳过 */
-      const go = () => {
-        sceneEl.removeEventListener('click', go);
-        if (isCurrent(myGen)) renderForage();
-      };
-      later(go, 2400);
-      sceneEl.addEventListener('click', go);
+      const counter = $('#driveGot');
+
+      sceneEl.querySelectorAll('.road-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (busy || btn.dataset.taken) return;
+          btn.dataset.taken = '1';
+          S.drive.got++;
+          Sound.pick(Math.min(S.drive.got - 1, 7));
+          if (counter) counter.textContent = S.drive.got;
+          burst(btn, 8, ['#ffd23f', '#fff6e6']);
+          btn.style.visibility = 'hidden';
+        });
+      });
+
+      const go = () => { if (isCurrent(myGen)) renderForage(); };
+      later(go, 5200);
+      on('#skipDrive', go);
     });
   }
 
@@ -600,11 +682,124 @@
   }
 
   /* ================================================================
+     6b. 自由厨房 —— 想放什么放什么，没有对错，做完请客人吃
+  ================================================================ */
+  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
+
+  function renderFree(reset = true) {
+    S.phase = 'free';
+    if (reset || !S.free) S.free = { picked: [], appliance: 'blender', made: false, served: false };
+    const F = S.free;
+    const full = F.picked.length >= 6;
+
+    const madeArt = F.made ? Art.creation(Art.blend(F.picked), F.appliance, F.picked) : '';
+
+    paint('sc-free', `
+      <div class="bg">${Art.kitchen()}</div>
+      <div class="layer">
+        <div class="banner">${F.made ? t('freeDone') : t('freeHint')}</div>
+
+        <div class="pos free-appliance ${F.made ? 'ready' : ''}" id="appliance">
+          ${Art.appliance(F.appliance)}
+          <div class="steam s1"></div><div class="steam s2"></div><div class="steam s3"></div>
+        </div>
+
+        <div class="free-added">
+          ${F.picked.map(id => `<span class="added-chip">${Art.ingredient(id)}</span>`).join('')}
+          ${F.picked.length ? '' : `<span class="added-empty">${t('freeEmpty')}</span>`}
+        </div>
+
+        ${F.made ? `
+          <div class="pos chef-free bob">${Art.chef('cheer')}</div>
+          <div class="pos free-made pop-in" id="made">${madeArt}</div>
+          <div class="free-actions">
+            <button class="big-btn" id="freeAgain">${t('freeAgain')}</button>
+            <button class="mid-btn" id="backHome">${t('backHome')}</button>
+          </div>`
+        : `
+          <div class="pick-row">
+            ${APPLIANCES.map(a => `
+              <button class="pick-appl${a === F.appliance ? ' on' : ''}" data-a="${a}"
+                      aria-label="${t('cookBtn')[a]}">${Art.appliance(a)}</button>`).join('')}
+          </div>
+          <div class="palette">
+            ${FREE_INGREDIENTS.map(id => `
+              <button class="pal-tile" data-id="${id}" ${full ? 'disabled' : ''}
+                      aria-label="${I18N.ing(id)}">${Art.ingredient(id)}</button>`).join('')}
+          </div>
+          <div class="free-actions">
+            <button class="big-btn" id="freeCook" ${F.picked.length ? '' : 'disabled'}>${t('freeCook')}</button>
+            <button class="mid-btn" id="freeClear" ${F.picked.length ? '' : 'disabled'}>${t('freeClear')}</button>
+            <button class="mid-btn" id="backHome">${t('backHome')}</button>
+          </div>`}
+      </div>
+    `, () => {
+      const appl = $('#appliance');
+
+      /*
+        放一样就地更新，不整屏重绘 ——
+        重绘那几百毫秒里的点击会被吞掉，小朋友连着点就只进了一半。
+      */
+      const refreshFree = () => {
+        const box = $('.free-added');
+        if (box) {
+          box.innerHTML = F.picked.length
+            ? F.picked.map(id => `<span class="added-chip">${Art.ingredient(id)}</span>`).join('')
+            : `<span class="added-empty">${t('freeEmpty')}</span>`;
+        }
+        const isFull = F.picked.length >= 6;
+        sceneEl.querySelectorAll('.pal-tile').forEach(el => { el.disabled = isFull; });
+        const cook = $('#freeCook'), clr = $('#freeClear');
+        if (cook) cook.disabled = !F.picked.length;
+        if (clr) clr.disabled = !F.picked.length;
+      };
+
+      sceneEl.querySelectorAll('.pal-tile').forEach(tile => {
+        tile.addEventListener('click', () => {
+          if (busy || tile.disabled || F.picked.length >= 6) return;
+          const id = tile.dataset.id;
+          F.picked.push(id);
+          Sound.plop();
+          refreshFree();
+          flyItem(Art.ingredient(id), tile, appl, {
+            endScale: 0.3, dur: 420,
+            onDone: () => {
+              appl.classList.remove('bump'); void appl.offsetWidth; appl.classList.add('bump');
+              burst(appl, 6, ['#fff6e6', '#ffd23f']);
+            }
+          });
+        });
+      });
+
+      /* 换厨具也就地换，别把整屏推倒重来 */
+      sceneEl.querySelectorAll('.pick-appl').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        Sound.tap();
+        F.appliance = b.dataset.a;
+        sceneEl.querySelectorAll('.pick-appl').forEach(x => x.classList.toggle('on', x === b));
+        appl.innerHTML = Art.appliance(F.appliance) +
+          '<div class="steam s1"></div><div class="steam s2"></div><div class="steam s3"></div>';
+        appl.classList.remove('bump'); void appl.offsetWidth; appl.classList.add('bump');
+      }));
+
+      on('#freeCook', () => {
+        F.made = true;
+        Sound.cookStep(2);
+        later(() => { Sound.ding(); renderFree(false); }, 420);
+      });
+      on('#freeClear', () => { F.picked = []; refreshFree(); });
+      on('#freeAgain', () => renderFree(true));
+      on('#backHome', renderTitle);
+    });
+  }
+
+  /* ================================================================
      7. 过关 / 通关
   ================================================================ */
   function levelClear() {
     S.stars++;
     Store.set('gulu.stars', S.stars);
+    markDone(level().id);
     updateStars();
     Sound.fanfare();
 
@@ -676,7 +871,8 @@
   /* ---------------- 当前场景重绘（切换语言时用） ---------------- */
   function repaint() {
     ({
-      title: renderTitle, order: renderOrder, drive: renderDrive, forage: renderForage,
+      title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
+      order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();
   }

@@ -504,6 +504,73 @@ const Art = (() => {
 
   const dish = (id, cls = '') => svg(DISH[id] || DISH.smoothie, '0 0 100 100', `art-dish ${cls}`);
 
+  /*
+    自由厨房的成品。
+    颜色是玩家选的那些食材混出来的，容器按用的厨具走 ——
+    所以随便怎么搭都能端出一个像模像样的东西，没有"做错"这回事。
+  */
+  function creation(color, appliance, toppings = []) {
+    const dark = shade(color, -0.22), light = shade(color, 0.2);
+    const bits = toppings.slice(0, 3).map((id, i) => `
+      <g transform="translate(${30 + i * 20} ${appliance === 'freezer' ? 26 : 40}) scale(.26)">
+        ${ING[id] || ''}
+      </g>`).join('');
+
+    const body = {
+      blender: `
+        <path d="M32 22h44l-6 64a10 10 0 0 1-10 8H48a10 10 0 0 1-10-8Z" fill="#eaf4fa" opacity=".85"/>
+        <path d="M35 40h38l-5 46a10 10 0 0 1-10 8H50a10 10 0 0 1-10-8Z" fill="${color}"/>
+        <ellipse cx="54" cy="40" rx="19" ry="6" fill="${light}"/>
+        <path d="M66 32l13-20" stroke="#ef4b52" stroke-width="7" stroke-linecap="round"/>`,
+      pot: `
+        <path d="M12 52h76c0 24-17 38-38 38S12 74 12 52Z" fill="#fdfdfd"/>
+        <ellipse cx="50" cy="52" rx="38" ry="14" fill="${dark}"/>
+        <ellipse cx="50" cy="53" rx="33" ry="11" fill="${color}"/>
+        <path d="M8 62h84" stroke="#dfe7ee" stroke-width="7" stroke-linecap="round"/>`,
+      griddle: `
+        <ellipse cx="50" cy="84" rx="38" ry="9" fill="#fff" opacity=".8"/>
+        <ellipse cx="50" cy="74" rx="34" ry="12" fill="${dark}"/>
+        <ellipse cx="50" cy="62" rx="34" ry="12" fill="${color}"/>
+        <ellipse cx="50" cy="50" rx="34" ry="12" fill="${light}"/>`,
+      oven: `
+        <path d="M12 62h76c0 20-16 32-38 32S12 82 12 62Z" fill="#e0a44f"/>
+        <path d="M14 58c0-16 16-26 36-26s36 10 36 26Z" fill="${color}"/>
+        <path d="M26 46c8-6 16-9 24-9" stroke="${light}" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M10 60h80" stroke="#c98a4b" stroke-width="7" stroke-linecap="round"/>`,
+      freezer: `
+        <path d="M34 54h32l-13 38a3 3 0 0 1-6 0Z" fill="#e0a44f"/>
+        <path d="M38 62l24-2M40 72l20-2" stroke="#c98a4b" stroke-width="3"/>
+        <circle cx="42" cy="48" r="17" fill="${color}"/>
+        <circle cx="60" cy="44" r="15" fill="${dark}"/>
+        <circle cx="51" cy="28" r="13" fill="${light}"/>`
+    }[appliance] || '';
+
+    return svg(body + bits, '0 0 100 100', 'art-dish');
+  }
+
+  /* 把一个 #rrggbb 调亮或调暗 */
+  function shade(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const ch = i => {
+      const v = (n >> (16 - i * 8)) & 255;
+      return Math.max(0, Math.min(255, Math.round(amt > 0 ? v + (255 - v) * amt : v * (1 + amt))));
+    };
+    return '#' + [0, 1, 2].map(i => ch(i).toString(16).padStart(2, '0')).join('');
+  }
+
+  /* 把几种食材的颜色混成一个 */
+  function blend(ids) {
+    if (!ids.length) return '#e8e2d4';
+    let r = 0, g = 0, b = 0;
+    ids.forEach(id => {
+      const n = parseInt((ING_COLOR[id] || '#cccccc').slice(1), 16);
+      r += (n >> 16) & 255; g += (n >> 8) & 255; b += n & 255;
+    });
+    const k = ids.length;
+    return '#' + [r / k, g / k, b / k].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  }
+
+
   /* ---------- 厨具 / appliances ---------- */
 
   const APPLIANCE = {
@@ -939,6 +1006,6 @@ const Art = (() => {
     svg(`<path d="M50 6 62 38l34 3-26 23 8 34-28-18-28 18 8-34L4 41l34-3Z" fill="${fill}"/>`,
       '0 0 100 100', 'art-star');
 
-  return { svg, chef, customer, ingredient, dish, appliance, truck, backdrop, street, road,
-           kitchen, basket, star, leaf };
+  return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
+           backdrop, street, road, kitchen, basket, star, leaf };
 })();

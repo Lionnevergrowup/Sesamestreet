@@ -173,3 +173,20 @@ const FORAGE_SPOTS = [
   [ 250, 462 ], [ 440, 470 ], [ 640, 448 ], [ 840, 470 ], [ 1030, 458 ],
   [ 700, 606 ], [ 930, 600 ], [ 1160, 598 ]
 ];
+
+/*
+  每种食材的代表色。自由厨房里会把选中食材的颜色混在一起，
+  做出来的东西就是那个颜色 —— 乱搭也能得到一个像样的成品。
+*/
+const ING_COLOR = {
+  banana: '#ffd75e', strawberry: '#ef4b52', tomato: '#e8453c', carrot: '#f4842c',
+  blueberry: '#4a5fc1', apple: '#e8453c', lemon: '#ffd23f', corn: '#ffd23f',
+  pumpkin: '#f4842c', mushroom: '#e8635c', grape: '#8b5fe0', peach: '#ff9f7a',
+  milk: '#f2f6fa', ice: '#a8dcf0', flour: '#eadfc8', egg: '#fff3dc',
+  cheese: '#ffcf4d', dough: '#f0dcb8', water: '#7cc4e8', salt: '#dfe7ee',
+  cream: '#fff3dc', sugar: '#fdfdfd', honey: '#ffb03a', butter: '#ffd23f',
+  chocolate: '#6b4420'
+};
+
+/* 自由厨房里可以随便拿的食材（不含虫子和橡果） */
+const FREE_INGREDIENTS = Object.keys(ING_COLOR);

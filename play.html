@@ -479,7 +479,7 @@ body.muted .ico-off { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift,
+  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift, .road-item,
   .road-scroll, .drive-truck, .puff,
   .appliance-wrap.ready .steam, .recipe-card li.now {
     animation: none !important;
@@ -499,6 +499,150 @@ body.muted .ico-off { display: block; }
   .rotate-inner p { margin-top: 18px; font-size: 22px; font-weight: 800; }
   @keyframes tilt { 0%,100% { transform: rotate(0); } 50% { transform: rotate(90deg); } }
 }
+
+.btn-row { display: flex; gap: 10px; margin-bottom: 18px; }
+.mid-btn {
+  flex: 1;
+  border: none; border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 21px; font-weight: 900; font-family: inherit;
+  color: #fff;
+  background: linear-gradient(180deg, #8b5fe0, #7245cc);
+  box-shadow: 0 5px 0 #5a34a8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.mid-btn.alt { background: linear-gradient(180deg, #4aa86b, #3a8f58); box-shadow: 0 5px 0 #2c7145; }
+.mid-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #5a34a8; }
+.mid-btn.alt:active { box-shadow: 0 1px 0 #2c7145; }
+.mid-btn:disabled { opacity: .4; cursor: default; }
+.title-card .big-btn { margin-bottom: 12px; }
+
+.layer.dim::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(20, 40, 32, .5);
+}
+.lv-grid {
+  position: absolute; left: 50%; top: 100px; transform: translateX(-50%);
+  display: grid; grid-template-columns: repeat(4, 264px); gap: 14px;
+  z-index: 10;
+}
+.lv-card {
+  position: relative;
+  height: 148px; padding: 8px 12px;
+  border: none; border-radius: 22px;
+  background: var(--cream);
+  box-shadow: 0 6px 0 rgba(43, 35, 64, .25);
+  cursor: pointer; font-family: inherit;
+  display: grid; grid-template-columns: 46px 1fr; align-items: center; gap: 8px;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.lv-card:hover { transform: translateY(-3px); box-shadow: 0 9px 0 rgba(43, 35, 64, .25); }
+.lv-card:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(43, 35, 64, .25); }
+.lv-no {
+  grid-row: 1 / span 2;
+  width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--grape); color: #fff;
+  font-size: 22px; font-weight: 900;
+}
+.lv-art { width: 96px; height: 96px; justify-self: center; }
+.lv-art svg { width: 100%; height: 100%; }
+.lv-name { grid-column: 2; font-size: 19px; font-weight: 800; color: #5c5040; text-align: center; }
+.lv-star { position: absolute; right: 8px; top: 6px; width: 32px; height: 32px; }
+.lv-star svg { width: 100%; height: 100%; }
+.lv-card.cleared { background: #eaf7ee; }
+
+.free-appliance { left: 130px; bottom: 232px; width: 250px; z-index: 12; }
+.free-appliance svg { width: 100%; height: auto; }
+.free-appliance.ready { filter: drop-shadow(0 0 22px rgba(255, 210, 63, .8)); }
+
+.free-added {
+  position: absolute; left: 440px; bottom: 468px; width: 292px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  padding: 10px 14px; border-radius: 20px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  min-height: 62px; z-index: 20;
+}
+.added-chip { width: 40px; height: 40px; }
+.added-chip svg { width: 100%; height: 100%; }
+.added-empty { font-size: 17px; font-weight: 700; color: #8a7a62; }
+
+.pick-row {
+  position: absolute; left: 60px; bottom: 150px;
+  display: flex; gap: 8px; z-index: 20;
+}
+.pick-appl {
+  width: 74px; height: 74px; padding: 6px;
+  border: none; border-radius: 18px;
+  background: rgba(255, 246, 230, .92);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .2);
+  cursor: pointer;
+}
+.pick-appl svg { width: 100%; height: 100%; }
+.pick-appl.on { background: var(--sun); box-shadow: 0 4px 0 #c9911c, 0 0 0 4px rgba(255,210,63,.5); }
+
+.palette {
+  position: absolute; right: 40px; top: 96px;
+  display: grid; grid-template-columns: repeat(5, 88px); gap: 9px;
+  padding: 14px; border-radius: 24px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  z-index: 20;
+}
+.pal-tile {
+  width: 88px; height: 88px; padding: 6px;
+  border: none; border-radius: 16px; background: #fff;
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .14);
+  cursor: pointer;
+}
+.pal-tile svg { width: 100%; height: 100%; }
+.pal-tile:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(43, 35, 64, .14); }
+.pal-tile:disabled { opacity: .35; cursor: default; }
+
+.free-actions {
+  position: absolute; left: 60px; bottom: 40px;
+  display: flex; align-items: center; gap: 10px; z-index: 20;
+}
+.free-actions .mid-btn { flex: none; }
+.free-made {
+  left: 470px; bottom: 248px; width: 224px; z-index: 25;
+  filter: drop-shadow(0 12px 16px rgba(0,0,0,.3));
+}
+.free-made svg { width: 100%; height: auto; }
+
+.road-item {
+  position: absolute; top: var(--lane); left: 1340px;
+  width: 104px; height: 104px; margin: -52px 0 0 -52px;
+  border: none; background: none; padding: 0; cursor: pointer;
+  z-index: 15;
+  filter: drop-shadow(0 6px 8px rgba(20,50,35,.35));
+  animation: rollBy 2.6s linear var(--delay) both;
+}
+.road-item svg { width: 100%; height: 100%; }
+@keyframes rollBy {
+  from { transform: translateX(0) rotate(0deg); }
+  to   { transform: translateX(-1460px) rotate(-320deg); }
+}
+.drive-bag {
+  position: absolute; left: 26px; bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 22px 10px 12px; border-radius: 24px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  font-size: 32px; font-weight: 900; color: var(--deep);
+  z-index: 30;
+}
+.bag-ico { width: 56px; }
+.bag-ico svg { width: 100%; height: auto; }
+.skip-btn {
+  position: absolute; right: 24px; bottom: 26px;
+  border: none; border-radius: 999px; padding: 12px 30px;
+  font-size: 22px; font-weight: 900; font-family: inherit; color: #fff;
+  background: rgba(43, 35, 64, .6);
+  cursor: pointer; z-index: 30;
+}
+.skip-btn:active { transform: translateY(3px); }
+
+.chef-free { left: 840px; bottom: 236px; width: 208px; z-index: 12; }
 </style>
 
 <div id="viewport">
@@ -1322,6 +1466,73 @@ const Art = (() => {
 
   const dish = (id, cls = '') => svg(DISH[id] || DISH.smoothie, '0 0 100 100', `art-dish ${cls}`);
 
+  /*
+    \u81ea\u7531\u53a8\u623f\u7684\u6210\u54c1\u3002
+    \u989c\u8272\u662f\u73a9\u5bb6\u9009\u7684\u90a3\u4e9b\u98df\u6750\u6df7\u51fa\u6765\u7684\uff0c\u5bb9\u5668\u6309\u7528\u7684\u53a8\u5177\u8d70 \u2014\u2014
+    \u6240\u4ee5\u968f\u4fbf\u600e\u4e48\u642d\u90fd\u80fd\u7aef\u51fa\u4e00\u4e2a\u50cf\u6a21\u50cf\u6837\u7684\u4e1c\u897f\uff0c\u6ca1\u6709"\u505a\u9519"\u8fd9\u56de\u4e8b\u3002
+  */
+  function creation(color, appliance, toppings = []) {
+    const dark = shade(color, -0.22), light = shade(color, 0.2);
+    const bits = toppings.slice(0, 3).map((id, i) => `
+      <g transform="translate(${30 + i * 20} ${appliance === 'freezer' ? 26 : 40}) scale(.26)">
+        ${ING[id] || ''}
+      </g>`).join('');
+
+    const body = {
+      blender: `
+        <path d="M32 22h44l-6 64a10 10 0 0 1-10 8H48a10 10 0 0 1-10-8Z" fill="#eaf4fa" opacity=".85"/>
+        <path d="M35 40h38l-5 46a10 10 0 0 1-10 8H50a10 10 0 0 1-10-8Z" fill="${color}"/>
+        <ellipse cx="54" cy="40" rx="19" ry="6" fill="${light}"/>
+        <path d="M66 32l13-20" stroke="#ef4b52" stroke-width="7" stroke-linecap="round"/>`,
+      pot: `
+        <path d="M12 52h76c0 24-17 38-38 38S12 74 12 52Z" fill="#fdfdfd"/>
+        <ellipse cx="50" cy="52" rx="38" ry="14" fill="${dark}"/>
+        <ellipse cx="50" cy="53" rx="33" ry="11" fill="${color}"/>
+        <path d="M8 62h84" stroke="#dfe7ee" stroke-width="7" stroke-linecap="round"/>`,
+      griddle: `
+        <ellipse cx="50" cy="84" rx="38" ry="9" fill="#fff" opacity=".8"/>
+        <ellipse cx="50" cy="74" rx="34" ry="12" fill="${dark}"/>
+        <ellipse cx="50" cy="62" rx="34" ry="12" fill="${color}"/>
+        <ellipse cx="50" cy="50" rx="34" ry="12" fill="${light}"/>`,
+      oven: `
+        <path d="M12 62h76c0 20-16 32-38 32S12 82 12 62Z" fill="#e0a44f"/>
+        <path d="M14 58c0-16 16-26 36-26s36 10 36 26Z" fill="${color}"/>
+        <path d="M26 46c8-6 16-9 24-9" stroke="${light}" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M10 60h80" stroke="#c98a4b" stroke-width="7" stroke-linecap="round"/>`,
+      freezer: `
+        <path d="M34 54h32l-13 38a3 3 0 0 1-6 0Z" fill="#e0a44f"/>
+        <path d="M38 62l24-2M40 72l20-2" stroke="#c98a4b" stroke-width="3"/>
+        <circle cx="42" cy="48" r="17" fill="${color}"/>
+        <circle cx="60" cy="44" r="15" fill="${dark}"/>
+        <circle cx="51" cy="28" r="13" fill="${light}"/>`
+    }[appliance] || '';
+
+    return svg(body + bits, '0 0 100 100', 'art-dish');
+  }
+
+  /* \u628a\u4e00\u4e2a #rrggbb \u8c03\u4eae\u6216\u8c03\u6697 */
+  function shade(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const ch = i => {
+      const v = (n >> (16 - i * 8)) & 255;
+      return Math.max(0, Math.min(255, Math.round(amt > 0 ? v + (255 - v) * amt : v * (1 + amt))));
+    };
+    return '#' + [0, 1, 2].map(i => ch(i).toString(16).padStart(2, '0')).join('');
+  }
+
+  /* \u628a\u51e0\u79cd\u98df\u6750\u7684\u989c\u8272\u6df7\u6210\u4e00\u4e2a */
+  function blend(ids) {
+    if (!ids.length) return '#e8e2d4';
+    let r = 0, g = 0, b = 0;
+    ids.forEach(id => {
+      const n = parseInt((ING_COLOR[id] || '#cccccc').slice(1), 16);
+      r += (n >> 16) & 255; g += (n >> 8) & 255; b += n & 255;
+    });
+    const k = ids.length;
+    return '#' + [r / k, g / k, b / k].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  }
+
+
   /* ---------- \u53a8\u5177 / appliances ---------- */
 
   const APPLIANCE = {
@@ -1757,8 +1968,8 @@ const Art = (() => {
     svg(`<path d="M50 6 62 38l34 3-26 23 8 34-28-18-28 18 8-34L4 41l34-3Z" fill="${fill}"/>`,
       '0 0 100 100', 'art-star');
 
-  return { svg, chef, customer, ingredient, dish, appliance, truck, backdrop, street, road,
-           kitchen, basket, star, leaf };
+  return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
+           backdrop, street, road, kitchen, basket, star, leaf };
 })();
 </script>
 
@@ -1938,6 +2149,23 @@ const FORAGE_SPOTS = [
   [ 250, 462 ], [ 440, 470 ], [ 640, 448 ], [ 840, 470 ], [ 1030, 458 ],
   [ 700, 606 ], [ 930, 600 ], [ 1160, 598 ]
 ];
+
+/*
+  \u6bcf\u79cd\u98df\u6750\u7684\u4ee3\u8868\u8272\u3002\u81ea\u7531\u53a8\u623f\u91cc\u4f1a\u628a\u9009\u4e2d\u98df\u6750\u7684\u989c\u8272\u6df7\u5728\u4e00\u8d77\uff0c
+  \u505a\u51fa\u6765\u7684\u4e1c\u897f\u5c31\u662f\u90a3\u4e2a\u989c\u8272 \u2014\u2014 \u4e71\u642d\u4e5f\u80fd\u5f97\u5230\u4e00\u4e2a\u50cf\u6837\u7684\u6210\u54c1\u3002
+*/
+const ING_COLOR = {
+  banana: '#ffd75e', strawberry: '#ef4b52', tomato: '#e8453c', carrot: '#f4842c',
+  blueberry: '#4a5fc1', apple: '#e8453c', lemon: '#ffd23f', corn: '#ffd23f',
+  pumpkin: '#f4842c', mushroom: '#e8635c', grape: '#8b5fe0', peach: '#ff9f7a',
+  milk: '#f2f6fa', ice: '#a8dcf0', flour: '#eadfc8', egg: '#fff3dc',
+  cheese: '#ffcf4d', dough: '#f0dcb8', water: '#7cc4e8', salt: '#dfe7ee',
+  cream: '#fff3dc', sugar: '#fdfdfd', honey: '#ffb03a', butter: '#ffd23f',
+  chocolate: '#6b4420'
+};
+
+/* \u81ea\u7531\u53a8\u623f\u91cc\u53ef\u4ee5\u968f\u4fbf\u62ff\u7684\u98df\u6750\uff08\u4e0d\u542b\u866b\u5b50\u548c\u6a61\u679c\uff09 */
+const FREE_INGREDIENTS = Object.keys(ING_COLOR);
 </script>
 
 <script>
@@ -1952,6 +2180,17 @@ const I18N = (() => {
       gameTitle: '\u5495\u565c\u7684\u7f8e\u98df\u9910\u8f66',
       gameSub: '\u63a5\u5355 \u00b7 \u91c7\u98df\u6750 \u00b7 \u4e0b\u53a8 \u00b7 \u4e0a\u83dc',
       play: '\u5f00\u59cb\u8425\u4e1a',
+      resume: '\u63a5\u7740\u8425\u4e1a',
+      pickLevel: '\u9009\u4e00\u5173\u73a9',
+      backHome: '\u56de\u9996\u9875',
+      skip: '\u5230\u4e86\uff01',
+      freeKitchen: '\u81ea\u7531\u53a8\u623f',
+      freeHint: '\u60f3\u653e\u4ec0\u4e48\u5c31\u653e\u4ec0\u4e48\uff0c\u505a\u51fa\u6765\u90fd\u7b97\u6570',
+      freeEmpty: '\u9505\u8fd8\u662f\u7a7a\u7684\uff0c\u53bb\u53f3\u8fb9\u62ff\u70b9\u4e1c\u897f\u5427',
+      freeCook: '\u5f00\u59cb\u505a\uff01',
+      freeClear: '\u5012\u6389\u91cd\u6765',
+      freeDone: '\u51fa\u9505\u5566\uff01\u8fd9\u662f\u4f60\u81ea\u5df1\u60f3\u51fa\u6765\u7684',
+      freeAgain: '\u518d\u505a\u4e00\u4e2a',
       how1: '\u542c\u542c\u5ba2\u4eba\u60f3\u5403\u4ec0\u4e48',
       how2: '\u5f00\u8f66\u53bb\u628a\u65b0\u9c9c\u98df\u6750\u6458\u56de\u6765',
       how3: '\u7167\u7740\u98df\u8c31\u4e00\u6b65\u4e00\u6b65\u505a',
@@ -1990,6 +2229,17 @@ const I18N = (() => {
       gameTitle: "Gulu's Foodie Truck",
       gameSub: 'Take the order \u00b7 Gather \u00b7 Cook \u00b7 Serve',
       play: 'Open the truck',
+      resume: 'Keep cooking',
+      pickLevel: 'Pick a level',
+      backHome: 'Back home',
+      skip: 'We are here!',
+      freeKitchen: 'Free kitchen',
+      freeHint: 'Put in whatever you like \u2014 anything counts',
+      freeEmpty: 'The pot is empty. Grab something from the right!',
+      freeCook: 'Cook it!',
+      freeClear: 'Tip it out',
+      freeDone: 'Served! You invented this one',
+      freeAgain: 'Make another',
       how1: 'Listen to what the customer wants',
       how2: 'Drive out and pick fresh ingredients',
       how3: 'Follow the recipe step by step',
@@ -2074,10 +2324,27 @@ const I18N = (() => {
     stars: +(Store.get('gulu.stars') || 0),
     forage: null,
     cook: null,
-    serve: null
+    serve: null,
+    drive: null
   };
 
   const level = () => LEVELS[S.level];
+
+  /*
+    \u54ea\u4e9b\u5173\u901a\u8fc7\u4e86\uff0c\u5355\u72ec\u5b58\u4e00\u4efd \u2014\u2014 \u6709\u4e86\u5b83\u624d\u80fd\u505a\u9009\u5173\uff0c
+    \u5c0f\u670b\u53cb\u60f3\u73a9\u54ea\u4e00\u5173\u5c31\u73a9\u54ea\u4e00\u5173\uff0c\u4e0d\u7528\u6bcf\u6b21\u4ece\u7b2c\u4e00\u5173\u91cd\u6253\u3002
+  */
+  const doneSet = () => new Set((Store.get('gulu.done') || '').split(',').filter(Boolean));
+  const markDone = id => {
+    const d = doneSet(); d.add(id);
+    Store.set('gulu.done', [...d].join(','));
+  };
+  /* \u7b2c\u4e00\u4e2a\u8fd8\u6ca1\u901a\u7684\u5173\uff0c"\u5f00\u59cb\u95ef\u5173"\u4ece\u8fd9\u91cc\u63a5\u7740\u73a9 */
+  function firstUndone() {
+    const d = doneSet();
+    const i = LEVELS.findIndex(L => !d.has(L.id));
+    return i < 0 ? 0 : i;
+  }
 
   /* ---------------- \u821e\u53f0\u7f29\u653e ---------------- */
   function fit() {
@@ -2263,6 +2530,7 @@ const I18N = (() => {
       [Art.appliance('pot'), t('how3')],
       [Art.dish('smoothie'), t('how4')]
     ];
+    const done = doneSet().size;
     paint('sc-title', `
       <div class="bg">${Art.street()}</div>
       <div class="layer">
@@ -2271,7 +2539,11 @@ const I18N = (() => {
         <div class="card title-card">
           <h1>${t('gameTitle')}</h1>
           <p class="sub">${t('gameSub')}</p>
-          <button class="big-btn" id="play">${t('play')}</button>
+          <button class="big-btn" id="play">${done ? t('resume') : t('play')}</button>
+          <div class="btn-row">
+            <button class="mid-btn" id="pick">${t('pickLevel')}</button>
+            <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
+          </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
               <div class="how-item"><div class="how-art">${art}</div>
@@ -2280,7 +2552,42 @@ const I18N = (() => {
         </div>
       </div>
     `, () => {
-      on('#play', () => { S.level = 0; startLevel(); });
+      on('#play', () => { S.level = firstUndone(); startLevel(); });
+      on('#pick', renderLevelSelect);
+      on('#free', renderFree);
+    });
+  }
+
+  /* ================================================================
+     1b. \u9009\u5173 \u2014\u2014 12 \u5173\u4efb\u9009\uff0c\u4e0d\u5fc5\u6309\u987a\u5e8f
+  ================================================================ */
+  function renderLevelSelect() {
+    S.phase = 'select';
+    const d = doneSet();
+    paint('sc-select', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('pickLevel')}</div>
+        <div class="lv-grid">
+          ${LEVELS.map((L, i) => `
+            <button class="lv-card${d.has(L.id) ? ' cleared' : ''}" data-i="${i}"
+                    aria-label="${i + 1}. ${I18N.name(L.dish)}">
+              <span class="lv-no">${i + 1}</span>
+              <span class="lv-art">${Art.dish(L.id)}</span>
+              <span class="lv-name">${I18N.name(L.dish)}</span>
+              ${d.has(L.id) ? `<span class="lv-star">${Art.star()}</span>` : ''}
+            </button>`).join('')}
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => {
+      sceneEl.querySelectorAll('.lv-card').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        Sound.tap();
+        S.level = +b.dataset.i;
+        startLevel();
+      }));
+      on('#backHome', renderTitle);
     });
   }
 
@@ -2346,25 +2653,50 @@ const I18N = (() => {
   function renderDrive() {
     S.phase = 'drive';
     const L = level();
+    /*
+      \u4ee5\u524d\u8fd9\u91cc\u662f\u5e72\u7b49 2.4 \u79d2\u7684\u8fc7\u573a\u52a8\u753b\u3002
+      \u73b0\u5728\u8def\u4e0a\u4f1a\u98d8\u6765\u6c34\u679c\u548c\u661f\u661f\uff0c\u70b9\u5230\u5c31\u6536\u8fdb\u515c\u91cc \u2014\u2014
+      \u6574\u5c40\u6e38\u620f\u7684\u64cd\u4f5c\u539f\u672c\u5168\u662f"\u770b\u51c6\u4e86\u70b9"\uff0c\u8fd9\u4e00\u6bb5\u52a0\u4e86\u70b9\u624b\u5feb\u7684\u6210\u5206\uff0c\u6362\u6362\u53e3\u5473\u3002
+      \u6536\u591a\u5c11\u90fd\u4e0d\u5f71\u54cd\u8fc7\u5173\uff0c\u7eaf\u5c5e\u597d\u73a9\uff0c\u6240\u4ee5\u6361\u4e0d\u5230\u4e5f\u4e0d\u4f1a\u6709\u632b\u8d25\u611f\u3002
+    */
+    const goodies = shuffle([...FREE_INGREDIENTS]).slice(0, 5).concat(['star', 'star']);
+    S.drive = { got: 0 };
+
     paint('sc-drive', `
       <div class="bg road-scroll">${Art.road()}${Art.road()}</div>
       <div class="layer">
         <div class="pos drive-truck">${Art.truck()}
           <div class="puff p1"></div><div class="puff p2"></div>
         </div>
+        ${shuffle(goodies).map((id, i) => `
+          <button class="road-item" data-id="${id}"
+            style="--lane:${[188, 258, 330][i % 3]}px;--delay:${(i * 0.62).toFixed(2)}s">
+            ${id === 'star' ? Art.star() : Art.ingredient(id)}
+          </button>`).join('')}
         <div class="banner">${t('driveTitle', { place: I18N.place(L.place) })}</div>
-        <div class="chip bottom-chip">${t('driving')}</div>
+        <div class="drive-bag"><span class="bag-ico">${Art.basket()}</span><b id="driveGot">0</b></div>
+        <button class="skip-btn" id="skipDrive">${t('skip')}</button>
       </div>
     `, () => {
       Sound.engine();
       const myGen = gen;
-      /* \u5230\u70b9\u81ea\u52a8\u5f00\u5230\uff0c\u6216\u8005\u4e2d\u9014\u70b9\u4e00\u4e0b\u76f4\u63a5\u8df3\u8fc7 */
-      const go = () => {
-        sceneEl.removeEventListener('click', go);
-        if (isCurrent(myGen)) renderForage();
-      };
-      later(go, 2400);
-      sceneEl.addEventListener('click', go);
+      const counter = $('#driveGot');
+
+      sceneEl.querySelectorAll('.road-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (busy || btn.dataset.taken) return;
+          btn.dataset.taken = '1';
+          S.drive.got++;
+          Sound.pick(Math.min(S.drive.got - 1, 7));
+          if (counter) counter.textContent = S.drive.got;
+          burst(btn, 8, ['#ffd23f', '#fff6e6']);
+          btn.style.visibility = 'hidden';
+        });
+      });
+
+      const go = () => { if (isCurrent(myGen)) renderForage(); };
+      later(go, 5200);
+      on('#skipDrive', go);
     });
   }
 
@@ -2654,11 +2986,124 @@ const I18N = (() => {
   }
 
   /* ================================================================
+     6b. \u81ea\u7531\u53a8\u623f \u2014\u2014 \u60f3\u653e\u4ec0\u4e48\u653e\u4ec0\u4e48\uff0c\u6ca1\u6709\u5bf9\u9519\uff0c\u505a\u5b8c\u8bf7\u5ba2\u4eba\u5403
+  ================================================================ */
+  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
+
+  function renderFree(reset = true) {
+    S.phase = 'free';
+    if (reset || !S.free) S.free = { picked: [], appliance: 'blender', made: false, served: false };
+    const F = S.free;
+    const full = F.picked.length >= 6;
+
+    const madeArt = F.made ? Art.creation(Art.blend(F.picked), F.appliance, F.picked) : '';
+
+    paint('sc-free', `
+      <div class="bg">${Art.kitchen()}</div>
+      <div class="layer">
+        <div class="banner">${F.made ? t('freeDone') : t('freeHint')}</div>
+
+        <div class="pos free-appliance ${F.made ? 'ready' : ''}" id="appliance">
+          ${Art.appliance(F.appliance)}
+          <div class="steam s1"></div><div class="steam s2"></div><div class="steam s3"></div>
+        </div>
+
+        <div class="free-added">
+          ${F.picked.map(id => `<span class="added-chip">${Art.ingredient(id)}</span>`).join('')}
+          ${F.picked.length ? '' : `<span class="added-empty">${t('freeEmpty')}</span>`}
+        </div>
+
+        ${F.made ? `
+          <div class="pos chef-free bob">${Art.chef('cheer')}</div>
+          <div class="pos free-made pop-in" id="made">${madeArt}</div>
+          <div class="free-actions">
+            <button class="big-btn" id="freeAgain">${t('freeAgain')}</button>
+            <button class="mid-btn" id="backHome">${t('backHome')}</button>
+          </div>`
+        : `
+          <div class="pick-row">
+            ${APPLIANCES.map(a => `
+              <button class="pick-appl${a === F.appliance ? ' on' : ''}" data-a="${a}"
+                      aria-label="${t('cookBtn')[a]}">${Art.appliance(a)}</button>`).join('')}
+          </div>
+          <div class="palette">
+            ${FREE_INGREDIENTS.map(id => `
+              <button class="pal-tile" data-id="${id}" ${full ? 'disabled' : ''}
+                      aria-label="${I18N.ing(id)}">${Art.ingredient(id)}</button>`).join('')}
+          </div>
+          <div class="free-actions">
+            <button class="big-btn" id="freeCook" ${F.picked.length ? '' : 'disabled'}>${t('freeCook')}</button>
+            <button class="mid-btn" id="freeClear" ${F.picked.length ? '' : 'disabled'}>${t('freeClear')}</button>
+            <button class="mid-btn" id="backHome">${t('backHome')}</button>
+          </div>`}
+      </div>
+    `, () => {
+      const appl = $('#appliance');
+
+      /*
+        \u653e\u4e00\u6837\u5c31\u5730\u66f4\u65b0\uff0c\u4e0d\u6574\u5c4f\u91cd\u7ed8 \u2014\u2014
+        \u91cd\u7ed8\u90a3\u51e0\u767e\u6beb\u79d2\u91cc\u7684\u70b9\u51fb\u4f1a\u88ab\u541e\u6389\uff0c\u5c0f\u670b\u53cb\u8fde\u7740\u70b9\u5c31\u53ea\u8fdb\u4e86\u4e00\u534a\u3002
+      */
+      const refreshFree = () => {
+        const box = $('.free-added');
+        if (box) {
+          box.innerHTML = F.picked.length
+            ? F.picked.map(id => `<span class="added-chip">${Art.ingredient(id)}</span>`).join('')
+            : `<span class="added-empty">${t('freeEmpty')}</span>`;
+        }
+        const isFull = F.picked.length >= 6;
+        sceneEl.querySelectorAll('.pal-tile').forEach(el => { el.disabled = isFull; });
+        const cook = $('#freeCook'), clr = $('#freeClear');
+        if (cook) cook.disabled = !F.picked.length;
+        if (clr) clr.disabled = !F.picked.length;
+      };
+
+      sceneEl.querySelectorAll('.pal-tile').forEach(tile => {
+        tile.addEventListener('click', () => {
+          if (busy || tile.disabled || F.picked.length >= 6) return;
+          const id = tile.dataset.id;
+          F.picked.push(id);
+          Sound.plop();
+          refreshFree();
+          flyItem(Art.ingredient(id), tile, appl, {
+            endScale: 0.3, dur: 420,
+            onDone: () => {
+              appl.classList.remove('bump'); void appl.offsetWidth; appl.classList.add('bump');
+              burst(appl, 6, ['#fff6e6', '#ffd23f']);
+            }
+          });
+        });
+      });
+
+      /* \u6362\u53a8\u5177\u4e5f\u5c31\u5730\u6362\uff0c\u522b\u628a\u6574\u5c4f\u63a8\u5012\u91cd\u6765 */
+      sceneEl.querySelectorAll('.pick-appl').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        Sound.tap();
+        F.appliance = b.dataset.a;
+        sceneEl.querySelectorAll('.pick-appl').forEach(x => x.classList.toggle('on', x === b));
+        appl.innerHTML = Art.appliance(F.appliance) +
+          '<div class="steam s1"></div><div class="steam s2"></div><div class="steam s3"></div>';
+        appl.classList.remove('bump'); void appl.offsetWidth; appl.classList.add('bump');
+      }));
+
+      on('#freeCook', () => {
+        F.made = true;
+        Sound.cookStep(2);
+        later(() => { Sound.ding(); renderFree(false); }, 420);
+      });
+      on('#freeClear', () => { F.picked = []; refreshFree(); });
+      on('#freeAgain', () => renderFree(true));
+      on('#backHome', renderTitle);
+    });
+  }
+
+  /* ================================================================
      7. \u8fc7\u5173 / \u901a\u5173
   ================================================================ */
   function levelClear() {
     S.stars++;
     Store.set('gulu.stars', S.stars);
+    markDone(level().id);
     updateStars();
     Sound.fanfare();
 
@@ -2730,7 +3175,8 @@ const I18N = (() => {
   /* ---------------- \u5f53\u524d\u573a\u666f\u91cd\u7ed8\uff08\u5207\u6362\u8bed\u8a00\u65f6\u7528\uff09 ---------------- */
   function repaint() {
     ({
-      title: renderTitle, order: renderOrder, drive: renderDrive, forage: renderForage,
+      title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
+      order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();
   }

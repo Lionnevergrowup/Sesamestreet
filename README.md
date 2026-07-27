@@ -11,12 +11,20 @@
 
 推到 `main` 之后 GitHub Actions 会自动重新发布，链接永远是最新版。
 
-## 玩法
+## 三种玩法
+
+| 模式 | 干什么 |
+| --- | --- |
+| **闯关** | 12 关按剧情走，从上次没打完的那关接着玩 |
+| **选一关玩** | 12 关任选，想玩哪个菜就玩哪个，不用按顺序 |
+| **自由厨房** | 25 种食材随便拿、5 种厨具随便换，做出来的东西颜色由你放的食材混成 —— 没有对错，也没有失败 |
+
+## 闯关怎么玩
 
 | 步骤 | 做什么 | 练到什么 |
 | --- | --- | --- |
 | 接单 | 客人说出想吃的菜 | 听指令、记任务 |
-| 开车 | 开去食材产地 | 换场景，喘口气 |
+| 开车 | 路上有水果和星星飘过，点到就收进兜里 | 手眼协调（捡不到也不影响过关） |
 | 采集 | 在丛林、农场、菜园、树林、果园、玉米地摘够指定数量的食材，别摘错 | **数数**、辨认、专注 |
 | 下厨 | 按食谱 1→2→3 的顺序把食材放进厨具，再连续点击直到做好 | **按顺序执行**、因果关系 |
 | 上菜 | 把做好的菜拖给客人 | 精细动作、分享的成就感 |
@@ -46,12 +54,13 @@
 
 12 位客人各不相同，6 种采集场景，25 种食材。
 
-每通一关得一颗星，星星数存在浏览器本地。
+每通一关得一颗星。通过哪些关会记在浏览器本地，所以下次打开能接着玩，选关页上也会标出来。
 
 ## 给小朋友考虑的几个细节
 
 - **点一下和拖拽都行。** 拖不准没关系，命中判定放宽了 80px；直接点一下食材也会自己飞进锅里。
-- **不会"输"。** 摘错、放错只会晃一下 + 提示"再看看食谱"，不扣分、不重来。
+- **不会"输"。** 摘错、放错只会晃一下 + 提示"再看看食谱"，不扣分、不重来。自由厨房里更是怎么搭都对。
+- **不用按顺序。** 想玩第 9 关就直接点第 9 关，不必先打通前 8 关。
 - **不打断。** 中间步骤就地更新，不整屏重绘，连点的时候不会吞掉点击。
 - **横屏提示。** 手机竖着拿会提示转横屏。
 - **有声音。** 一直在走的背景音乐，加上采摘、下锅、上菜各自的音效，全部是实时合成的，没有音频文件。左上角随时静音。
@@ -116,6 +125,12 @@ foraging locations, with twelve customers and twenty-five ingredients. Difficult
 three axes: how many things to count, how long the recipe is, and how steady the aim needs
 to be — from level 6 two different ingredients must be gathered at once, recipes grow from
 three steps to five, and from level 8 the ingredients drift as you reach for them.
+
+Three ways to play: work through the twelve levels, jump straight to any level you like
+from the picker, or open the free kitchen — twenty-five ingredients, five appliances, no
+recipe and no wrong answers, where whatever you invent comes out coloured by the
+ingredients you chose. The drive between the order and the field is a small catching game
+rather than a cutscene.
 
 Music and every sound effect are synthesised live in the browser, so there are no audio
 files. Tap or drag both work, nothing can be failed, and the whole UI toggles between

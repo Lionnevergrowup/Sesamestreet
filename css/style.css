@@ -522,7 +522,7 @@ body.muted .ico-off { display: block; }
   但食材飞进锅里、庆祝的碎片这些是游戏反馈，保留。
 */
 @media (prefers-reduced-motion: reduce) {
-  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift,
+  .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift, .road-item,
   .road-scroll, .drive-truck, .puff,
   .appliance-wrap.ready .steam, .recipe-card li.now {
     animation: none !important;
@@ -544,3 +544,156 @@ body.muted .ico-off { display: block; }
   .rotate-inner p { margin-top: 18px; font-size: 22px; font-weight: 800; }
   @keyframes tilt { 0%,100% { transform: rotate(0); } 50% { transform: rotate(90deg); } }
 }
+
+/* ---------------- 首页的模式入口 ---------------- */
+
+.btn-row { display: flex; gap: 10px; margin-bottom: 18px; }
+.mid-btn {
+  flex: 1;
+  border: none; border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 21px; font-weight: 900; font-family: inherit;
+  color: #fff;
+  background: linear-gradient(180deg, #8b5fe0, #7245cc);
+  box-shadow: 0 5px 0 #5a34a8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.mid-btn.alt { background: linear-gradient(180deg, #4aa86b, #3a8f58); box-shadow: 0 5px 0 #2c7145; }
+.mid-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #5a34a8; }
+.mid-btn.alt:active { box-shadow: 0 1px 0 #2c7145; }
+.mid-btn:disabled { opacity: .4; cursor: default; }
+.title-card .big-btn { margin-bottom: 12px; }
+
+/* ---------------- 选关 ---------------- */
+
+.layer.dim::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(20, 40, 32, .5);
+}
+.lv-grid {
+  position: absolute; left: 50%; top: 100px; transform: translateX(-50%);
+  display: grid; grid-template-columns: repeat(4, 264px); gap: 14px;
+  z-index: 10;
+}
+.lv-card {
+  position: relative;
+  height: 148px; padding: 8px 12px;
+  border: none; border-radius: 22px;
+  background: var(--cream);
+  box-shadow: 0 6px 0 rgba(43, 35, 64, .25);
+  cursor: pointer; font-family: inherit;
+  display: grid; grid-template-columns: 46px 1fr; align-items: center; gap: 8px;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.lv-card:hover { transform: translateY(-3px); box-shadow: 0 9px 0 rgba(43, 35, 64, .25); }
+.lv-card:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(43, 35, 64, .25); }
+.lv-no {
+  grid-row: 1 / span 2;
+  width: 42px; height: 42px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--grape); color: #fff;
+  font-size: 22px; font-weight: 900;
+}
+.lv-art { width: 96px; height: 96px; justify-self: center; }
+.lv-art svg { width: 100%; height: 100%; }
+.lv-name { grid-column: 2; font-size: 19px; font-weight: 800; color: #5c5040; text-align: center; }
+.lv-star { position: absolute; right: 8px; top: 6px; width: 32px; height: 32px; }
+.lv-star svg { width: 100%; height: 100%; }
+.lv-card.cleared { background: #eaf7ee; }
+
+/* ---------------- 自由厨房 ---------------- */
+
+.free-appliance { left: 130px; bottom: 232px; width: 250px; z-index: 12; }
+.free-appliance svg { width: 100%; height: auto; }
+.free-appliance.ready { filter: drop-shadow(0 0 22px rgba(255, 210, 63, .8)); }
+
+.free-added {
+  position: absolute; left: 440px; bottom: 468px; width: 292px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  padding: 10px 14px; border-radius: 20px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  min-height: 62px; z-index: 20;
+}
+.added-chip { width: 40px; height: 40px; }
+.added-chip svg { width: 100%; height: 100%; }
+.added-empty { font-size: 17px; font-weight: 700; color: #8a7a62; }
+
+.pick-row {
+  position: absolute; left: 60px; bottom: 150px;
+  display: flex; gap: 8px; z-index: 20;
+}
+.pick-appl {
+  width: 74px; height: 74px; padding: 6px;
+  border: none; border-radius: 18px;
+  background: rgba(255, 246, 230, .92);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .2);
+  cursor: pointer;
+}
+.pick-appl svg { width: 100%; height: 100%; }
+.pick-appl.on { background: var(--sun); box-shadow: 0 4px 0 #c9911c, 0 0 0 4px rgba(255,210,63,.5); }
+
+.palette {
+  position: absolute; right: 40px; top: 96px;
+  display: grid; grid-template-columns: repeat(5, 88px); gap: 9px;
+  padding: 14px; border-radius: 24px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  z-index: 20;
+}
+.pal-tile {
+  width: 88px; height: 88px; padding: 6px;
+  border: none; border-radius: 16px; background: #fff;
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .14);
+  cursor: pointer;
+}
+.pal-tile svg { width: 100%; height: 100%; }
+.pal-tile:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(43, 35, 64, .14); }
+.pal-tile:disabled { opacity: .35; cursor: default; }
+
+.free-actions {
+  position: absolute; left: 60px; bottom: 40px;
+  display: flex; align-items: center; gap: 10px; z-index: 20;
+}
+.free-actions .mid-btn { flex: none; }
+.free-made {
+  left: 470px; bottom: 248px; width: 224px; z-index: 25;
+  filter: drop-shadow(0 12px 16px rgba(0,0,0,.3));
+}
+.free-made svg { width: 100%; height: auto; }
+
+/* ---------------- 开车路上捡东西 ---------------- */
+
+.road-item {
+  position: absolute; top: var(--lane); left: 1340px;
+  width: 104px; height: 104px; margin: -52px 0 0 -52px;
+  border: none; background: none; padding: 0; cursor: pointer;
+  z-index: 15;
+  filter: drop-shadow(0 6px 8px rgba(20,50,35,.35));
+  animation: rollBy 2.6s linear var(--delay) both;
+}
+.road-item svg { width: 100%; height: 100%; }
+@keyframes rollBy {
+  from { transform: translateX(0) rotate(0deg); }
+  to   { transform: translateX(-1460px) rotate(-320deg); }
+}
+.drive-bag {
+  position: absolute; left: 26px; bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 22px 10px 12px; border-radius: 24px;
+  background: rgba(255, 246, 230, .95); box-shadow: var(--shadow);
+  font-size: 32px; font-weight: 900; color: var(--deep);
+  z-index: 30;
+}
+.bag-ico { width: 56px; }
+.bag-ico svg { width: 100%; height: auto; }
+.skip-btn {
+  position: absolute; right: 24px; bottom: 26px;
+  border: none; border-radius: 999px; padding: 12px 30px;
+  font-size: 22px; font-weight: 900; font-family: inherit; color: #fff;
+  background: rgba(43, 35, 64, .6);
+  cursor: pointer; z-index: 30;
+}
+.skip-btn:active { transform: translateY(3px); }
+
+/* 做好之后主厨出来捧个场，右边不至于空着 */
+.chef-free { left: 840px; bottom: 236px; width: 208px; z-index: 12; }
