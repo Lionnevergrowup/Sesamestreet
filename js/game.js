@@ -133,6 +133,14 @@
       if (Math.abs(dx) + Math.abs(dy) > 10) moved = true;
       if (moved) el.style.transform = `translate(${dx / scale}px,${dy / scale}px) scale(1.12)`;
     });
+    /* 手势被系统抢走（来电、多指、边缘滑动）就当没拖过，别误判成放下 */
+    el.addEventListener('pointercancel', () => {
+      if (!active) return;
+      active = false;
+      el.classList.remove('grabbing');
+      el.style.transform = '';
+    });
+
     const end = e => {
       if (!active) return;
       active = false;
@@ -149,7 +157,6 @@
       onRelease(hit);
     };
     el.addEventListener('pointerup', end);
-    el.addEventListener('pointercancel', end);
   }
 
   /* ---------------- 场景切换 ---------------- */

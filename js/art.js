@@ -412,12 +412,14 @@ const Art = (() => {
       <path d="M40 74q8 4 16 0" stroke="#4fae63" stroke-width="4" stroke-linecap="round" fill="none"/>`,
 
     soup: `
-      <path d="M18 54h64c0 22-14 34-32 34S18 76 18 54Z" fill="#fdfdfd"/>
-      <ellipse cx="50" cy="54" rx="32" ry="9" fill="#f4842c"/>
-      <ellipse cx="44" cy="52" rx="7" ry="3" fill="#ffb36b"/>
-      <ellipse cx="60" cy="56" rx="5" ry="2.5" fill="#ffb36b"/>
-      <path d="M16 62h68" stroke="#dfe7ee" stroke-width="6" stroke-linecap="round"/>
-      <path d="M40 34c-6-6 6-10 0-16M56 34c-6-6 6-10 0-16" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>`,
+      <path d="M40 30c-6-7 7-11 0-18M58 32c-6-7 7-11 0-18" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>
+      <path d="M12 52h76c0 24-17 38-38 38S12 74 12 52Z" fill="#fdfdfd"/>
+      <ellipse cx="50" cy="52" rx="38" ry="14" fill="#d1762a"/>
+      <ellipse cx="50" cy="53" rx="33" ry="11" fill="#f4842c"/>
+      <ellipse cx="41" cy="50" rx="7" ry="3" fill="#ffb36b"/>
+      <ellipse cx="61" cy="55" rx="5.5" ry="2.4" fill="#ffb36b"/>
+      <ellipse cx="52" cy="57" rx="4" ry="1.8" fill="#ffb36b"/>
+      <path d="M8 62h84" stroke="#dfe7ee" stroke-width="7" stroke-linecap="round"/>`,
 
     icecream: `
       <path d="M34 56h32l-13 38a3 3 0 0 1-6 0Z" fill="#e0a44f"/>
@@ -438,12 +440,15 @@ const Art = (() => {
       <path d="M50 26c-6-6 4-10 0-14" fill="none" stroke="#e0d0b8" stroke-width="4" stroke-linecap="round"/>`,
 
     cornsoup: `
-      <path d="M16 52h68c0 24-15 36-34 36S16 76 16 52Z" fill="#fdfdfd"/>
-      <ellipse cx="50" cy="52" rx="34" ry="9" fill="#ffd23f"/>
-      <ellipse cx="42" cy="50" rx="7" ry="3" fill="#ffe89a"/>
-      <ellipse cx="60" cy="54" rx="5" ry="2.5" fill="#ffe89a"/>
-      <path d="M14 60h72" stroke="#dfe7ee" stroke-width="6" stroke-linecap="round"/>
-      <path d="M40 32c-6-6 6-10 0-16M58 32c-6-6 6-10 0-16" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>`,
+      <path d="M40 30c-6-7 7-11 0-18M58 32c-6-7 7-11 0-18" fill="none" stroke="#cfe0ea" stroke-width="5" stroke-linecap="round"/>
+      <path d="M12 52h76c0 24-17 38-38 38S12 74 12 52Z" fill="#fdfdfd"/>
+      <ellipse cx="50" cy="52" rx="38" ry="14" fill="#e0a416"/>
+      <ellipse cx="50" cy="53" rx="33" ry="11" fill="#ffd23f"/>
+      <g fill="#fff6c2">
+        <circle cx="40" cy="50" r="3.4"/><circle cx="52" cy="48" r="3"/>
+        <circle cx="60" cy="55" r="3.2"/><circle cx="46" cy="56" r="2.8"/>
+      </g>
+      <path d="M8 62h84" stroke="#dfe7ee" stroke-width="7" stroke-linecap="round"/>`,
 
     lemonade: `
       <path d="M32 22h44l-6 64a10 10 0 0 1-10 8H48a10 10 0 0 1-10-8Z" fill="#eaf4fa" opacity=".85"/>
@@ -455,11 +460,15 @@ const Art = (() => {
       <path d="M74 40a13 13 0 1 1 0-1Z" fill="#ffe08a" stroke="#e8ab1e" stroke-width="3"/>`,
 
     pumpkinpie: `
-      <path d="M12 66 50 22l38 44Z" fill="#f4842c"/>
-      <path d="M12 66 50 22l38 44Z" fill="none" stroke="#e0a44f" stroke-width="7" stroke-linejoin="round"/>
-      <path d="M10 70h80v8a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6Z" fill="#e0a44f"/>
-      <path d="M50 34c-8 10-14 18-18 28h36c-4-10-10-18-18-28Z" fill="#ff9f4d" opacity=".55"/>
-      <path d="M50 30c6-4 14-2 16 2-6 4-12 3-16-2Z" fill="#fffdf7"/>`,
+      <path d="M12 66 50 22l38 44Z" fill="#d96a15"/>
+      <path d="M16 64 50 28l34 36Z" fill="#f4842c"/>
+      <path d="M24 60 50 34l26 26Z" fill="#ff9f4d"/>
+      <path d="M12 66 50 22l38 44Z" fill="none" stroke="#e0a44f" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M8 68h84v10a7 7 0 0 1-7 7H15a7 7 0 0 1-7-7Z" fill="#e0a44f"/>
+      <path d="M14 74h72" stroke="#c98a4b" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+      <g fill="#fffdf7">
+        <circle cx="50" cy="30" r="9"/><circle cx="41" cy="35" r="6"/><circle cx="59" cy="35" r="6"/>
+      </g>`,
 
     grapejuice: `
       <path d="M32 24h44l-6 62a10 10 0 0 1-10 9H48a10 10 0 0 1-10-9Z" fill="#eaf4fa" opacity=".85"/>
@@ -480,14 +489,17 @@ const Art = (() => {
       <circle cx="36" cy="70" r="5" fill="#e8453c"/>`,
 
     peachcake: `
-      <path d="M18 54h64v30a8 8 0 0 1-8 8H26a8 8 0 0 1-8-8Z" fill="#fff3dc"/>
-      <path d="M18 66h64v8H18Z" fill="#ff9f7a"/>
-      <path d="M18 54c0-8 14-12 32-12s32 4 32 12Z" fill="#fffdf7"/>
+      <path d="M16 56h68v32a9 9 0 0 1-9 9H25a9 9 0 0 1-9-9Z" fill="#f0dcb8"/>
+      <path d="M16 64h68v11H16Z" fill="#ff8a5c"/>
+      <path d="M16 80h68v6H16Z" fill="#e0c99a"/>
+      <path d="M16 56c0-9 15-13 34-13s34 4 34 13Z" fill="#fff3dc"/>
       <g fill="#fffdf7">
-        <circle cx="30" cy="48" r="7"/><circle cx="50" cy="44" r="8"/><circle cx="70" cy="48" r="7"/>
+        <circle cx="28" cy="50" r="8"/><circle cx="42" cy="45" r="8"/>
+        <circle cx="58" cy="45" r="8"/><circle cx="72" cy="50" r="8"/>
       </g>
-      <path d="M50 40c-7 0-12-5-12-10s5-8 12-8 12 3 12 8-5 10-12 10Z" fill="#ff9f7a"/>
-      <path d="M52 22c6-6 12-5 14-4-2 6-8 8-14 4Z" fill="#4fae63"/>`
+      <path d="M50 42c-8 0-14-6-14-12s6-9 14-9 14 3 14 9-6 12-14 12Z" fill="#ff9f7a"/>
+      <path d="M50 22c5 3 8 8 7 13-4-3-7-8-7-13Z" fill="#ff8a5c"/>
+      <path d="M52 21c6-7 13-6 15-5-2 7-9 9-15 5Z" fill="#4fae63"/>`
   };
 
   const dish = (id, cls = '') => svg(DISH[id] || DISH.smoothie, '0 0 100 100', `art-dish ${cls}`);
@@ -690,51 +702,92 @@ const Art = (() => {
     }
 
     if (place === 'field') {
+      /* 一株玉米：细长的秆 + 几片弯垂的叶子 + 一根结在半腰的棒子 */
+      const stalk = (x, y, sc, flip = 1) => `
+        <g transform="translate(${x} ${y}) scale(${sc * flip} ${sc})">
+          <path d="M0 0C-4-50-2-90 2-132" fill="none" stroke="#7fa02e" stroke-width="9" stroke-linecap="round"/>
+          <path d="M0 -34c-34-2-52-22-58-42 26-2 46 14 58 42Z" fill="#8fb02e"/>
+          <path d="M1 -64c34-2 52-22 58-42-26-2-46 14-58 42Z" fill="#a8c840"/>
+          <path d="M1 -92c-28-2-42-18-47-34 21-2 38 12 47 34Z" fill="#a8c840"/>
+          <!--
+            顶上只给穗子，不画玉米棒 —— 背景里要是也挂着黄澄澄的棒子，
+            小朋友会去点背景，点了没反应就以为游戏坏了。
+            能采的那些一眼就得是唯一像"玉米"的东西。
+          -->
+          <g transform="translate(2 -132)">
+            <path d="M0 0c-10-14-14-26-12-36 9 6 13 20 12 36Z" fill="#c2d94e"/>
+            <path d="M0 0c10-14 14-26 12-36-9 6-13 20-12 36Z" fill="#c2d94e"/>
+            <path d="M0 -2c0-16 1-26 3-34 3 12 2 24-3 34Z" fill="#d8e87a"/>
+          </g>
+        </g>`;
+
       return wrap(`
         <rect width="${W}" height="${H}" fill="#bfe4f5"/>
-        <rect width="${W}" height="240" fill="#a8dcf0"/>
-        <circle cx="1090" cy="120" r="66" fill="#ffd23f"/>
+        <circle cx="1090" cy="118" r="66" fill="#ffd23f"/>
         <g fill="#fff" opacity=".92">
           <ellipse cx="240" cy="120" rx="80" ry="32"/><ellipse cx="300" cy="104" rx="52" ry="28"/>
-          <ellipse cx="700" cy="90" rx="60" ry="26"/><ellipse cx="748" cy="80" rx="40" ry="20"/>
+          <ellipse cx="700" cy="92" rx="60" ry="26"/><ellipse cx="748" cy="82" rx="40" ry="20"/>
         </g>
-        <path d="M0 300q220-40 440-10t400-20 440 16V720H0Z" fill="#a8c840"/>
-        <path d="M0 400q300-40 640 0t640-20V720H0Z" fill="#c2d94e"/>
-        <g fill="#e0a44f">
-          ${[80, 250, 420, 590, 760, 930, 1100, 1250].map((x, i) => `
-            <g transform="translate(${x} ${430 + (i % 3) * 14})">
-              <rect x="-5" y="0" width="10" height="120" rx="5"/>
-              <ellipse cx="0" cy="-14" rx="17" ry="26" fill="#ffd23f"/>
-              <path d="M0 -34c-10 8-14 20-12 30 8-4 12-16 12-30Z" fill="#e8ab1e"/>
-            </g>`).join('')}
-        </g>
-        <path d="M0 560q320-36 640 0t640-14V720H0Z" fill="#8fb02e"/>
-        <g stroke="#6d8a1e" stroke-width="7" stroke-linecap="round">
-          <path d="M140 700v-44M380 710v-40M620 702v-46M860 712v-42M1120 700v-44"/>
+        <path d="M0 300q220-42 440-12t400-20 440 16V720H0Z" fill="#a8c840"/>
+        ${[[110, 470, .72], [300, 452, .66], [520, 476, .7], [760, 452, .64], [980, 474, .7], [1190, 456, .66]]
+          .map(([x, y, sc], i) => stalk(x, y, sc, i % 2 ? -1 : 1)).join('')}
+        <path d="M0 470q300-46 640 0t640-22V720H0Z" fill="#c2d94e"/>
+        ${[[60, 700, 1], [280, 712, .92], [520, 704, 1.05], [780, 714, .95], [1030, 702, 1], [1240, 710, .9]]
+          .map(([x, y, sc], i) => stalk(x, y, sc, i % 2 ? -1 : 1)).join('')}
+        <path d="M0 626q320-30 640 0t640-12V720H0Z" fill="#8fb02e"/>
+        <g stroke="#6d8a1e" stroke-width="7" stroke-linecap="round" opacity=".7">
+          <path d="M150 712v-32M400 716v-28M660 710v-34M910 716v-28M1150 712v-32"/>
         </g>`);
     }
 
-    /* forest */
+    /* forest —— 莓果树林 */
+    const pine = (x, y, sc, c1, c2) => `
+      <g transform="translate(${x} ${y}) scale(${sc})">
+        <rect x="-11" y="-16" width="22" height="52" rx="9" fill="#8b5a2b"/>
+        <path d="M0 -150 58 -66H-58Z" fill="${c1}"/>
+        <path d="M0 -112 66 -20H-66Z" fill="${c2}"/>
+        <path d="M0 -70 74 24H-74Z" fill="${c1}"/>
+      </g>`;
+    const round3 = (x, y, sc, c1, c2) => `
+      <g transform="translate(${x} ${y}) scale(${sc})">
+        <rect x="-13" y="-40" width="26" height="66" rx="11" fill="#8b5a2b"/>
+        <circle cx="0" cy="-92" r="54" fill="${c1}"/>
+        <circle cx="-42" cy="-52" r="40" fill="${c2}"/>
+        <circle cx="42" cy="-52" r="40" fill="${c2}"/>
+        <circle cx="0" cy="-44" r="34" fill="${c1}"/>
+      </g>`;
+
     return wrap(`
-      <rect width="${W}" height="${H}" fill="#d6ecef"/>
-      <circle cx="${W / 2}" cy="300" r="280" fill="#e4f3f4"/>
-      <g fill="#2d6647">
-        <circle cx="120" cy="260" r="140"/><circle cx="330" cy="200" r="120"/>
-        <circle cx="980" cy="210" r="130"/><circle cx="1190" cy="270" r="140"/>
+      <rect width="${W}" height="${H}" fill="#dff0f2"/>
+      <circle cx="${W / 2}" cy="300" r="300" fill="#eaf6f6"/>
+      <g fill="#fff" opacity=".8">
+        <ellipse cx="300" cy="110" rx="70" ry="26"/><ellipse cx="352" cy="98" rx="44" ry="22"/>
+        <ellipse cx="960" cy="96" rx="56" ry="22"/>
       </g>
-      <g fill="#3f7d5b">
-        <circle cx="230" cy="330" r="120"/><circle cx="1080" cy="340" r="120"/>
-        <circle cx="640" cy="180" r="110"/>
+      <!-- 远处一排小树，只做轮廓 -->
+      <path d="M0 330q320-34 640 0t640-18V720H0Z" fill="#b6d8cd"/>
+      <g opacity=".85">
+        ${[60, 190, 330, 470, 950, 1090, 1220].map((x, i) =>
+          pine(x, 340, 0.42 + (i % 3) * 0.05, '#8fc0b0', '#a2ccbd')).join('')}
       </g>
-      <g fill="#8b5a2b">
-        <rect x="176" y="330" width="46" height="260" rx="12"/>
-        <rect x="1052" y="340" width="46" height="250" rx="12"/>
+      <!-- 中景：主要的树，树干踩在这条地平线上 -->
+      <path d="M0 430q300-40 640 0t640-20V720H0Z" fill="#79b394"/>
+      ${pine(120, 470, 0.72, '#3f7d5b', '#4f8f6a')}
+      ${round3(300, 470, 0.62, '#4aa86b', '#59b878')}
+      ${pine(1160, 470, 0.78, '#3f7d5b', '#4f8f6a')}
+      ${round3(985, 468, 0.58, '#4aa86b', '#59b878')}
+      <!-- 前景 -->
+      <path d="M0 560q320-40 640 0t640-18V720H0Z" fill="#5fa87c"/>
+      <path d="M0 650q300-30 640 0t640-14V720H0Z" fill="#4e9a6e"/>
+      <g fill="#3f7d5b" opacity=".55">
+        ${[80, 360, 660, 940, 1210].map(x =>
+          `<g transform="translate(${x} 690)">
+             <circle cx="0" cy="0" r="30"/><circle cx="-24" cy="12" r="22"/><circle cx="24" cy="12" r="22"/>
+           </g>`).join('')}
       </g>
-      <path d="M0 520q320-50 640 0t640-30V720H0Z" fill="#59a37c"/>
-      <path d="M0 620q300-40 640 0t640-20V720H0Z" fill="#4aa86b"/>
-      <g fill="#2d6647" opacity=".5">
-        ${[100, 380, 700, 980, 1220].map(x =>
-          `<ellipse cx="${x}" cy="690" rx="70" ry="14"/>`).join('')}
+      <g fill="#8b5fe0" opacity=".75">
+        <circle cx="352" cy="682" r="6"/><circle cx="368" cy="694" r="5"/>
+        <circle cx="944" cy="686" r="6"/><circle cx="962" cy="696" r="5"/>
       </g>`);
   }
 
