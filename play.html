@@ -2,11 +2,6 @@
 <title>&#21653;&#22108;&#30340;&#32654;&#39135;&#39184;&#36710; &#183; Gulu's Foodie Truck</title>
 
 <style>
-/* ------------------------------------------------------------------
-   style.css — 咕噜的美食餐车
-   固定 1280×720 舞台，整体等比缩放到任意屏幕。
------------------------------------------------------------------- */
-
 :root {
   --ink:   #2b2340;
   --cream: #fff6e6;
@@ -51,8 +46,6 @@ html, body {
   transform-origin: center center;
 }
 
-/* ---------------- 场景骨架 ---------------- */
-
 .scene { position: absolute; inset: 0; opacity: 1; transition: opacity .18s ease; }
 .scene.fade { opacity: 0; }
 
@@ -66,8 +59,6 @@ html, body {
 .fg { position: absolute; inset: 0; pointer-events: none; }
 
 #fx { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
-
-/* ---------------- HUD ---------------- */
 
 #hud {
   position: absolute;
@@ -108,8 +99,6 @@ body.muted .ico-off { display: block; }
 }
 .stars-badge svg { width: 28px; height: 28px; fill: var(--sun); }
 
-/* ---------------- 通用组件 ---------------- */
-
 .big-btn {
   border: none;
   border-radius: 999px;
@@ -132,7 +121,7 @@ body.muted .ico-off { display: block; }
   z-index: 20;
 }
 .big-btn.bottom:active { transform: translateX(-50%) translateY(6px); box-shadow: 0 2px 0 #c9541c; }
-/* 接单场景：按钮直接挂在对话气泡下面 */
+
 .big-btn.under-bubble { position: absolute; right: 96px; top: 288px; z-index: 20; }
 
 .banner {
@@ -165,7 +154,6 @@ body.muted .ico-off { display: block; }
   box-shadow: 0 12px 0 rgba(43, 35, 64, .18), 0 24px 50px rgba(0, 0, 0, .2);
 }
 
-/* 顶部飘字提示 */
 .toast {
   position: absolute; top: 96px; left: 50%; transform: translateX(-50%);
   padding: 12px 28px; border-radius: 999px;
@@ -175,11 +163,12 @@ body.muted .ico-off { display: block; }
   animation: toastIn .3s cubic-bezier(.2,1.4,.4,1);
   z-index: 70;
 }
+
+.sc-cook .toast { left: calc(50% + 100px); }
 .toast.warn { background: #ffe8a8; color: #8a5a12; }
 .toast.good { background: #cdf0d8; color: #1f4a34; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(.9); } }
 
-/* 飞行中的道具 / 碎片 */
 .fly { position: absolute; transform: translate(-50%, -50%); z-index: 65; }
 .fly svg { width: 100%; height: 100%; }
 .particle {
@@ -188,8 +177,6 @@ body.muted .ico-off { display: block; }
   transform: translate(-50%, -50%);
 }
 .particle.confetti { width: 14px; height: 22px; border-radius: 3px; transform: none; }
-
-/* ---------------- 动画 ---------------- */
 
 @keyframes bob   { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
@@ -228,8 +215,6 @@ body.muted .ico-off { display: block; }
 .bump   { animation: bumpIt .4s ease; }
 .nudge  { animation: nudgeIt .35s ease; }
 
-/* ---------------- 首页 & 通关页 ---------------- */
-
 .truck-title { left: 10px; bottom: 22px; width: 540px; }
 .chef-title  { left: 520px; bottom: 30px; width: 250px; }
 
@@ -256,10 +241,8 @@ body.muted .ico-off { display: block; }
 }
 .crowd-one { width: 140px; }
 .crowd-one svg { width: 100%; height: auto; }
-/* 通关页：主厨站到右边，别挡住排队道谢的客人 */
-.sc-finale .chef-title { left: 832px; bottom: 24px; width: 212px; }
 
-/* ---------------- 接单 / 上菜 ---------------- */
+.sc-finale .chef-title { left: 832px; bottom: 24px; width: 212px; }
 
 .truck-side { left: -30px; bottom: 34px; width: 610px; }
 .chef-side  { left: 520px; bottom: 40px; width: 235px; }
@@ -297,8 +280,6 @@ body.muted .ico-off { display: block; }
   box-shadow: 0 8px 0 #d9d2c2, 0 16px 26px rgba(0,0,0,.22);
 }
 
-/* ---------------- 开车 ---------------- */
-
 .road-scroll { display: flex; width: 200%; animation: roadRun 3s linear infinite; }
 .road-scroll svg { position: relative; width: 50%; height: 100%; flex: none; }
 @keyframes roadRun { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -322,8 +303,6 @@ body.muted .ico-off { display: block; }
   from { opacity: .8; transform: translate(0,0) scale(.5); }
   to   { opacity: 0;  transform: translate(-150px,-40px) scale(1.6); }
 }
-
-/* ---------------- 采集 ---------------- */
 
 .forage-item {
   position: absolute;
@@ -362,8 +341,6 @@ body.muted .ico-off { display: block; }
 .count em { font-style: normal; font-size: 22px; opacity: .55; }
 
 .chef-forage { right: 40px; bottom: 30px; width: 200px; z-index: 25; }
-
-/* ---------------- 下厨 ---------------- */
 
 .recipe-card { position: absolute; left: 34px; top: 92px; width: 320px; padding: 20px 22px; }
 .recipe-card h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; text-align: center; }
@@ -457,15 +434,12 @@ body.muted .ico-off { display: block; }
 .cook-controls .hint { font-size: 18px; font-weight: 700; color: #fff6e6;
   text-shadow: 0 2px 6px rgba(0,0,0,.5); }
 
-/* 做好的菜端到台面正中央亮个相 */
 .dish-pop {
   left: 50%; margin-left: -115px; bottom: 148px; width: 230px;
   animation: popIn .5s cubic-bezier(.2,1.6,.4,1) both, float 2.4s ease-in-out .5s infinite;
   z-index: 35;
   filter: drop-shadow(0 12px 16px rgba(0,0,0,.3));
 }
-
-/* ---------------- 过关面板 ---------------- */
 
 .overlay {
   position: absolute; inset: 0; z-index: 55;
@@ -480,9 +454,6 @@ body.muted .ico-off { display: block; }
   animation: popIn .6s cubic-bezier(.2,1.7,.4,1) both; }
 .big-star svg { width: 100%; height: 100%; filter: drop-shadow(0 8px 12px rgba(0,0,0,.25)); }
 
-/* ---------------- 无障碍 ---------------- */
-
-/* 键盘操作时看得见焦点在哪 */
 .big-btn:focus-visible,
 .icon-btn:focus-visible,
 .ing-tile:focus-visible,
@@ -491,10 +462,6 @@ body.muted .ico-off { display: block; }
   outline-offset: 4px;
 }
 
-/*
-  有人对动效敏感。角色的呼吸、叶子摇晃、路面滚动这些氛围动画一律停掉，
-  但食材飞进锅里、庆祝的碎片这些是游戏反馈，保留。
-*/
 @media (prefers-reduced-motion: reduce) {
   .bob, .float, .walk-in, .forage-item.sway,
   .road-scroll, .drive-truck, .puff,
@@ -503,8 +470,6 @@ body.muted .ico-off { display: block; }
   }
   .scene { transition: none; }
 }
-
-/* ---------------- 竖屏提示 ---------------- */
 
 #rotate-hint { display: none; }
 @media (orientation: portrait) and (max-width: 900px) {
@@ -556,6 +521,54 @@ body.muted .ico-off { display: block; }
 
 <script>
 /* ------------------------------------------------------------------
+   store.js \u2014 \u5b58\u8fdb\u5ea6\u7528\u7684\u4e00\u5c42\u8584\u5c01\u88c5\u3002
+
+   localStorage \u5e76\u4e0d\u662f\u968f\u65f6\u90fd\u80fd\u7528\uff1a\u9690\u79c1\u6a21\u5f0f\u3001\u5d4c\u5728 iframe \u91cc\u88ab\u9694\u79bb\u5b58\u50a8\u3001
+   \u6d4f\u89c8\u5668\u5173\u6389\u4e86\u7ad9\u70b9\u6570\u636e\uff0c\u8bfb\u4e00\u4e0b\u5c31\u4f1a\u629b\u5f02\u5e38\u3002\u6e38\u620f\u4e3a\u6b64\u767d\u5c4f\u662f\u4e0d\u53ef\u63a5\u53d7\u7684 \u2014\u2014
+   \u5b58\u4e0d\u4e86\u9876\u591a\u662f\u8bb0\u4e0d\u4f4f\u661f\u661f\uff0c\u4e0d\u8be5\u8fde\u73a9\u90fd\u73a9\u4e0d\u4e86\u3002
+   \u6240\u4ee5\u8fd9\u91cc\u63a2\u6d4b\u4e00\u6b21\uff0c\u4e0d\u884c\u5c31\u9000\u56de\u5185\u5b58\uff0c\u672c\u6b21\u7167\u73a9\uff0c\u5237\u65b0\u540e\u5fd8\u6389\u3002
+------------------------------------------------------------------ */
+
+const Store = (() => {
+  const memory = Object.create(null);
+  let usable = false;
+
+  try {
+    const probe = '__gulu_probe__';
+    window.localStorage.setItem(probe, '1');
+    window.localStorage.removeItem(probe);
+    usable = true;
+  } catch (e) {
+    usable = false;
+  }
+
+  return {
+    get available() { return usable; },
+
+    get(key, fallback = null) {
+      try {
+        const v = usable ? window.localStorage.getItem(key) : memory[key];
+        return (v === null || v === undefined) ? fallback : v;
+      } catch (e) {
+        return fallback;
+      }
+    },
+
+    set(key, value) {
+      const v = String(value);
+      try {
+        if (usable) window.localStorage.setItem(key, v);
+        else memory[key] = v;
+      } catch (e) {
+        memory[key] = v;      // \u6bd4\u5982\u5199\u6ee1\u4e86\u914d\u989d\uff0c\u9000\u56de\u5185\u5b58
+      }
+    }
+  };
+})();
+</script>
+
+<script>
+/* ------------------------------------------------------------------
    audio.js \u2014 \u7528 WebAudio \u73b0\u573a\u5408\u6210\u97f3\u6548\uff0c\u4e0d\u4f9d\u8d56\u4efb\u4f55\u5916\u90e8\u6587\u4ef6\u3002
    All sound effects are synthesised with WebAudio \u2014 no asset files,
    so the game works offline / straight off the filesystem.
@@ -564,7 +577,7 @@ body.muted .ico-off { display: block; }
 const Sound = (() => {
   let ctx = null;
   let master = null;
-  let enabled = localStorage.getItem('gulu.sound') !== 'off';
+  let enabled = Store.get('gulu.sound') !== 'off';
 
   function ensure() {
     if (!ctx) {
@@ -630,7 +643,7 @@ const Sound = (() => {
 
     toggle() {
       enabled = !enabled;
-      localStorage.setItem('gulu.sound', enabled ? 'on' : 'off');
+      Store.set('gulu.sound', enabled ? 'on' : 'off');
       if (enabled) { ensure(); this.tap(); }
       return enabled;
     },
@@ -1368,7 +1381,7 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, appliance, truck, backdrop, street, road,
-           kitchen, basket, star, leaf, CUSTOMERS };
+           kitchen, basket, star, leaf };
 })();
 </script>
 
@@ -1518,13 +1531,11 @@ const I18N = (() => {
       orderBtn: '\u597d\u7684\uff0c\u4ea4\u7ed9\u6211\uff01',
       needTitle: '\u4eca\u5929\u8981\u505a\uff1a{dish}',
       driveTitle: '\u53bb{place}\u6458{ing}',
-      driveBtn: '\u51fa\u53d1\uff01',
       driving: '\u8def\u4e0a\u98a0\u98a0\u98a0\u2026',
       forageTitle: '\u6458{count}\u4e2a{ing}',
       forageOops: '\u8fd9\u4e0d\u662f{ing}\u5440\uff0c\u518d\u627e\u627e\uff01',
       forageDone: '\u98df\u6750\u9f50\u5566\uff0c\u56de\u9910\u8f66\uff01',
       backBtn: '\u56de\u9910\u8f66\u505a\u83dc',
-      cookTitle: '\u7167\u7740\u98df\u8c31\u653e\u98df\u6750',
       recipeTitle: '{dish}\u98df\u8c31',
       nextIng: '\u63a5\u4e0b\u6765\u653e\uff1a{ing}',
       wrongIng: '\u5148\u770b\u770b\u98df\u8c31\u7b2c{n}\u6b65\u54e6\uff01',
@@ -1555,13 +1566,11 @@ const I18N = (() => {
       orderBtn: 'You got it!',
       needTitle: "Today's dish: {dish}",
       driveTitle: 'Off to the {place} for {ing}',
-      driveBtn: "Let's go!",
       driving: 'Bumpity bump\u2026',
       forageTitle: 'Pick {count} {ing}',
       forageOops: 'That is not a {ing} \u2014 keep looking!',
       forageDone: 'All picked. Back to the truck!',
       backBtn: 'Back to the truck',
-      cookTitle: 'Add them in recipe order',
       recipeTitle: '{dish} recipe',
       nextIng: 'Add next: {ing}',
       wrongIng: 'Check step {n} of the recipe!',
@@ -1581,7 +1590,7 @@ const I18N = (() => {
     }
   };
 
-  let lang = localStorage.getItem('gulu.lang') || 'zh';
+  let lang = Store.get('gulu.lang') || 'zh';
 
   function t(key, vars = {}) {
     let s = STR[lang][key];
@@ -1599,7 +1608,7 @@ const I18N = (() => {
     place(id) { return this.name(PLACES[id]); },
     toggle() {
       lang = lang === 'zh' ? 'en' : 'zh';
-      localStorage.setItem('gulu.lang', lang);
+      Store.set('gulu.lang', lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
       return lang;
     }
@@ -1627,7 +1636,7 @@ const I18N = (() => {
   const S = {
     phase: 'title',
     level: 0,
-    stars: +(localStorage.getItem('gulu.stars') || 0),
+    stars: +(Store.get('gulu.stars') || 0),
     forage: null,
     cook: null,
     serve: null
@@ -1773,6 +1782,13 @@ const I18N = (() => {
 
   function paint(cls, html, after) {
     gen++;
+    /*
+      \u4e0a\u4e2a\u573a\u666f\u7684\u63d0\u793a\u548c\u788e\u7247\u4e0d\u8be5\u98d8\u5230\u4e0b\u4e00\u4e2a\u573a\u666f\u91cc \u2014\u2014
+      \u6bd4\u5982"\u8fd9\u4e0d\u662f\u9999\u8549\u5440"\u4f1a\u4e00\u8def\u98d8\u5230\u53a8\u623f\u3002
+      \u53ea\u6e05\u7eaf\u88c5\u9970\u7684\u90e8\u5206\uff1b\u98de\u884c\u4e2d\u7684\u98df\u6750\u5e26\u7740\u56de\u8c03\uff0c\u8ba9\u5b83\u81ea\u5df1\u98de\u5b8c\u3002
+    */
+    clearTimeout(toastTimer);
+    fxEl.querySelectorAll('.toast, .particle').forEach(el => el.remove());
     sceneEl.classList.add('fade');
     busy = true;
     setTimeout(() => {
@@ -1927,7 +1943,7 @@ const I18N = (() => {
       <div class="bg">${Art.backdrop(L.place)}</div>
       <div class="layer">
         ${F.items.map((it, i) => it.taken ? '' : `
-          <button class="forage-item sway" data-i="${i}"
+          <button class="forage-item sway" data-i="${i}" aria-label="${I18N.ing(it.id)}"
             style="left:${it.x}px;top:${it.y}px;--rot:${it.rot}deg;--sc:${it.sc};animation-delay:${it.delay}s">
             ${Art.ingredient(it.id)}
           </button>`).join('')}
@@ -1979,8 +1995,12 @@ const I18N = (() => {
               }
             }
           });
+          /*
+            \u6458\u8d70\u4e4b\u540e\u8981\u628a\u6309\u94ae\u771f\u7684\u5220\u6389\uff0c\u4e0d\u80fd\u53ea\u662f\u8ba9\u5b83\u900f\u660e\u3002
+            \u7559\u7740\u7684\u8bdd DOM \u91cc\u4f1a\u6709\u4e2a\u770b\u4e0d\u89c1\u4e5f\u70b9\u4e0d\u4e86\u7684\u5e7d\u7075\u6309\u94ae\uff0c\u8bfb\u5c4f\u8f6f\u4ef6\u7167\u5ff5\u4e0d\u8bef\u3002
+          */
           btn.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.4)' }],
-            { duration: 220, fill: 'forwards' });
+            { duration: 220, fill: 'forwards' }).onfinish = () => btn.remove();
         });
       });
       on('#toCook', renderCook);
@@ -2168,7 +2188,7 @@ const I18N = (() => {
   ================================================================ */
   function levelClear() {
     S.stars++;
-    localStorage.setItem('gulu.stars', S.stars);
+    Store.set('gulu.stars', S.stars);
     updateStars();
     Sound.fanfare();
 

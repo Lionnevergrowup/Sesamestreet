@@ -7,7 +7,7 @@
 const Sound = (() => {
   let ctx = null;
   let master = null;
-  let enabled = localStorage.getItem('gulu.sound') !== 'off';
+  let enabled = Store.get('gulu.sound') !== 'off';
 
   function ensure() {
     if (!ctx) {
@@ -73,7 +73,7 @@ const Sound = (() => {
 
     toggle() {
       enabled = !enabled;
-      localStorage.setItem('gulu.sound', enabled ? 'on' : 'off');
+      Store.set('gulu.sound', enabled ? 'on' : 'off');
       if (enabled) { ensure(); this.tap(); }
       return enabled;
     },

@@ -171,6 +171,8 @@ body.muted .ico-off { display: block; }
   animation: toastIn .3s cubic-bezier(.2,1.4,.4,1);
   z-index: 70;
 }
+/* 厨房里食谱卡占着左边，提示往右让一让，别压住它 */
+.sc-cook .toast { left: calc(50% + 100px); }
 .toast.warn { background: #ffe8a8; color: #8a5a12; }
 .toast.good { background: #cdf0d8; color: #1f4a34; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(.9); } }

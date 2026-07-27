@@ -14,7 +14,7 @@ const path = require('path');
 const root = __dirname;
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 
-const SCRIPTS = ['js/audio.js', 'js/art.js', 'js/recipes.js', 'js/i18n.js', 'js/game.js'];
+const SCRIPTS = ['js/store.js', 'js/audio.js', 'js/art.js', 'js/recipes.js', 'js/i18n.js', 'js/game.js'];
 
 const html = read('index.html');
 
@@ -42,11 +42,18 @@ const asciiJS = s => s.replace(/[^\x00-\x7F]/g,
 const asciiHTML = s => s.replace(/[^\x00-\x7F]/gu,
   c => '&#' + c.codePointAt(0) + ';');
 
+/*
+  CSS 注释是写给读源码的人看的，打包版里没用。
+  剥掉之后整个文件就是纯 ASCII，"任何编码下都不乱码"这条保证不再有例外。
+  （样式表里没有带 /* 的字符串或 url()，这个正则是安全的。）
+*/
+const css = read('css/style.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\n{3,}/g, '\n\n').trim();
+
 const out = `<meta charset="utf-8">
 <title>${asciiHTML(title)}</title>
 
 <style>
-${read('css/style.css').trim()}
+${css}
 </style>
 
 ${asciiHTML(markup)}
@@ -54,8 +61,9 @@ ${asciiHTML(markup)}
 ${SCRIPTS.map(f => `<script>\n${asciiJS(safe(read(f).trim()))}\n</script>`).join('\n\n')}
 `;
 
-if (/[^\x00-\x7F]/.test(out.slice(out.indexOf('</style>')))) {
-  throw new Error('打包结果里还有非 ASCII 字符，编码可能出问题');
+const stray = out.match(/[^\x00-\x7F]/g);
+if (stray) {
+  throw new Error(`打包结果里还有 ${stray.length} 个非 ASCII 字符（如 ${JSON.stringify(stray[0])}），换个编码读就会乱码`);
 }
 
 fs.writeFileSync(path.join(root, 'play.html'), out);

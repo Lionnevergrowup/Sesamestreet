@@ -17,7 +17,7 @@
   const S = {
     phase: 'title',
     level: 0,
-    stars: +(localStorage.getItem('gulu.stars') || 0),
+    stars: +(Store.get('gulu.stars') || 0),
     forage: null,
     cook: null,
     serve: null
@@ -163,6 +163,13 @@
 
   function paint(cls, html, after) {
     gen++;
+    /*
+      上个场景的提示和碎片不该飘到下一个场景里 ——
+      比如"这不是香蕉呀"会一路飘到厨房。
+      只清纯装饰的部分；飞行中的食材带着回调，让它自己飞完。
+    */
+    clearTimeout(toastTimer);
+    fxEl.querySelectorAll('.toast, .particle').forEach(el => el.remove());
     sceneEl.classList.add('fade');
     busy = true;
     setTimeout(() => {
@@ -317,7 +324,7 @@
       <div class="bg">${Art.backdrop(L.place)}</div>
       <div class="layer">
         ${F.items.map((it, i) => it.taken ? '' : `
-          <button class="forage-item sway" data-i="${i}"
+          <button class="forage-item sway" data-i="${i}" aria-label="${I18N.ing(it.id)}"
             style="left:${it.x}px;top:${it.y}px;--rot:${it.rot}deg;--sc:${it.sc};animation-delay:${it.delay}s">
             ${Art.ingredient(it.id)}
           </button>`).join('')}
@@ -369,8 +376,12 @@
               }
             }
           });
+          /*
+            摘走之后要把按钮真的删掉，不能只是让它透明。
+            留着的话 DOM 里会有个看不见也点不了的幽灵按钮，读屏软件照念不误。
+          */
           btn.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.4)' }],
-            { duration: 220, fill: 'forwards' });
+            { duration: 220, fill: 'forwards' }).onfinish = () => btn.remove();
         });
       });
       on('#toCook', renderCook);
@@ -558,7 +569,7 @@
   ================================================================ */
   function levelClear() {
     S.stars++;
-    localStorage.setItem('gulu.stars', S.stars);
+    Store.set('gulu.stars', S.stars);
     updateStars();
     Sound.fanfare();
 

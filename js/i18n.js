@@ -17,13 +17,11 @@ const I18N = (() => {
       orderBtn: '好的，交给我！',
       needTitle: '今天要做：{dish}',
       driveTitle: '去{place}摘{ing}',
-      driveBtn: '出发！',
       driving: '路上颠颠颠…',
       forageTitle: '摘{count}个{ing}',
       forageOops: '这不是{ing}呀，再找找！',
       forageDone: '食材齐啦，回餐车！',
       backBtn: '回餐车做菜',
-      cookTitle: '照着食谱放食材',
       recipeTitle: '{dish}食谱',
       nextIng: '接下来放：{ing}',
       wrongIng: '先看看食谱第{n}步哦！',
@@ -54,13 +52,11 @@ const I18N = (() => {
       orderBtn: 'You got it!',
       needTitle: "Today's dish: {dish}",
       driveTitle: 'Off to the {place} for {ing}',
-      driveBtn: "Let's go!",
       driving: 'Bumpity bump…',
       forageTitle: 'Pick {count} {ing}',
       forageOops: 'That is not a {ing} — keep looking!',
       forageDone: 'All picked. Back to the truck!',
       backBtn: 'Back to the truck',
-      cookTitle: 'Add them in recipe order',
       recipeTitle: '{dish} recipe',
       nextIng: 'Add next: {ing}',
       wrongIng: 'Check step {n} of the recipe!',
@@ -80,7 +76,7 @@ const I18N = (() => {
     }
   };
 
-  let lang = localStorage.getItem('gulu.lang') || 'zh';
+  let lang = Store.get('gulu.lang') || 'zh';
 
   function t(key, vars = {}) {
     let s = STR[lang][key];
@@ -98,7 +94,7 @@ const I18N = (() => {
     place(id) { return this.name(PLACES[id]); },
     toggle() {
       lang = lang === 'zh' ? 'en' : 'zh';
-      localStorage.setItem('gulu.lang', lang);
+      Store.set('gulu.lang', lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
       return lang;
     }

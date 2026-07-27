@@ -660,5 +660,5 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, appliance, truck, backdrop, street, road,
-           kitchen, basket, star, leaf, CUSTOMERS };
+           kitchen, basket, star, leaf };
 })();
