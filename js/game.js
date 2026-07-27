@@ -585,7 +585,12 @@
       </div>`;
     sceneEl.appendChild(panel);
     confetti(30);
-    panel.querySelector('#nextLv').addEventListener('click', () => {
+    /*
+      面板是"弹"进来的，这半秒里按钮中心会移动 40 多像素，比按钮半高还多。
+      小朋友手快，照着刚看到的位置戳下去就落空了，戳了没反应最让人烦。
+      所以整块面板都接受点击 —— 反正这一屏只有"继续"这一个去处。
+    */
+    panel.addEventListener('click', () => {
       Sound.tap();
       panel.remove();
       if (last) renderFinale();
