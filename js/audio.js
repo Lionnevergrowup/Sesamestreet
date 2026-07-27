@@ -153,6 +153,9 @@ const Sound = (() => {
     /* 浏览器要求首次交互后才能出声 */
     unlock() { ensure(); startMusic(); },
 
+    /* 声音是不是真的跑起来了 —— 解锁那边靠这个判断要不要再试 */
+    get running() { return !!ctx && ctx.state === 'running'; },
+
     music(on) { on ? startMusic() : (musicWanted = false, stopMusic()); },
 
     tap() {

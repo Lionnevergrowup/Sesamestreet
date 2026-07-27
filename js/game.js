@@ -708,8 +708,20 @@
     repaint();
   });
 
-  /* 第一次交互时解锁音频（浏览器策略） */
-  window.addEventListener('pointerdown', () => Sound.unlock(), { once: true });
+  /*
+    浏览器要求先有用户交互才让出声。
+    键盘也算交互 —— 只听 pointerdown 的话，纯键盘玩的人一路是静音的。
+    另外首次不一定成功（音频上下文可能还没就绪），所以确认响起来了才撤监听。
+  */
+  const unlockAudio = () => {
+    Sound.unlock();
+    if (Sound.running) {
+      window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    }
+  };
+  window.addEventListener('pointerdown', unlockAudio);
+  window.addEventListener('keydown', unlockAudio);
 
   /* ---------------- 启动 ---------------- */
   fit();

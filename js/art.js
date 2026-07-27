@@ -533,11 +533,12 @@ const Art = (() => {
       <rect x="52" y="150" width="116" height="10" rx="5" fill="#5b6b7c"/>`,
 
     pot: `
-      <path d="M32 62h156l-14 108a20 20 0 0 1-20 18H66a20 20 0 0 1-20-18Z" fill="#8b9aa8"/>
-      <path d="M32 62h156l-4 30H36Z" fill="#a8b6c2"/>
-      <path d="M20 66h180" stroke="#5b6b7c" stroke-width="14" stroke-linecap="round"/>
-      <path d="M10 78a14 14 0 0 1 0-24M210 78a14 14 0 0 0 0-24" fill="none" stroke="#5b6b7c" stroke-width="10" stroke-linecap="round"/>
-      <ellipse cx="110" cy="100" rx="66" ry="16" fill="#f4842c"/>`,
+      <path d="M40 66h140l-13 106a20 20 0 0 1-20 18H73a20 20 0 0 1-20-18Z" fill="#8b9aa8"/>
+      <path d="M40 66h140l-4 30H44Z" fill="#a8b6c2"/>
+      <path d="M32 70h156" stroke="#5b6b7c" stroke-width="14" stroke-linecap="round"/>
+      <path d="M28 82a13 13 0 0 1 0-24M192 82a13 13 0 0 0 0-24" fill="none" stroke="#5b6b7c" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="110" cy="102" rx="58" ry="15" fill="#f4842c"/>
+      <ellipse cx="96" cy="99" rx="14" ry="4" fill="#ffb36b"/>`,
 
     freezer: `
       <rect x="34" y="18" width="152" height="176" rx="16" fill="#dfe7ee"/>
@@ -881,13 +882,16 @@ const Art = (() => {
         ${Array.from({ length: 16 }, (_, i) =>
           `<rect x="${i * 80}" y="0" width="38" height="440"/>`).join('')}
       </g>
-      <!-- 窗户 -->
-      <rect x="820" y="70" width="380" height="230" rx="18" fill="#2f3a44"/>
-      <rect x="834" y="84" width="352" height="202" rx="12" fill="#bfe4f5"/>
-      <circle cx="1120" cy="140" r="34" fill="#ffd23f"/>
-      <path d="M834 232q90-40 176 0t176-20v74H834Z" fill="#7cc48c"/>
-      <rect x="996" y="84" width="14" height="202" fill="#2f3a44"/>
-      <rect x="834" y="176" width="352" height="14" fill="#2f3a44"/>
+      <!--
+        窗户放在右上角。以前它横跨 x820-1200，正好和灶台上的锅、烤箱撞在一起，
+        锅的把手看着像窗框的一部分。器具占到 x980，所以窗户从 1000 起。
+      -->
+      <rect x="1000" y="56" width="250" height="196" rx="16" fill="#2f3a44"/>
+      <rect x="1012" y="68" width="226" height="172" rx="10" fill="#bfe4f5"/>
+      <circle cx="1186" cy="112" r="28" fill="#ffd23f"/>
+      <path d="M1012 196q58-32 113 0t113-16v60h-226Z" fill="#7cc48c"/>
+      <rect x="1118" y="68" width="12" height="172" fill="#2f3a44"/>
+      <rect x="1012" y="148" width="226" height="12" fill="#2f3a44"/>
       <!-- 挂架 -->
       <rect x="80" y="96" width="560" height="14" rx="7" fill="#8b5a2b"/>
       ${jar(120, 130, '#ef4b52')}${jar(200, 130, '#5fbf7d')}${jar(280, 130, '#5aa8e8')}${jar(360, 130, '#ffd23f')}
