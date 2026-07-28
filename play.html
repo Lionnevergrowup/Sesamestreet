@@ -218,7 +218,7 @@ body.muted .ico-off { display: block; }
 .truck-title { left: 10px; bottom: 22px; width: 540px; }
 .chef-title  { left: 520px; bottom: 30px; width: 250px; }
 
-.title-card { right: 46px; top: 74px; width: 470px; position: absolute; text-align: center; }
+.title-card { right: 46px; top: 74px; width: 470px; position: absolute; text-align: center; z-index: 10; }
 .title-card h1 { font-size: 46px; line-height: 1.15; color: var(--deep); }
 .title-card .sub { margin: 10px 0 20px; font-size: 21px; font-weight: 700; color: #7a6a55; }
 .title-card .big-btn { margin-bottom: 20px; }
@@ -501,7 +501,7 @@ body.muted .ico-off { display: block; }
   @keyframes tilt { 0%,100% { transform: rotate(0); } 50% { transform: rotate(90deg); } }
 }
 
-.btn-row { display: flex; gap: 10px; margin-bottom: 18px; }
+.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
 .mid-btn {
   flex: 1;
   border: none; border-radius: 999px;
@@ -652,10 +652,10 @@ body.muted .ico-off { display: block; }
 
 .mini-grid {
   position: absolute; left: 50%; top: 130px; transform: translateX(-50%);
-  display: flex; gap: 40px; z-index: 10;
+  display: flex; gap: 26px; z-index: 10;
 }
 .mini-card {
-  width: 400px; padding: 26px 22px 22px;
+  width: 340px; padding: 26px 22px 22px;
   border: none; border-radius: 30px; background: var(--cream);
   box-shadow: 0 10px 0 rgba(43, 35, 64, .25);
   cursor: pointer; font-family: inherit;
@@ -664,9 +664,10 @@ body.muted .ico-off { display: block; }
 }
 .mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 0 rgba(43, 35, 64, .25); }
 .mini-card:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .25); }
-.mini-art { display: flex; gap: 14px; align-items: flex-end; justify-content: center;
+.mini-art { display: flex; gap: 10px; align-items: flex-end; justify-content: center;
   width: 100%; height: 150px; margin-bottom: 10px; }
-.mini-art svg { height: 100%; width: auto; }
+
+.mini-art svg { height: 100%; width: auto; max-width: 44%; }
 .mini-art svg:first-child { transform: rotate(-8deg); }
 .mini-art svg:last-child { transform: rotate(8deg); }
 .mini-card b { font-size: 27px; color: var(--deep); }
@@ -740,6 +741,117 @@ body.muted .ico-off { display: block; }
 }
 .sort-actions .mid-btn { flex: none; }
 .mid-btn.corner { position: absolute; left: 20px; top: 84px; flex: none; z-index: 30; }
+
+.count-field {
+  position: absolute; left: 50%; top: 340px; transform: translate(-50%, -50%);
+  padding: 18px;
+  display: grid; grid-template-columns: repeat(var(--cols), 104px);
+  justify-content: center; align-content: center;
+  min-width: 340px; min-height: 172px;
+  gap: 14px; z-index: 15;
+  border-radius: 34px;
+  background: rgba(255, 246, 230, .86);
+  box-shadow: var(--shadow);
+}
+.count-one {
+  width: 104px; height: 104px;
+  filter: drop-shadow(0 8px 8px rgba(20,50,35,.3));
+  animation: popIn .4s cubic-bezier(.2,1.5,.4,1) both;
+}
+.count-one svg { width: 100%; height: 100%; }
+
+.count-field.done { background: rgba(255, 246, 230, .94); }
+.count-one.num {
+  display: grid; place-items: center;
+  border-radius: 24px; background: #9be3b0;
+  color: var(--deep); font-size: 54px; font-weight: 900;
+  filter: none; box-shadow: 0 5px 0 #4aa86b;
+}
+
+.num-row {
+  position: absolute; left: 50%; bottom: 54px; transform: translateX(-50%);
+  display: flex; gap: 26px; z-index: 20;
+}
+.num-btn {
+  width: 132px; height: 116px;
+  border: none; border-radius: 28px;
+  background: var(--cream); color: var(--deep);
+  font-family: inherit; font-size: 62px; font-weight: 900;
+  box-shadow: 0 8px 0 rgba(43, 35, 64, .3);
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.num-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 0 rgba(43, 35, 64, .3); }
+.num-btn:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .3); }
+.num-btn.right { background: #9be3b0; box-shadow: 0 8px 0 #4aa86b; }
+.num-btn.shake { animation: shakeIt .45s ease; }
+
+.count-art { gap: 6px; align-items: center; }
+.count-art svg { height: 48%; width: auto; transform: none; }
+.count-badge {
+  width: 56px; height: 56px; flex: none;
+  border-radius: 50%; display: grid; place-items: center;
+  background: var(--grape); color: #fff; font-size: 32px;
+}
+
+.chef-title { border: none; background: none; padding: 0; cursor: pointer; }
+button.chef-title:focus-visible { outline: 5px solid var(--cream); outline-offset: 6px; border-radius: 20px; }
+.dress-tag {
+  position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%);
+  padding: 6px 18px; border-radius: 999px;
+  background: var(--sun); color: var(--deep);
+  font-size: 17px; font-weight: 900; white-space: nowrap;
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .28);
+}
+
+.dress-stage { left: 300px; top: 132px; width: 300px; z-index: 15; }
+.dress-panel {
+  position: absolute; right: 120px; top: 172px; width: 500px; z-index: 20;
+}
+.dress-panel h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; }
+.dress-panel h3 + .swatch-row { margin-bottom: 20px; }
+.swatch-row { display: flex; gap: 10px; }
+.swatch {
+  width: 62px; height: 62px; flex: none;
+  border: none; border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .28);
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+.swatch:hover { transform: translateY(-3px); }
+.swatch.on { box-shadow: 0 0 0 5px var(--cream), 0 4px 0 rgba(43, 35, 64, .28); }
+.swatch:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+
+.book-panel {
+  position: absolute; left: 50%; top: 90px; transform: translateX(-50%);
+  width: 1120px; padding: 22px 28px; z-index: 20;
+}
+.book-panel h3 { font-size: 23px; color: var(--deep); margin-bottom: 10px; }
+.book-panel h3 + * { margin-bottom: 18px; }
+.book-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.book-strip { display: flex; flex-wrap: wrap; gap: 10px; }
+.book-strip .book-cell { width: 78px; }
+.book-cell {
+  display: grid; justify-items: center; align-content: start; gap: 2px;
+  padding: 8px 4px; border-radius: 18px;
+  background: rgba(43, 35, 64, .06);
+}
+.book-art { width: 68px; height: 68px; }
+.book-strip .book-art { width: 56px; height: 56px; }
+.book-art svg { width: 100%; height: 100%; }
+.book-name {
+  font-size: 15px; font-weight: 800; color: #5c5040; text-align: center;
+  line-height: 1.2;
+}
+.book-strip .book-name { font-size: 12px; }
+
+.book-cell.locked .book-art { filter: brightness(0); opacity: .16; }
+.book-cell.locked .book-name { color: #a09580; font-size: 22px; }
+.book-empty { font-size: 19px; font-weight: 700; color: #8a7a62; padding: 10px 4px 18px; }
+
+.mid-btn.sky { background: linear-gradient(180deg, #5aa8e8, #3a83c4); box-shadow: 0 5px 0 #2c6699; }
+.mid-btn.sky:active { box-shadow: 0 1px 0 #2c6699; }
 </style>
 
 <div id="viewport">
@@ -1111,8 +1223,19 @@ const Art = (() => {
      pose: idle | cook | cheer | drive
      \u5b8c\u5168\u539f\u521b\u7684\u7d2b\u8272\u6bdb\u602a\uff0c\u6234\u53a8\u5e08\u5e3d\u3001\u7cfb\u56f4\u88d9\u3002
   */
-  function chef(pose = 'idle', look = [0, 0.15]) {
-    const FUR = '#8b5fe0', FUR_D = '#6b41c0', BELLY = '#b494f2';
+  /*
+    \u5495\u565c\u957f\u4ec0\u4e48\u6837\u662f\u53ef\u4ee5\u6362\u7684\u3002\u6bdb\u8272\u548c\u56f4\u88d9\u8272\u5b58\u5728\u8fd9\u91cc\uff0c
+    \u6df1\u6d45\u4e24\u6863\u7531\u4e3b\u8272\u63a8\u7b97\uff0c\u6240\u4ee5\u6362\u4e00\u4e2a\u989c\u8272\u6574\u53ea\u90fd\u534f\u8c03\u3002
+  */
+  const CHEF_FURS  = ['#8b5fe0', '#2fb0a0', '#ff7a5c', '#5a8fe8', '#5fbf7d', '#f38fc4'];
+  const CHEF_TRIMS = ['#ffb03a', '#ef4b52', '#5aa8e8', '#4aa86b'];
+  let chefLook = { fur: CHEF_FURS[0], trim: CHEF_TRIMS[0] };
+  const setChefLook = l => { chefLook = { ...chefLook, ...l }; };
+
+  function chef(pose = 'idle', look = [0, 0.15], style = null) {
+    const skin = style || chefLook;
+    const FUR = skin.fur, FUR_D = shade(FUR, -0.24), BELLY = shade(FUR, 0.28);
+    const TRIM = skin.trim;
     const armL = { idle: 'rotate(14 58 168)', cook: 'rotate(-38 58 168)', cheer: 'rotate(-72 58 168)', drive: 'rotate(-30 58 168)' }[pose];
     const armR = { idle: 'rotate(-14 162 168)', cook: 'rotate(38 162 168)', cheer: 'rotate(72 162 168)', drive: 'rotate(26 162 168)' }[pose];
     const mouth = pose === 'cheer'
@@ -1122,7 +1245,7 @@ const Art = (() => {
 
     return svg(`
       <defs>
-        <radialGradient id="chefBelly" cx=".5" cy=".35">
+        <radialGradient id="belly${FUR.slice(1)}" cx=".5" cy=".35">
           <stop offset="0" stop-color="${BELLY}"/><stop offset="1" stop-color="${FUR}"/>
         </radialGradient>
       </defs>
@@ -1137,9 +1260,9 @@ const Art = (() => {
       <!-- \u8eab\u4f53 + \u56f4\u88d9 -->
       <path d="${furPath(110, 186, 54, 46, 20)}" fill="${FUR}"/>
       <path d="M78 152h64a10 10 0 0 1 10 10v42a32 32 0 0 1-32 32h-20a32 32 0 0 1-32-32v-42a10 10 0 0 1 10-10Z" fill="#fff6e6"/>
-      <path d="M98 152q12 10 24 0" fill="none" stroke="#ffb03a" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="110" cy="192" r="15" fill="none" stroke="#ffb03a" stroke-width="5"/>
-      <path d="M110 183v18M103 192h14" stroke="#ffb03a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M98 152q12 10 24 0" fill="none" stroke="${TRIM}" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="110" cy="192" r="15" fill="none" stroke="${TRIM}" stroke-width="5"/>
+      <path d="M110 183v18M103 192h14" stroke="${TRIM}" stroke-width="5" stroke-linecap="round"/>
 
       <!-- \u624b\u81c2 -->
       <g transform="${armL}">
@@ -1152,12 +1275,12 @@ const Art = (() => {
       </g>
 
       <!-- \u5934 -->
-      <path d="${furPath(110, 100, 62, 56, 24)}" fill="url(#chefBelly)"/>
+      <path d="${furPath(110, 100, 62, 56, 24)}" fill="url(#belly${FUR.slice(1)})"/>
       <!-- \u89e6\u89d2 -->
       <path d="M84 50c-6-16-14-22-22-24" fill="none" stroke="${FUR_D}" stroke-width="6" stroke-linecap="round"/>
       <path d="M136 50c6-16 14-22 22-24" fill="none" stroke="${FUR_D}" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="60" cy="24" r="9" fill="#ffd23f"/>
-      <circle cx="160" cy="24" r="9" fill="#ffd23f"/>
+      <circle cx="60" cy="24" r="9" fill="${TRIM}"/>
+      <circle cx="160" cy="24" r="9" fill="${TRIM}"/>
       ${eyes(110, 88, 22, 46, look, pose === 'cheer')}
       <ellipse cx="70" cy="118" rx="12" ry="8" fill="#f4718f" opacity=".45"/>
       <ellipse cx="150" cy="118" rx="12" ry="8" fill="#f4718f" opacity=".45"/>
@@ -2099,7 +2222,9 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
-           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf };
+           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf,
+           setChefLook, CHEF_FURS, CHEF_TRIMS,
+           get chefLook() { return { ...chefLook }; } };
 })();
 </script>
 
@@ -2338,6 +2463,24 @@ const I18N = (() => {
       sortOops: '\u518d\u60f3\u60f3\uff0c{ing}\u653e\u54ea\u4e2a\u7b50\uff1f',
       sortLeft: '\u8fd8\u5269{n}\u4e2a',
       sortWin: '\u5168\u90fd\u5206\u597d\u5566\uff01',
+      countTitle: '\u6570\u4e00\u6570\u6709\u51e0\u4e2a',
+      countDesc: '\u6570\u5b8c\u4e86\u70b9\u90a3\u4e2a\u6570\u5b57',
+      countAsk: '\u8fd9\u91cc\u6709\u51e0\u4e2a{ing}\uff1f',
+      countOops: '\u518d\u6570\u4e00\u904d\u8bd5\u8bd5\uff1f',
+      countLeft: '\u8fd8\u5269{n}\u9898',
+      countWin: '\u5168\u90fd\u6570\u5bf9\u5566\uff01',
+      dressTitle: '\u7ed9\u5495\u565c\u6362\u4e2a\u6837\u5b50',
+      dressTap: '\u70b9\u6211\u6362\u88c5',
+      dressFur: '\u6bdb\u7684\u989c\u8272',
+      dressTrim: '\u56f4\u88d9\u548c\u89e6\u89d2',
+      dressDone: '\u5c31\u8fd9\u6837\uff01',
+      bookTitle: '\u6536\u85cf\u518c',
+      bookDesc: '\u505a\u8fc7\u7684\u83dc\u90fd\u5728\u8fd9\u513f',
+      bookDishes: '\u83dc\u8c31\u4e0a\u7684\u83dc\uff08{a}/{b}\uff09',
+      bookInvent: '\u4f60\u81ea\u5df1\u53d1\u660e\u7684\uff08{n}\uff09',
+      bookEmpty: '\u8fd8\u6ca1\u6709\u5462\uff0c\u53bb\u53a8\u623f\u505a\u4e00\u4e2a\u5427\uff01',
+      bookLocked: '\u8fd8\u6ca1\u505a\u8fc7',
+      bookMine: '\u7b2c{n}\u53f7\u53d1\u660e',
       how1: '\u542c\u542c\u5ba2\u4eba\u60f3\u5403\u4ec0\u4e48',
       how2: '\u5f00\u8f66\u53bb\u628a\u65b0\u9c9c\u98df\u6750\u6458\u56de\u6765',
       how3: '\u7167\u7740\u98df\u8c31\u4e00\u6b65\u4e00\u6b65\u505a',
@@ -2400,6 +2543,24 @@ const I18N = (() => {
       sortOops: 'Have another think \u2014 where does the {ing} go?',
       sortLeft: '{n} to go',
       sortWin: 'All sorted!',
+      countTitle: 'Count them up',
+      countDesc: 'Tap the right number',
+      countAsk: 'How many {ing} are there?',
+      countOops: 'Have another count?',
+      countLeft: '{n} to go',
+      countWin: 'You counted them all!',
+      dressTitle: 'Give Gulu a new look',
+      dressTap: 'Tap to dress me',
+      dressFur: 'Fur colour',
+      dressTrim: 'Apron and antennae',
+      dressDone: 'Looking good!',
+      bookTitle: 'Collection',
+      bookDesc: 'Everything you have cooked',
+      bookDishes: 'Recipe dishes ({a}/{b})',
+      bookInvent: 'Your own inventions ({n})',
+      bookEmpty: 'Nothing yet \u2014 go cook something!',
+      bookLocked: 'Not cooked yet',
+      bookMine: 'Invention no.{n}',
       how1: 'Listen to what the customer wants',
       how2: 'Drive out and pick fresh ingredients',
       how3: 'Follow the recipe step by step',
@@ -2487,10 +2648,54 @@ const I18N = (() => {
     serve: null,
     drive: null,
     mem: null,
-    sort: null
+    sort: null,
+    count: null
   };
 
   const level = () => LEVELS[S.level];
+  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
+
+  /*
+    \u5495\u565c\u957f\u4ec0\u4e48\u6837\u5b58\u5728\u672c\u5730\uff0c\u4e00\u8fdb\u6765\u5c31\u5148\u7a7f\u4e0a\u3002
+    \u5b58\u7684\u503c\u53ea\u8ba4\u8c03\u8272\u677f\u91cc\u7684\u90a3\u51e0\u4e2a\u989c\u8272 \u2014\u2014 \u4e07\u4e00\u5b58\u6863\u88ab\u6539\u82b1\u4e86\uff0c
+    \u4e5f\u53ea\u4f1a\u9000\u56de\u9ed8\u8ba4\u914d\u8272\uff0c\u4e0d\u4f1a\u628a\u5947\u602a\u7684\u5b57\u7b26\u4e32\u585e\u8fdb SVG \u91cc\u3002
+  */
+  (function loadChefLook() {
+    const [fur, trim] = (Store.get('gulu.chef') || '').split('|');
+    if (Art.CHEF_FURS.includes(fur) && Art.CHEF_TRIMS.includes(trim)) Art.setChefLook({ fur, trim });
+  })();
+
+  /* ---------------- \u6536\u85cf\u518c ---------------- */
+  /*
+    \u505a\u51fa\u6765\u7684\u4e1c\u897f\u8981\u7559\u4e2a\u5ff5\u60f3\u3002\u83dc\u8c31\u4e0a\u7684\u83dc\u8bb0 id \u5c31\u591f\u4e86\uff1b
+    \u81ea\u5df1\u53d1\u660e\u7684\u8bb0\u4e0b\u53a8\u5177\u548c\u653e\u4e86\u4ec0\u4e48\uff0c\u770b\u7684\u65f6\u5019\u73b0\u753b\u3002
+  */
+  const bookSet = () => new Set((Store.get('gulu.book') || '').split(',').filter(Boolean));
+  function addToBook(id) {
+    const b = bookSet();
+    if (b.has(id)) return;
+    b.add(id);
+    Store.set('gulu.book', [...b].join(','));
+  }
+
+  const MAX_INV = 12;
+  /* \u8bfb\u7684\u65f6\u5019\u987a\u624b\u628a\u4e0d\u8ba4\u8bc6\u7684\u6761\u76ee\u7b5b\u6389\uff0c\u5b58\u6863\u574f\u4e86\u4e5f\u4e0d\u4f1a\u753b\u51fa\u4e2a\u7a7a\u6846 */
+  function invList() {
+    let v;
+    try { v = JSON.parse(Store.get('gulu.inv') || '[]'); } catch (e) { return []; }
+    if (!Array.isArray(v)) return [];
+    return v.filter(r => r && APPLIANCES.includes(r.a) &&
+                    Array.isArray(r.i) && r.i.length && r.i.every(id => ING_COLOR[id]))
+            .slice(0, MAX_INV);
+  }
+  const invKey = r => r.a + ':' + [...r.i].sort().join(',');
+  function addInvention(rec) {
+    const key = invKey(rec);
+    /* \u540c\u4e00\u4e2a\u914d\u65b9\u53cd\u590d\u505a\u4e0d\u8be5\u5360\u6389\u4e00\u6574\u518c\uff0c\u91cd\u4e86\u5c31\u632a\u5230\u6700\u524d\u9762 */
+    const list = invList().filter(r => invKey(r) !== key);
+    list.unshift(rec);
+    Store.set('gulu.inv', JSON.stringify(list.slice(0, MAX_INV)));
+  }
 
   /*
     \u54ea\u4e9b\u5173\u901a\u8fc7\u4e86\uff0c\u5355\u72ec\u5b58\u4e00\u4efd \u2014\u2014 \u6709\u4e86\u5b83\u624d\u80fd\u505a\u9009\u5173\uff0c
@@ -2697,7 +2902,6 @@ const I18N = (() => {
       <div class="bg">${Art.street()}</div>
       <div class="layer">
         <div class="pos truck-title">${Art.truck()}</div>
-        <div class="pos chef-title bob">${Art.chef('cheer')}</div>
         <div class="card title-card">
           <h1>${t('gameTitle')}</h1>
           <p class="sub">${t('gameSub')}</p>
@@ -2706,6 +2910,7 @@ const I18N = (() => {
             <button class="mid-btn" id="pick">${t('pickLevel')}</button>
             <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
             <button class="mid-btn warm" id="mini">${t('miniGames')}</button>
+            <button class="mid-btn sky" id="book">${t('bookTitle')}</button>
           </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
@@ -2713,13 +2918,110 @@ const I18N = (() => {
                 <span><b>${i + 1}</b>${label}</span></div>`).join('')}
           </div>
         </div>
+        <!--
+          \u5495\u565c\u6392\u5728\u5361\u7247\u540e\u9762\uff0c\u662f\u4e3a\u4e86\u952e\u76d8\u987a\u5e8f\uff1a\u6309 Tab \u5e94\u8be5\u5148\u8d70\u5230"\u5f00\u59cb\u8425\u4e1a"\uff0c
+          \u6362\u88c5\u662f\u987a\u5e26\u7684\u4e50\u5b50\uff0c\u4e0d\u8be5\u62a2\u5728\u6b63\u4e8b\u524d\u9762\u3002\u4f4d\u7f6e\u662f\u7edd\u5bf9\u5b9a\u4f4d\uff0c\u770b\u7740\u6ca1\u533a\u522b\u3002
+        -->
+        <button class="pos chef-title bob" id="dressUp" aria-label="${t('dressTitle')}">
+          ${Art.chef('cheer')}
+          <span class="dress-tag">${t('dressTap')}</span>
+        </button>
       </div>
     `, () => {
       on('#play', () => { S.level = firstUndone(); startLevel(); });
       on('#pick', renderLevelSelect);
       on('#free', renderFree);
       on('#mini', renderMiniMenu);
+      on('#book', renderBook);
+      on('#dressUp', renderDressUp);
     });
+  }
+
+  /* ================================================================
+     1d. \u6362\u88c5 \u2014\u2014 \u5495\u565c\u662f"\u6211\u7684"\u5495\u565c
+  ================================================================ */
+  function renderDressUp() {
+    S.phase = 'dress';
+    const swatch = (list, cur, kind) => list.map(c => `
+      <button class="swatch${c === cur ? ' on' : ''}" data-kind="${kind}" data-c="${c}"
+              style="--c:${c}" aria-label="${c}"></button>`).join('');
+
+    /* \u5f53\u524d\u7a7f\u7684\u8fd9\u8eab\uff0c\u76f4\u63a5\u95ee\u7f8e\u672f\u5c42\u8981\uff0c\u4e0d\u53e6\u5b58\u4e00\u4efd\u514d\u5f97\u4e24\u8fb9\u5bf9\u4e0d\u4e0a */
+    const cur = { fur: Art.chefLook.fur, trim: Art.chefLook.trim };
+
+    paint('sc-dress', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('dressTitle')}</div>
+        <div class="pos dress-stage bob" id="dressChef">${Art.chef('cheer')}</div>
+        <div class="card dress-panel">
+          <h3>${t('dressFur')}</h3>
+          <div class="swatch-row" id="furRow">${swatch(Art.CHEF_FURS, cur.fur, 'fur')}</div>
+          <h3>${t('dressTrim')}</h3>
+          <div class="swatch-row" id="trimRow">${swatch(Art.CHEF_TRIMS, cur.trim, 'trim')}</div>
+        </div>
+        <button class="big-btn bottom" id="dressBack">${t('dressDone')}</button>
+      </div>
+    `, () => {
+      const preview = $('#dressChef');
+      sceneEl.querySelectorAll('.swatch').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        const kind = b.dataset.kind, c = b.dataset.c;
+        if (cur[kind] === c) return;
+        cur[kind] = c;
+        Sound.pick(Math.max(0, (kind === 'fur' ? Art.CHEF_FURS : Art.CHEF_TRIMS).indexOf(c)));
+        Art.setChefLook({ [kind]: c });
+        Store.set('gulu.chef', cur.fur + '|' + cur.trim);
+        /*
+          \u5c31\u5730\u6362\u6389\u9884\u89c8\u5c31\u884c \u2014\u2014 \u6574\u5c4f\u91cd\u7ed8\u90a3\u534a\u79d2\u91cc\u70b9\u51fb\u4f1a\u88ab\u541e\uff0c
+          \u800c\u6362\u88c5\u6070\u6070\u662f\u5c0f\u670b\u53cb\u4f1a\u4e00\u53e3\u6c14\u8fde\u70b9\u5341\u51e0\u4e0b\u7684\u5730\u65b9\u3002
+        */
+        if (preview) preview.innerHTML = Art.chef('cheer');
+        b.parentElement.querySelectorAll('.swatch').forEach(x => x.classList.toggle('on', x === b));
+        burst(b, 6, [c, '#fff6e6']);
+      }));
+      on('#dressBack', renderTitle);
+    });
+  }
+
+  /* ================================================================
+     1e. \u6536\u85cf\u518c \u2014\u2014 \u505a\u8fc7\u7684\u90fd\u5728\u8fd9\u513f
+  ================================================================ */
+  function renderBook() {
+    S.phase = 'book';
+    const got = bookSet();
+    const inv = invList();
+
+    const cells = LEVELS.map(L => {
+      const have = got.has(L.id);
+      return `<div class="book-cell${have ? '' : ' locked'}"
+                   aria-label="${have ? I18N.name(L.dish) : t('bookLocked')}">
+                <span class="book-art">${Art.dish(L.id)}</span>
+                <span class="book-name">${have ? I18N.name(L.dish) : '?'}</span>
+              </div>`;
+    }).join('');
+
+    const strip = inv.length
+      ? inv.map((r, i) => `
+          <div class="book-cell" aria-label="${t('bookMine', { n: i + 1 })}">
+            <span class="book-art">${Art.creation(Art.blend(r.i), r.a, r.i)}</span>
+            <span class="book-name">${t('bookMine', { n: i + 1 })}</span>
+          </div>`).join('')
+      : `<p class="book-empty">${t('bookEmpty')}</p>`;
+
+    paint('sc-book', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('bookTitle')}</div>
+        <div class="card book-panel">
+          <h3>${t('bookDishes', { a: got.size, b: LEVELS.length })}</h3>
+          <div class="book-grid">${cells}</div>
+          <h3>${t('bookInvent', { n: inv.length })}</h3>
+          <div class="book-strip">${strip}</div>
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => { on('#backHome', renderTitle); });
   }
 
   /* ================================================================
@@ -3094,6 +3396,7 @@ const I18N = (() => {
 
   function finishCooking(appl) {
     S.cook.cooked = true;
+    addToBook(level().id);      /* \u51fa\u9505\u5c31\u7b97\u505a\u8fc7\uff0c\u6536\u85cf\u518c\u91cc\u7acb\u523b\u6709\u4e86 */
     busy = true;
     const controls = $('.cook-controls');
     if (controls) controls.classList.add('hide');
@@ -3167,13 +3470,115 @@ const I18N = (() => {
             <span class="mini-art">${Art.crate('fruit')}${Art.crate('veg')}</span>
             <b>${t('sortTitle')}</b><span>${t('sortDesc')}</span>
           </button>
+          <button class="mini-card" id="goCount">
+            <span class="mini-art count-art">
+              ${Art.ingredient('apple')}${Art.ingredient('apple')}${Art.ingredient('apple')}
+              <b class="count-badge">3</b>
+            </span>
+            <b>${t('countTitle')}</b><span>${t('countDesc')}</span>
+          </button>
         </div>
         <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
       </div>
     `, () => {
       on('#goMem', () => renderMemory(4));
       on('#goSort', () => renderSort(true));
+      on('#goCount', () => renderCount(true));
       on('#backHome', renderTitle);
+    });
+  }
+
+  /* ---------------- \u6570\u4e00\u6570 ---------------- */
+  /*
+    \u505a\u83dc\u90a3\u8fb9\u6570\u6570\u662f"\u91c7\u591f\u4e3a\u6b62"\uff0c\u6570\u9519\u4e86\u8fd8\u80fd\u63a5\u7740\u91c7\u3002
+    \u8fd9\u91cc\u6362\u4e2a\u8003\u6cd5\uff1a\u4e1c\u897f\u4e00\u6b21\u5168\u6446\u51fa\u6765\uff0c\u5f97\u5148\u6570\u6e05\u695a\u518d\u6311\u6570\u5b57\uff0c
+    \u7ec3\u7684\u662f\u628a\u4e00\u5806\u4e1c\u897f\u70b9\u6e05\u7684\u672c\u4e8b\u3002
+  */
+  function buildCountRounds() {
+    const kinds = shuffle([...FRUITS, ...VEGGIES]);
+    /* \u6bcf\u9898\u6362\u4e2a\u5730\u65b9\uff0c\u516b\u9053\u9898\u4e0d\u4f1a\u5168\u5728\u540c\u4e00\u7247\u83dc\u56ed\u91cc */
+    const spots = shuffle(Object.keys(PLACES));
+    /* \u5148\u5c0f\u540e\u5927\uff0c\u9898\u91cf\u56fa\u5b9a 8 \u9053\uff1b\u6bcf\u9053\u6570\u76ee\u4e0d\u91cd\u6837\uff0c\u514d\u5f97\u8fde\u7740\u4e24\u9898\u4e00\u6837\u591a */
+    const counts = [...shuffle([2, 3, 4, 5]), ...shuffle([6, 7, 8, 9])];
+    return counts.map((n, i) => {
+      const opts = new Set([n]);
+      while (opts.size < 3) {
+        const d = n + [-2, -1, 1, 2][Math.floor(Math.random() * 4)];
+        if (d >= 1 && d <= 10) opts.add(d);
+      }
+      return { id: kinds[i % kinds.length], place: spots[i % spots.length], n, opts: shuffle([...opts]) };
+    });
+  }
+
+  /*
+    \u6446\u6210\u65b9\u65b9\u6b63\u6b63\u7684\u4e00\u5757\u6700\u597d\u6570\uff1a6 \u4e2a\u662f\u4e24\u884c\u4e09\u5217\uff0c9 \u4e2a\u662f\u4e09\u884c\u4e09\u5217\u3002
+    \u8981\u662f\u4e00\u5473\u5f80\u4e00\u884c\u91cc\u585e\uff0c5 \u4e2a\u4e4b\u540e\u5c31\u6210\u4e86"5 + 1"\u8fd9\u79cd\u4e00\u5934\u6c89\u7684\u6837\u5b50\uff0c
+    \u5c0f\u670b\u53cb\u6570\u7b2c\u4e8c\u884c\u90a3\u4e00\u4e2a\u7684\u65f6\u5019\u5bb9\u6613\u5fd8\u4e86\u524d\u9762\u6570\u5230\u51e0\u3002
+  */
+  const countCols = n => (n <= 5 ? n : (n === 6 || n === 9) ? 3 : 4);
+
+  function renderCount(fresh = true) {
+    S.phase = 'count';
+    if (fresh || !S.count) S.count = { queue: buildCountRounds(), done: 0, log: [] };
+    const C = S.count;
+    const r = C.queue[0];
+    const won = !r;
+
+    paint('sc-count', `
+      <div class="bg">${Art.backdrop(won ? 'garden' : r.place)}</div>
+      <div class="layer">
+        <div class="banner">${won ? t('countWin') : t('countAsk', { ing: I18N.ing(r.id) })}</div>
+        ${won ? '' : `<div class="chip">${t('countLeft', { n: C.queue.length })}</div>`}
+
+        ${won ? `
+          <!-- \u6570\u5bf9\u7684\u90a3\u4e9b\u6570\u5b57\u6392\u5728\u57ab\u5b50\u4e0a\uff0c\u5f53\u6210\u4e00\u5f20\u5c0f\u6210\u7ee9\u5355 -->
+          <div class="count-field done" style="--cols:4">
+            ${[...C.log].sort((a, b) => a - b).map((v, i) =>
+              `<span class="count-one num" style="animation-delay:${(i * 0.09).toFixed(2)}s">${v}</span>`).join('')}
+          </div>`
+        : `
+          <div class="count-field" style="--cols:${countCols(r.n)}">
+            ${Array.from({ length: r.n }, (_, i) =>
+              `<span class="count-one" style="animation-delay:${(i * 0.07).toFixed(2)}s">${Art.ingredient(r.id)}</span>`).join('')}
+          </div>
+          <div class="num-row">
+            ${r.opts.map(v => `<button class="num-btn" data-v="${v}">${v}</button>`).join('')}
+          </div>`}
+
+        ${won ? `
+          <div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>
+          <div class="sort-actions">
+            <button class="big-btn" id="countAgain">${t('memAgain')}</button>
+            <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+          </div>`
+        : `<button class="mid-btn alt corner" id="backMini">${t('backHome')}</button>`}
+      </div>
+    `, () => {
+      /* \u4e00\u5c4f\u53ea\u8ba4\u4e00\u6b21\u4f5c\u7b54\uff0c\u8fde\u70b9\u4e0d\u4f1a\u628a\u540e\u9762\u7684\u9898\u4e00\u8d77\u8df3\u6389 */
+      let answered = false;
+      sceneEl.querySelectorAll('.num-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          if (busy || !r || answered) return;
+          if (+b.dataset.v !== r.n) {
+            shake(b);
+            Sound.oops();
+            toast(t('countOops'), 'warn');
+            return;
+          }
+          answered = true;
+          C.queue.shift();
+          C.done++;
+          C.log.push(r.n);
+          Sound.pick(Math.min(C.done - 1, 7));
+          b.classList.add('right');
+          burst(b, 12);
+          Sound.ding();
+          later(() => renderCount(false), 620);
+        });
+      });
+      if (won) { Sound.fanfare(); confetti(40); }
+      on('#countAgain', () => renderCount(true));
+      on('#backMini', renderMiniMenu);
     });
   }
 
@@ -3360,8 +3765,6 @@ const I18N = (() => {
   /* ================================================================
      6b. \u81ea\u7531\u53a8\u623f \u2014\u2014 \u60f3\u653e\u4ec0\u4e48\u653e\u4ec0\u4e48\uff0c\u6ca1\u6709\u5bf9\u9519\uff0c\u505a\u5b8c\u8bf7\u5ba2\u4eba\u5403
   ================================================================ */
-  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
-
   function renderFree(reset = true) {
     S.phase = 'free';
     if (reset || !S.free) S.free = { picked: [], appliance: 'blender', made: false, served: false };
@@ -3460,6 +3863,7 @@ const I18N = (() => {
 
       on('#freeCook', () => {
         F.made = true;
+        addInvention({ a: F.appliance, i: [...F.picked] });   /* \u81ea\u5df1\u53d1\u660e\u7684\u4e5f\u5b58\u8fdb\u6536\u85cf\u518c */
         Sound.cookStep(2);
         later(() => { Sound.ding(); renderFree(false); }, 420);
       });
@@ -3549,7 +3953,8 @@ const I18N = (() => {
     ({
       title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
       mini: renderMiniMenu, memory: () => renderMemory(S.mem ? S.mem.pairs : 4, false),
-      sort: () => renderSort(false),
+      sort: () => renderSort(false), count: () => renderCount(false),
+      dress: renderDressUp, book: renderBook,
       order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();

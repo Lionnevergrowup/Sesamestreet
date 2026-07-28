@@ -11,14 +11,17 @@
 
 推到 `main` 之后 GitHub Actions 会自动重新发布，链接永远是最新版。
 
-## 四种玩法
+## 五种玩法
 
 | 模式 | 干什么 |
 | --- | --- |
 | **闯关** | 12 关按剧情走，从上次没打完的那关接着玩 |
 | **选一关玩** | 12 关任选，想玩哪个菜就玩哪个，不用按顺序 |
 | **自由厨房** | 25 种食材随便拿、5 种厨具随便换，做出来的东西颜色由你放的食材混成 —— 没有对错，也没有失败 |
-| **小游戏** | 两个和做菜无关的小玩意，练的是另外两种本事（见下） |
+| **小游戏** | 三个和做菜无关的小玩意，练的是另外三种本事（见下） |
+| **收藏册** | 做过的菜和自己发明的都留在这儿 |
+
+另外，首页上的咕噜是可以点的 —— 点它就能**换装**：6 种毛色 × 4 种围裙色，换完整局都记着。
 
 ### 小游戏
 
@@ -26,8 +29,16 @@
 | --- | --- | --- |
 | **翻牌找一样的** | 牌都盖着，翻两张，一样就留下 | **工作记忆** —— 记住刚才看到的东西在哪儿。3 / 4 / 6 对三档 |
 | **这是水果还是蔬菜？** | 一次出一样，放进对的筐 | **分类判断** —— 按类别归纳。放错只提示不惩罚 |
+| **数一数有几个** | 一堆东西摆在垫子上，数完点那个数字 | **点数**（一个一个数出总数）—— 8 道题从 2 个数到 9 个，答错只让你再数一遍 |
 
-这两个和主线的"看准了点""照顺序做"是完全不同的脑力活，所以不会玩腻。
+这三个和主线的"看准了点""照顺序做"是完全不同的脑力活，所以不会玩腻。
+数一数摆成方阵（6 个是两行三列，9 个是三行三列），比排成一长条好数得多。
+
+### 收藏册
+
+菜谱上的 12 道菜，做出来一道就亮一道；没做过的只留一个灰色的影子，看得出有这么一道，但不剧透。
+自由厨房里做的东西也会存进来（最近 12 个，同一个配方不重复占格），当时放了什么、用的哪个厨具，
+下次打开还是原样画出来。
 
 ## 闯关怎么玩
 
@@ -74,7 +85,7 @@
 - **不打断。** 中间步骤就地更新，不整屏重绘，连点的时候不会吞掉点击。
 - **横屏提示。** 手机竖着拿会提示转横屏。
 - **有声音。** 一直在走的背景音乐，加上采摘、下锅、上菜各自的音效，全部是实时合成的，没有音频文件。左上角随时静音。
-- **存不了也能玩。** 隐私模式或存储被禁用时，只是记不住星星，不会白屏。
+- **存不了也能玩。** 隐私模式或存储被禁用时，只是记不住星星和换装，不会白屏。
 - **尊重系统设置。** 开了「减少动态效果」就不放氛围动画，键盘操作有可见焦点圈。
 
 ## 操作
@@ -136,13 +147,18 @@ three axes: how many things to count, how long the recipe is, and how steady the
 to be — from level 6 two different ingredients must be gathered at once, recipes grow from
 three steps to five, and from level 8 the ingredients drift as you reach for them.
 
-Four ways to play: work through the twelve levels, jump straight to any level you like
+Five ways to play: work through the twelve levels, jump straight to any level you like
 from the picker, open the free kitchen — twenty-five ingredients, five appliances, no
 recipe and no wrong answers, where whatever you invent comes out coloured by the
-ingredients you chose, or take on one of two mini games — a memory pairs board at three
-sizes, and a fruit-or-vegetable sorter. Those two ask for working memory and for
-categorising, neither of which the main game exercises. The drive between the order and
-the field is a small catching game rather than a cutscene.
+ingredients you chose, take on one of three mini games, or leaf through the collection.
+The mini games are a memory pairs board at three sizes, a fruit-or-vegetable sorter, and
+a counting game where a tidy block of items appears and you tap the matching numeral.
+Those three ask for working memory, for categorising, and for one-to-one counting — none
+of which the main game exercises. The drive between the order and the field is a small
+catching game rather than a cutscene. The collection keeps every dish you have cooked,
+recipe dishes as well as your own free-kitchen inventions; the ones you have not made yet
+show as grey silhouettes. Tap Gulu on the title screen to change his fur and apron colour;
+the choice sticks.
 
 Music and every sound effect are synthesised live in the browser, so there are no audio
 files. Tap or drag both work, nothing can be failed, and the whole UI toggles between

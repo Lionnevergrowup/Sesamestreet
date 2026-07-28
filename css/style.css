@@ -231,7 +231,8 @@ body.muted .ico-off { display: block; }
 .truck-title { left: 10px; bottom: 22px; width: 540px; }
 .chef-title  { left: 520px; bottom: 30px; width: 250px; }
 
-.title-card { right: 46px; top: 74px; width: 470px; position: absolute; text-align: center; }
+/* 卡片压在咕噜上面（它俩边缘差着几像素），跟 DOM 顺序无关 */
+.title-card { right: 46px; top: 74px; width: 470px; position: absolute; text-align: center; z-index: 10; }
 .title-card h1 { font-size: 46px; line-height: 1.15; color: var(--deep); }
 .title-card .sub { margin: 10px 0 20px; font-size: 21px; font-weight: 700; color: #7a6a55; }
 .title-card .big-btn { margin-bottom: 20px; }
@@ -553,7 +554,8 @@ body.muted .ico-off { display: block; }
 
 /* ---------------- 首页的模式入口 ---------------- */
 
-.btn-row { display: flex; gap: 10px; margin-bottom: 18px; }
+/* 四个入口排成两行两列 —— 挤在一行的话中英文都会顶到卡片边上 */
+.btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
 .mid-btn {
   flex: 1;
   border: none; border-radius: 999px;
@@ -713,10 +715,10 @@ body.muted .ico-off { display: block; }
 
 .mini-grid {
   position: absolute; left: 50%; top: 130px; transform: translateX(-50%);
-  display: flex; gap: 40px; z-index: 10;
+  display: flex; gap: 26px; z-index: 10;
 }
 .mini-card {
-  width: 400px; padding: 26px 22px 22px;
+  width: 340px; padding: 26px 22px 22px;
   border: none; border-radius: 30px; background: var(--cream);
   box-shadow: 0 10px 0 rgba(43, 35, 64, .25);
   cursor: pointer; font-family: inherit;
@@ -725,9 +727,13 @@ body.muted .ico-off { display: block; }
 }
 .mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 0 rgba(43, 35, 64, .25); }
 .mini-card:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .25); }
-.mini-art { display: flex; gap: 14px; align-items: flex-end; justify-content: center;
+.mini-art { display: flex; gap: 10px; align-items: flex-end; justify-content: center;
   width: 100%; height: 150px; margin-bottom: 10px; }
-.mini-art svg { height: 100%; width: auto; }
+/*
+  卡片从 400 缩到 340 装下第三张之后，两张牌背按满高画就顶出卡片外面了
+  （还带 8 度的倾斜，实际占得更宽）。所以按卡片宽度封顶，高度自己跟着缩。
+*/
+.mini-art svg { height: 100%; width: auto; max-width: 44%; }
 .mini-art svg:first-child { transform: rotate(-8deg); }
 .mini-art svg:last-child { transform: rotate(8deg); }
 .mini-card b { font-size: 27px; color: var(--deep); }
@@ -806,3 +812,130 @@ body.muted .ico-off { display: block; }
 }
 .sort-actions .mid-btn { flex: none; }
 .mid-btn.corner { position: absolute; left: 20px; top: 84px; flex: none; z-index: 30; }
+
+/* ---------------- 数一数 ---------------- */
+
+/*
+  一行最多 5 个，多了就换行。摆得整整齐齐是有讲究的：
+  东西东一个西一个的话，小朋友数着数着就重了或者漏了。
+  底下垫一块浅色的"数数垫"，一是把要数的东西圈成一堆，
+  二是不管背景里有栅栏还是树，数的时候都不碍眼。
+  垫子按中心定位，2 个和 9 个都稳稳落在题面和数字之间。
+*/
+.count-field {
+  position: absolute; left: 50%; top: 340px; transform: translate(-50%, -50%);
+  padding: 18px;
+  display: grid; grid-template-columns: repeat(var(--cols), 104px);
+  justify-content: center; align-content: center;
+  min-width: 340px; min-height: 172px;
+  gap: 14px; z-index: 15;
+  border-radius: 34px;
+  background: rgba(255, 246, 230, .86);
+  box-shadow: var(--shadow);
+}
+.count-one {
+  width: 104px; height: 104px;
+  filter: drop-shadow(0 8px 8px rgba(20,50,35,.3));
+  animation: popIn .4s cubic-bezier(.2,1.5,.4,1) both;
+}
+.count-one svg { width: 100%; height: 100%; }
+/* 通关那屏把答对的数字摆回垫子上，算一张小成绩单 */
+.count-field.done { background: rgba(255, 246, 230, .94); }
+.count-one.num {
+  display: grid; place-items: center;
+  border-radius: 24px; background: #9be3b0;
+  color: var(--deep); font-size: 54px; font-weight: 900;
+  filter: none; box-shadow: 0 5px 0 #4aa86b;
+}
+
+.num-row {
+  position: absolute; left: 50%; bottom: 54px; transform: translateX(-50%);
+  display: flex; gap: 26px; z-index: 20;
+}
+.num-btn {
+  width: 132px; height: 116px;
+  border: none; border-radius: 28px;
+  background: var(--cream); color: var(--deep);
+  font-family: inherit; font-size: 62px; font-weight: 900;
+  box-shadow: 0 8px 0 rgba(43, 35, 64, .3);
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.num-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 0 rgba(43, 35, 64, .3); }
+.num-btn:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .3); }
+.num-btn.right { background: #9be3b0; box-shadow: 0 8px 0 #4aa86b; }
+.num-btn.shake { animation: shakeIt .45s ease; }
+
+/* 小游戏菜单上"数一数"那张卡的封面：三个苹果，旁边一个 3 */
+/* 三个苹果加一个 56px 的圆，横着排要塞进卡片的 296px 里，所以苹果只能到 48% */
+.count-art { gap: 6px; align-items: center; }
+.count-art svg { height: 48%; width: auto; transform: none; }
+.count-badge {
+  width: 56px; height: 56px; flex: none;
+  border-radius: 50%; display: grid; place-items: center;
+  background: var(--grape); color: #fff; font-size: 32px;
+}
+
+/* ---------------- 换装 ---------------- */
+
+/* 首页的咕噜本身就是入口，所以它是个按钮 */
+.chef-title { border: none; background: none; padding: 0; cursor: pointer; }
+button.chef-title:focus-visible { outline: 5px solid var(--cream); outline-offset: 6px; border-radius: 20px; }
+.dress-tag {
+  position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%);
+  padding: 6px 18px; border-radius: 999px;
+  background: var(--sun); color: var(--deep);
+  font-size: 17px; font-weight: 900; white-space: nowrap;
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .28);
+}
+
+.dress-stage { left: 300px; top: 132px; width: 300px; z-index: 15; }
+.dress-panel {
+  position: absolute; right: 120px; top: 172px; width: 500px; z-index: 20;
+}
+.dress-panel h3 { font-size: 24px; color: var(--deep); margin-bottom: 12px; }
+.dress-panel h3 + .swatch-row { margin-bottom: 20px; }
+.swatch-row { display: flex; gap: 10px; }
+.swatch {
+  width: 62px; height: 62px; flex: none;
+  border: none; border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 4px 0 rgba(43, 35, 64, .28);
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+.swatch:hover { transform: translateY(-3px); }
+.swatch.on { box-shadow: 0 0 0 5px var(--cream), 0 4px 0 rgba(43, 35, 64, .28); }
+.swatch:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+
+/* ---------------- 收藏册 ---------------- */
+
+.book-panel {
+  position: absolute; left: 50%; top: 90px; transform: translateX(-50%);
+  width: 1120px; padding: 22px 28px; z-index: 20;
+}
+.book-panel h3 { font-size: 23px; color: var(--deep); margin-bottom: 10px; }
+.book-panel h3 + * { margin-bottom: 18px; }
+.book-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.book-strip { display: flex; flex-wrap: wrap; gap: 10px; }
+.book-strip .book-cell { width: 78px; }
+.book-cell {
+  display: grid; justify-items: center; align-content: start; gap: 2px;
+  padding: 8px 4px; border-radius: 18px;
+  background: rgba(43, 35, 64, .06);
+}
+.book-art { width: 68px; height: 68px; }
+.book-strip .book-art { width: 56px; height: 56px; }
+.book-art svg { width: 100%; height: 100%; }
+.book-name {
+  font-size: 15px; font-weight: 800; color: #5c5040; text-align: center;
+  line-height: 1.2;
+}
+.book-strip .book-name { font-size: 12px; }
+/* 还没做过的只留个影子 —— 看得出有这么一道，但不剧透 */
+.book-cell.locked .book-art { filter: brightness(0); opacity: .16; }
+.book-cell.locked .book-name { color: #a09580; font-size: 22px; }
+.book-empty { font-size: 19px; font-weight: 700; color: #8a7a62; padding: 10px 4px 18px; }
+
+.mid-btn.sky { background: linear-gradient(180deg, #5aa8e8, #3a83c4); box-shadow: 0 5px 0 #2c6699; }
+.mid-btn.sky:active { box-shadow: 0 1px 0 #2c6699; }

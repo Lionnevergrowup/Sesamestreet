@@ -52,8 +52,19 @@ const Art = (() => {
      pose: idle | cook | cheer | drive
      完全原创的紫色毛怪，戴厨师帽、系围裙。
   */
-  function chef(pose = 'idle', look = [0, 0.15]) {
-    const FUR = '#8b5fe0', FUR_D = '#6b41c0', BELLY = '#b494f2';
+  /*
+    咕噜长什么样是可以换的。毛色和围裙色存在这里，
+    深浅两档由主色推算，所以换一个颜色整只都协调。
+  */
+  const CHEF_FURS  = ['#8b5fe0', '#2fb0a0', '#ff7a5c', '#5a8fe8', '#5fbf7d', '#f38fc4'];
+  const CHEF_TRIMS = ['#ffb03a', '#ef4b52', '#5aa8e8', '#4aa86b'];
+  let chefLook = { fur: CHEF_FURS[0], trim: CHEF_TRIMS[0] };
+  const setChefLook = l => { chefLook = { ...chefLook, ...l }; };
+
+  function chef(pose = 'idle', look = [0, 0.15], style = null) {
+    const skin = style || chefLook;
+    const FUR = skin.fur, FUR_D = shade(FUR, -0.24), BELLY = shade(FUR, 0.28);
+    const TRIM = skin.trim;
     const armL = { idle: 'rotate(14 58 168)', cook: 'rotate(-38 58 168)', cheer: 'rotate(-72 58 168)', drive: 'rotate(-30 58 168)' }[pose];
     const armR = { idle: 'rotate(-14 162 168)', cook: 'rotate(38 162 168)', cheer: 'rotate(72 162 168)', drive: 'rotate(26 162 168)' }[pose];
     const mouth = pose === 'cheer'
@@ -63,7 +74,7 @@ const Art = (() => {
 
     return svg(`
       <defs>
-        <radialGradient id="chefBelly" cx=".5" cy=".35">
+        <radialGradient id="belly${FUR.slice(1)}" cx=".5" cy=".35">
           <stop offset="0" stop-color="${BELLY}"/><stop offset="1" stop-color="${FUR}"/>
         </radialGradient>
       </defs>
@@ -78,9 +89,9 @@ const Art = (() => {
       <!-- 身体 + 围裙 -->
       <path d="${furPath(110, 186, 54, 46, 20)}" fill="${FUR}"/>
       <path d="M78 152h64a10 10 0 0 1 10 10v42a32 32 0 0 1-32 32h-20a32 32 0 0 1-32-32v-42a10 10 0 0 1 10-10Z" fill="#fff6e6"/>
-      <path d="M98 152q12 10 24 0" fill="none" stroke="#ffb03a" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="110" cy="192" r="15" fill="none" stroke="#ffb03a" stroke-width="5"/>
-      <path d="M110 183v18M103 192h14" stroke="#ffb03a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M98 152q12 10 24 0" fill="none" stroke="${TRIM}" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="110" cy="192" r="15" fill="none" stroke="${TRIM}" stroke-width="5"/>
+      <path d="M110 183v18M103 192h14" stroke="${TRIM}" stroke-width="5" stroke-linecap="round"/>
 
       <!-- 手臂 -->
       <g transform="${armL}">
@@ -93,12 +104,12 @@ const Art = (() => {
       </g>
 
       <!-- 头 -->
-      <path d="${furPath(110, 100, 62, 56, 24)}" fill="url(#chefBelly)"/>
+      <path d="${furPath(110, 100, 62, 56, 24)}" fill="url(#belly${FUR.slice(1)})"/>
       <!-- 触角 -->
       <path d="M84 50c-6-16-14-22-22-24" fill="none" stroke="${FUR_D}" stroke-width="6" stroke-linecap="round"/>
       <path d="M136 50c6-16 14-22 22-24" fill="none" stroke="${FUR_D}" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="60" cy="24" r="9" fill="#ffd23f"/>
-      <circle cx="160" cy="24" r="9" fill="#ffd23f"/>
+      <circle cx="60" cy="24" r="9" fill="${TRIM}"/>
+      <circle cx="160" cy="24" r="9" fill="${TRIM}"/>
       ${eyes(110, 88, 22, 46, look, pose === 'cheer')}
       <ellipse cx="70" cy="118" rx="12" ry="8" fill="#f4718f" opacity=".45"/>
       <ellipse cx="150" cy="118" rx="12" ry="8" fill="#f4718f" opacity=".45"/>
@@ -1040,5 +1051,7 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
-           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf };
+           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf,
+           setChefLook, CHEF_FURS, CHEF_TRIMS,
+           get chefLook() { return { ...chefLook }; } };
 })();

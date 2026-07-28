@@ -23,10 +23,54 @@
     serve: null,
     drive: null,
     mem: null,
-    sort: null
+    sort: null,
+    count: null
   };
 
   const level = () => LEVELS[S.level];
+  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
+
+  /*
+    咕噜长什么样存在本地，一进来就先穿上。
+    存的值只认调色板里的那几个颜色 —— 万一存档被改花了，
+    也只会退回默认配色，不会把奇怪的字符串塞进 SVG 里。
+  */
+  (function loadChefLook() {
+    const [fur, trim] = (Store.get('gulu.chef') || '').split('|');
+    if (Art.CHEF_FURS.includes(fur) && Art.CHEF_TRIMS.includes(trim)) Art.setChefLook({ fur, trim });
+  })();
+
+  /* ---------------- 收藏册 ---------------- */
+  /*
+    做出来的东西要留个念想。菜谱上的菜记 id 就够了；
+    自己发明的记下厨具和放了什么，看的时候现画。
+  */
+  const bookSet = () => new Set((Store.get('gulu.book') || '').split(',').filter(Boolean));
+  function addToBook(id) {
+    const b = bookSet();
+    if (b.has(id)) return;
+    b.add(id);
+    Store.set('gulu.book', [...b].join(','));
+  }
+
+  const MAX_INV = 12;
+  /* 读的时候顺手把不认识的条目筛掉，存档坏了也不会画出个空框 */
+  function invList() {
+    let v;
+    try { v = JSON.parse(Store.get('gulu.inv') || '[]'); } catch (e) { return []; }
+    if (!Array.isArray(v)) return [];
+    return v.filter(r => r && APPLIANCES.includes(r.a) &&
+                    Array.isArray(r.i) && r.i.length && r.i.every(id => ING_COLOR[id]))
+            .slice(0, MAX_INV);
+  }
+  const invKey = r => r.a + ':' + [...r.i].sort().join(',');
+  function addInvention(rec) {
+    const key = invKey(rec);
+    /* 同一个配方反复做不该占掉一整册，重了就挪到最前面 */
+    const list = invList().filter(r => invKey(r) !== key);
+    list.unshift(rec);
+    Store.set('gulu.inv', JSON.stringify(list.slice(0, MAX_INV)));
+  }
 
   /*
     哪些关通过了，单独存一份 —— 有了它才能做选关，
@@ -233,7 +277,6 @@
       <div class="bg">${Art.street()}</div>
       <div class="layer">
         <div class="pos truck-title">${Art.truck()}</div>
-        <div class="pos chef-title bob">${Art.chef('cheer')}</div>
         <div class="card title-card">
           <h1>${t('gameTitle')}</h1>
           <p class="sub">${t('gameSub')}</p>
@@ -242,6 +285,7 @@
             <button class="mid-btn" id="pick">${t('pickLevel')}</button>
             <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
             <button class="mid-btn warm" id="mini">${t('miniGames')}</button>
+            <button class="mid-btn sky" id="book">${t('bookTitle')}</button>
           </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
@@ -249,13 +293,110 @@
                 <span><b>${i + 1}</b>${label}</span></div>`).join('')}
           </div>
         </div>
+        <!--
+          咕噜排在卡片后面，是为了键盘顺序：按 Tab 应该先走到"开始营业"，
+          换装是顺带的乐子，不该抢在正事前面。位置是绝对定位，看着没区别。
+        -->
+        <button class="pos chef-title bob" id="dressUp" aria-label="${t('dressTitle')}">
+          ${Art.chef('cheer')}
+          <span class="dress-tag">${t('dressTap')}</span>
+        </button>
       </div>
     `, () => {
       on('#play', () => { S.level = firstUndone(); startLevel(); });
       on('#pick', renderLevelSelect);
       on('#free', renderFree);
       on('#mini', renderMiniMenu);
+      on('#book', renderBook);
+      on('#dressUp', renderDressUp);
     });
+  }
+
+  /* ================================================================
+     1d. 换装 —— 咕噜是"我的"咕噜
+  ================================================================ */
+  function renderDressUp() {
+    S.phase = 'dress';
+    const swatch = (list, cur, kind) => list.map(c => `
+      <button class="swatch${c === cur ? ' on' : ''}" data-kind="${kind}" data-c="${c}"
+              style="--c:${c}" aria-label="${c}"></button>`).join('');
+
+    /* 当前穿的这身，直接问美术层要，不另存一份免得两边对不上 */
+    const cur = { fur: Art.chefLook.fur, trim: Art.chefLook.trim };
+
+    paint('sc-dress', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('dressTitle')}</div>
+        <div class="pos dress-stage bob" id="dressChef">${Art.chef('cheer')}</div>
+        <div class="card dress-panel">
+          <h3>${t('dressFur')}</h3>
+          <div class="swatch-row" id="furRow">${swatch(Art.CHEF_FURS, cur.fur, 'fur')}</div>
+          <h3>${t('dressTrim')}</h3>
+          <div class="swatch-row" id="trimRow">${swatch(Art.CHEF_TRIMS, cur.trim, 'trim')}</div>
+        </div>
+        <button class="big-btn bottom" id="dressBack">${t('dressDone')}</button>
+      </div>
+    `, () => {
+      const preview = $('#dressChef');
+      sceneEl.querySelectorAll('.swatch').forEach(b => b.addEventListener('click', () => {
+        if (busy) return;
+        const kind = b.dataset.kind, c = b.dataset.c;
+        if (cur[kind] === c) return;
+        cur[kind] = c;
+        Sound.pick(Math.max(0, (kind === 'fur' ? Art.CHEF_FURS : Art.CHEF_TRIMS).indexOf(c)));
+        Art.setChefLook({ [kind]: c });
+        Store.set('gulu.chef', cur.fur + '|' + cur.trim);
+        /*
+          就地换掉预览就行 —— 整屏重绘那半秒里点击会被吞，
+          而换装恰恰是小朋友会一口气连点十几下的地方。
+        */
+        if (preview) preview.innerHTML = Art.chef('cheer');
+        b.parentElement.querySelectorAll('.swatch').forEach(x => x.classList.toggle('on', x === b));
+        burst(b, 6, [c, '#fff6e6']);
+      }));
+      on('#dressBack', renderTitle);
+    });
+  }
+
+  /* ================================================================
+     1e. 收藏册 —— 做过的都在这儿
+  ================================================================ */
+  function renderBook() {
+    S.phase = 'book';
+    const got = bookSet();
+    const inv = invList();
+
+    const cells = LEVELS.map(L => {
+      const have = got.has(L.id);
+      return `<div class="book-cell${have ? '' : ' locked'}"
+                   aria-label="${have ? I18N.name(L.dish) : t('bookLocked')}">
+                <span class="book-art">${Art.dish(L.id)}</span>
+                <span class="book-name">${have ? I18N.name(L.dish) : '?'}</span>
+              </div>`;
+    }).join('');
+
+    const strip = inv.length
+      ? inv.map((r, i) => `
+          <div class="book-cell" aria-label="${t('bookMine', { n: i + 1 })}">
+            <span class="book-art">${Art.creation(Art.blend(r.i), r.a, r.i)}</span>
+            <span class="book-name">${t('bookMine', { n: i + 1 })}</span>
+          </div>`).join('')
+      : `<p class="book-empty">${t('bookEmpty')}</p>`;
+
+    paint('sc-book', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('bookTitle')}</div>
+        <div class="card book-panel">
+          <h3>${t('bookDishes', { a: got.size, b: LEVELS.length })}</h3>
+          <div class="book-grid">${cells}</div>
+          <h3>${t('bookInvent', { n: inv.length })}</h3>
+          <div class="book-strip">${strip}</div>
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => { on('#backHome', renderTitle); });
   }
 
   /* ================================================================
@@ -630,6 +771,7 @@
 
   function finishCooking(appl) {
     S.cook.cooked = true;
+    addToBook(level().id);      /* 出锅就算做过，收藏册里立刻有了 */
     busy = true;
     const controls = $('.cook-controls');
     if (controls) controls.classList.add('hide');
@@ -703,13 +845,115 @@
             <span class="mini-art">${Art.crate('fruit')}${Art.crate('veg')}</span>
             <b>${t('sortTitle')}</b><span>${t('sortDesc')}</span>
           </button>
+          <button class="mini-card" id="goCount">
+            <span class="mini-art count-art">
+              ${Art.ingredient('apple')}${Art.ingredient('apple')}${Art.ingredient('apple')}
+              <b class="count-badge">3</b>
+            </span>
+            <b>${t('countTitle')}</b><span>${t('countDesc')}</span>
+          </button>
         </div>
         <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
       </div>
     `, () => {
       on('#goMem', () => renderMemory(4));
       on('#goSort', () => renderSort(true));
+      on('#goCount', () => renderCount(true));
       on('#backHome', renderTitle);
+    });
+  }
+
+  /* ---------------- 数一数 ---------------- */
+  /*
+    做菜那边数数是"采够为止"，数错了还能接着采。
+    这里换个考法：东西一次全摆出来，得先数清楚再挑数字，
+    练的是把一堆东西点清的本事。
+  */
+  function buildCountRounds() {
+    const kinds = shuffle([...FRUITS, ...VEGGIES]);
+    /* 每题换个地方，八道题不会全在同一片菜园里 */
+    const spots = shuffle(Object.keys(PLACES));
+    /* 先小后大，题量固定 8 道；每道数目不重样，免得连着两题一样多 */
+    const counts = [...shuffle([2, 3, 4, 5]), ...shuffle([6, 7, 8, 9])];
+    return counts.map((n, i) => {
+      const opts = new Set([n]);
+      while (opts.size < 3) {
+        const d = n + [-2, -1, 1, 2][Math.floor(Math.random() * 4)];
+        if (d >= 1 && d <= 10) opts.add(d);
+      }
+      return { id: kinds[i % kinds.length], place: spots[i % spots.length], n, opts: shuffle([...opts]) };
+    });
+  }
+
+  /*
+    摆成方方正正的一块最好数：6 个是两行三列，9 个是三行三列。
+    要是一味往一行里塞，5 个之后就成了"5 + 1"这种一头沉的样子，
+    小朋友数第二行那一个的时候容易忘了前面数到几。
+  */
+  const countCols = n => (n <= 5 ? n : (n === 6 || n === 9) ? 3 : 4);
+
+  function renderCount(fresh = true) {
+    S.phase = 'count';
+    if (fresh || !S.count) S.count = { queue: buildCountRounds(), done: 0, log: [] };
+    const C = S.count;
+    const r = C.queue[0];
+    const won = !r;
+
+    paint('sc-count', `
+      <div class="bg">${Art.backdrop(won ? 'garden' : r.place)}</div>
+      <div class="layer">
+        <div class="banner">${won ? t('countWin') : t('countAsk', { ing: I18N.ing(r.id) })}</div>
+        ${won ? '' : `<div class="chip">${t('countLeft', { n: C.queue.length })}</div>`}
+
+        ${won ? `
+          <!-- 数对的那些数字排在垫子上，当成一张小成绩单 -->
+          <div class="count-field done" style="--cols:4">
+            ${[...C.log].sort((a, b) => a - b).map((v, i) =>
+              `<span class="count-one num" style="animation-delay:${(i * 0.09).toFixed(2)}s">${v}</span>`).join('')}
+          </div>`
+        : `
+          <div class="count-field" style="--cols:${countCols(r.n)}">
+            ${Array.from({ length: r.n }, (_, i) =>
+              `<span class="count-one" style="animation-delay:${(i * 0.07).toFixed(2)}s">${Art.ingredient(r.id)}</span>`).join('')}
+          </div>
+          <div class="num-row">
+            ${r.opts.map(v => `<button class="num-btn" data-v="${v}">${v}</button>`).join('')}
+          </div>`}
+
+        ${won ? `
+          <div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>
+          <div class="sort-actions">
+            <button class="big-btn" id="countAgain">${t('memAgain')}</button>
+            <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+          </div>`
+        : `<button class="mid-btn alt corner" id="backMini">${t('backHome')}</button>`}
+      </div>
+    `, () => {
+      /* 一屏只认一次作答，连点不会把后面的题一起跳掉 */
+      let answered = false;
+      sceneEl.querySelectorAll('.num-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          if (busy || !r || answered) return;
+          if (+b.dataset.v !== r.n) {
+            shake(b);
+            Sound.oops();
+            toast(t('countOops'), 'warn');
+            return;
+          }
+          answered = true;
+          C.queue.shift();
+          C.done++;
+          C.log.push(r.n);
+          Sound.pick(Math.min(C.done - 1, 7));
+          b.classList.add('right');
+          burst(b, 12);
+          Sound.ding();
+          later(() => renderCount(false), 620);
+        });
+      });
+      if (won) { Sound.fanfare(); confetti(40); }
+      on('#countAgain', () => renderCount(true));
+      on('#backMini', renderMiniMenu);
     });
   }
 
@@ -896,8 +1140,6 @@
   /* ================================================================
      6b. 自由厨房 —— 想放什么放什么，没有对错，做完请客人吃
   ================================================================ */
-  const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
-
   function renderFree(reset = true) {
     S.phase = 'free';
     if (reset || !S.free) S.free = { picked: [], appliance: 'blender', made: false, served: false };
@@ -996,6 +1238,7 @@
 
       on('#freeCook', () => {
         F.made = true;
+        addInvention({ a: F.appliance, i: [...F.picked] });   /* 自己发明的也存进收藏册 */
         Sound.cookStep(2);
         later(() => { Sound.ding(); renderFree(false); }, 420);
       });
@@ -1085,7 +1328,8 @@
     ({
       title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
       mini: renderMiniMenu, memory: () => renderMemory(S.mem ? S.mem.pairs : 4, false),
-      sort: () => renderSort(false),
+      sort: () => renderSort(false), count: () => renderCount(false),
+      dress: renderDressUp, book: renderBook,
       order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();
