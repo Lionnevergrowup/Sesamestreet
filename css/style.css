@@ -522,9 +522,15 @@ body.muted .ico-off { display: block; }
   但食材飞进锅里、庆祝的碎片这些是游戏反馈，保留。
 */
 @media (prefers-reduced-motion: reduce) {
+  /*
+    这份清单必须覆盖所有"一直在动"的东西。
+    容易漏的是像 .dish-pop / .sort-item 这种把 float 关键帧内联写在自己规则里的 ——
+    它们不带 .float 类，光豁免 .float 是抓不到的。
+    所以有一条测试会逐个场景枚举无限循环动画，漏了就会失败。
+  */
   .bob, .float, .walk-in, .forage-item.sway, .forage-item.drift, .road-item,
-  .road-scroll, .drive-truck, .puff,
-  .appliance-wrap.ready .steam, .recipe-card li.now {
+  .road-scroll, .drive-truck, .puff, .dish-pop, .sort-item,
+  .appliance-wrap.ready .steam, .recipe-card li.now, .rotate-inner svg {
     animation: none !important;
   }
   .scene { transition: none; }
@@ -719,7 +725,8 @@ body.muted .ico-off { display: block; }
 }
 .mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 0 rgba(43, 35, 64, .25); }
 .mini-card:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .25); }
-.mini-art { display: flex; gap: 14px; align-items: flex-end; height: 150px; margin-bottom: 10px; }
+.mini-art { display: flex; gap: 14px; align-items: flex-end; justify-content: center;
+  width: 100%; height: 150px; margin-bottom: 10px; }
 .mini-art svg { height: 100%; width: auto; }
 .mini-art svg:first-child { transform: rotate(-8deg); }
 .mini-art svg:last-child { transform: rotate(8deg); }

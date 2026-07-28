@@ -723,6 +723,7 @@
         cards: shuffle([...ids, ...ids]).map(id => ({ id, up: false, done: false })),
         open: [],       // 当前翻开还没判定的
         found: 0,
+        pending: null,  // 等着盖回去的那两张
         locked: false   // 两张翻开、正在等着盖回去
       };
     }
@@ -749,6 +750,29 @@
         ${won ? `<div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>` : ''}
       </div>
     `, () => {
+      /*
+        盖回去这件事必须挂在状态上、每次重绘都重新安排。
+        以前只用一个定时器，重绘（比如中途切语言）会把它作废，
+        结果两张牌永远翻着、M.locked 永远为真，整局就死在那儿了。
+      */
+      function flipBackSoon() {
+        later(() => {
+          if (!M.pending) return;
+          const [x, y] = M.pending;
+          M.cards[x].up = M.cards[y].up = false;
+          M.pending = null;
+          M.locked = false;
+          sceneEl.querySelectorAll('.mem-card').forEach(el => {
+            const j = +el.dataset.i;
+            if (j === x || j === y) {
+              el.classList.remove('up');
+              el.setAttribute('aria-label', t('memTitle'));
+            }
+          });
+        }, 1000);
+      }
+      if (M.locked && M.pending) flipBackSoon();   // 重绘后接着把牌盖回去
+
       sceneEl.querySelectorAll('.mem-card').forEach(btn => {
         btn.addEventListener('click', () => {
           if (busy || M.locked) return;
@@ -783,18 +807,9 @@
           } else {
             /* 没配上，盖回去 —— 留够看清的时间 */
             M.locked = true;
+            M.pending = [a, b];
             Sound.oops();
-            later(() => {
-              M.cards[a].up = M.cards[b].up = false;
-              M.locked = false;
-              sceneEl.querySelectorAll('.mem-card').forEach(el => {
-                const j = +el.dataset.i;
-                if (j === a || j === b) {
-                  el.classList.remove('up');
-                  el.setAttribute('aria-label', t('memTitle'));
-                }
-              });
-            }, 1000);
+            flipBackSoon();
           }
         });
       });
@@ -843,9 +858,14 @@
       </div>
     `, () => {
       const item = $('#sortItem');
+      /*
+        一屏只认一次作答。小朋友会对着筐连按好几下，
+        没这个闸门的话按 4 下就跳过 4 道题，题目哗哗地少。
+      */
+      let answered = false;
       sceneEl.querySelectorAll('.crate-btn').forEach(cb => {
         cb.addEventListener('click', () => {
-          if (busy || !cur) return;
+          if (busy || !cur || answered) return;
           const right = (cb.dataset.kind === 'fruit') === FRUITS.includes(cur);
           if (!right) {
             shake(cb);
@@ -853,6 +873,7 @@
             toast(t('sortOops', { ing: I18N.ing(cur) }), 'warn');
             return;
           }
+          answered = true;
           So.queue.shift();
           So.done++;
           Sound.pick(Math.min(So.done - 1, 7));
