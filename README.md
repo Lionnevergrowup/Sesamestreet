@@ -11,13 +11,23 @@
 
 推到 `main` 之后 GitHub Actions 会自动重新发布，链接永远是最新版。
 
-## 三种玩法
+## 四种玩法
 
 | 模式 | 干什么 |
 | --- | --- |
 | **闯关** | 12 关按剧情走，从上次没打完的那关接着玩 |
 | **选一关玩** | 12 关任选，想玩哪个菜就玩哪个，不用按顺序 |
 | **自由厨房** | 25 种食材随便拿、5 种厨具随便换，做出来的东西颜色由你放的食材混成 —— 没有对错，也没有失败 |
+| **小游戏** | 两个和做菜无关的小玩意，练的是另外两种本事（见下） |
+
+### 小游戏
+
+| 游戏 | 怎么玩 | 练什么 |
+| --- | --- | --- |
+| **翻牌找一样的** | 牌都盖着，翻两张，一样就留下 | **工作记忆** —— 记住刚才看到的东西在哪儿。3 / 4 / 6 对三档 |
+| **这是水果还是蔬菜？** | 一次出一样，放进对的筐 | **分类判断** —— 按类别归纳。放错只提示不惩罚 |
+
+这两个和主线的"看准了点""照顺序做"是完全不同的脑力活，所以不会玩腻。
 
 ## 闯关怎么玩
 
@@ -126,11 +136,13 @@ three axes: how many things to count, how long the recipe is, and how steady the
 to be — from level 6 two different ingredients must be gathered at once, recipes grow from
 three steps to five, and from level 8 the ingredients drift as you reach for them.
 
-Three ways to play: work through the twelve levels, jump straight to any level you like
-from the picker, or open the free kitchen — twenty-five ingredients, five appliances, no
+Four ways to play: work through the twelve levels, jump straight to any level you like
+from the picker, open the free kitchen — twenty-five ingredients, five appliances, no
 recipe and no wrong answers, where whatever you invent comes out coloured by the
-ingredients you chose. The drive between the order and the field is a small catching game
-rather than a cutscene.
+ingredients you chose, or take on one of two mini games — a memory pairs board at three
+sizes, and a fruit-or-vegetable sorter. Those two ask for working memory and for
+categorising, neither of which the main game exercises. The drive between the order and
+the field is a small catching game rather than a cutscene.
 
 Music and every sound effect are synthesised live in the browser, so there are no audio
 files. Tap or drag both work, nothing can be failed, and the whole UI toggles between

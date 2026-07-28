@@ -993,6 +993,39 @@ const Art = (() => {
     `, '0 0 1280 720', 'art-bg');
   }
 
+  /* 记忆配对的卡背 —— 用围裙上那个圈作图案，和主厨是一套 */
+  const cardBack = () => svg(`
+    <rect width="100" height="100" rx="16" fill="#8b5fe0"/>
+    <rect x="7" y="7" width="86" height="86" rx="11" fill="#a888f0"/>
+    <circle cx="50" cy="50" r="24" fill="none" stroke="#fff6e6" stroke-width="7"/>
+    <path d="M50 34v32M34 50h32" stroke="#fff6e6" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#fff6e6" opacity=".5">
+      <circle cx="19" cy="19" r="5"/><circle cx="81" cy="19" r="5"/>
+      <circle cx="19" cy="81" r="5"/><circle cx="81" cy="81" r="5"/>
+    </g>
+  `, '0 0 100 100', 'art-card');
+
+  /* 分类游戏的两个筐，颜色和标签都不一样，一眼能分清 */
+  const crate = (kind) => {
+    const k = kind === 'fruit'
+      ? { body: '#ef4b52', dark: '#c93b42' }
+      : { body: '#4aa86b', dark: '#3a8f58' };
+    const mark = kind === 'fruit'
+      ? `<circle cx="60" cy="36" r="19" fill="#ffd23f"/>
+         <path d="M60 17c9-9 19-8 22-6-3 9-13 11-22 6Z" fill="#4fae63"/>`
+      : `<path d="M60 58 44 20c-3-7 3-12 16-12s19 5 16 12Z" fill="#f4842c"/>
+         <path d="M60 10c-3-11-11-16-19-16 2 10 7 15 19 16Z" fill="#3d8a4e"/>`;
+    return svg(`
+      ${mark}
+      <path d="M14 66h92l-11 54a14 14 0 0 1-14 11H39a14 14 0 0 1-14-11Z" fill="${k.body}"/>
+      <path d="M14 66h92l-3 15H17Z" fill="${k.dark}"/>
+      <path d="M8 70h104" stroke="${k.dark}" stroke-width="12" stroke-linecap="round"/>
+      <g stroke="${k.dark}" stroke-width="4" opacity=".55">
+        <path d="M36 84l5 44M60 84v46M84 84l-5 44"/>
+      </g>
+    `, '0 0 120 140', 'art-crate');
+  };
+
   /* 篮子：采集场景里装战利品 */
   const basket = () => svg(`
     <path d="M10 30h100l-12 56a14 14 0 0 1-14 12H36a14 14 0 0 1-14-12Z" fill="#c98a4b"/>
@@ -1007,5 +1040,5 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
-           backdrop, street, road, kitchen, basket, star, leaf };
+           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf };
 })();

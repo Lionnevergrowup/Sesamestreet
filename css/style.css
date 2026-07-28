@@ -697,3 +697,105 @@ body.muted .ico-off { display: block; }
 
 /* 做好之后主厨出来捧个场，右边不至于空着 */
 .chef-free { left: 840px; bottom: 236px; width: 208px; z-index: 12; }
+
+/* ---------------- 小游戏入口 ---------------- */
+
+.mid-btn.warm { background: linear-gradient(180deg, #f4842c, #d96a15); box-shadow: 0 5px 0 #ad5310; }
+.mid-btn.warm:active { box-shadow: 0 1px 0 #ad5310; }
+.mid-btn.on { background: linear-gradient(180deg, #ffd23f, #f0b81e); color: var(--deep); box-shadow: 0 5px 0 #c9911c; }
+.btn-row .mid-btn { font-size: 18px; padding: 12px 10px; }
+
+.mini-grid {
+  position: absolute; left: 50%; top: 130px; transform: translateX(-50%);
+  display: flex; gap: 40px; z-index: 10;
+}
+.mini-card {
+  width: 400px; padding: 26px 22px 22px;
+  border: none; border-radius: 30px; background: var(--cream);
+  box-shadow: 0 10px 0 rgba(43, 35, 64, .25);
+  cursor: pointer; font-family: inherit;
+  display: grid; justify-items: center; gap: 6px;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 0 rgba(43, 35, 64, .25); }
+.mini-card:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .25); }
+.mini-art { display: flex; gap: 14px; align-items: flex-end; height: 150px; margin-bottom: 10px; }
+.mini-art svg { height: 100%; width: auto; }
+.mini-art svg:first-child { transform: rotate(-8deg); }
+.mini-art svg:last-child { transform: rotate(8deg); }
+.mini-card b { font-size: 27px; color: var(--deep); }
+.mini-card span:last-child { font-size: 18px; font-weight: 700; color: #7a6a55; }
+
+/* ---------------- 记忆配对 ---------------- */
+
+/* 牌面上下居中：3 对和 6 对都是 4 列，行数不同也不会一头沉 */
+.mem-board {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; grid-template-columns: repeat(4, 132px); gap: 14px; z-index: 10;
+}
+.mem-card {
+  position: relative; aspect-ratio: 1;
+  border: none; background: none; padding: 0;
+  cursor: pointer; border-radius: 18px;
+  transition: transform .15s ease;
+}
+.mem-face {
+  position: absolute; inset: 0;
+  border-radius: 18px; overflow: hidden;
+  display: grid; place-items: center;
+  transition: opacity .18s ease, transform .25s ease;
+  backface-visibility: hidden;
+}
+.mem-face svg { width: 100%; height: 100%; }
+.mem-face.front {
+  background: #fffdf7; padding: 10px;
+  box-shadow: 0 5px 0 rgba(43, 35, 64, .2);
+  opacity: 0; transform: rotateY(90deg);
+}
+.mem-face.back { box-shadow: 0 5px 0 rgba(43, 35, 64, .25); }
+.mem-card.up .front { opacity: 1; transform: rotateY(0); }
+.mem-card.up .back { opacity: 0; transform: rotateY(-90deg); }
+.mem-card.done { cursor: default; }
+.mem-card.done .front { background: #eaf7ee; box-shadow: 0 0 0 4px rgba(74,168,107,.55); }
+.mem-card:not(.done):hover { transform: translateY(-3px); }
+
+.mem-levels {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  display: flex; gap: 10px; z-index: 20;
+}
+.mem-levels .mid-btn { flex: none; min-width: 118px; }
+.chef-mini { right: 40px; bottom: 110px; width: 180px; z-index: 25; }
+
+/* ---------------- 水果还是蔬菜 ---------------- */
+
+.sort-item {
+  left: 50%; top: 152px; margin-left: -105px;
+  width: 210px; height: 210px; z-index: 20;
+  filter: drop-shadow(0 10px 12px rgba(20,50,35,.3));
+  animation: popIn .4s cubic-bezier(.2,1.5,.4,1) both, float 2.6s ease-in-out .4s infinite;
+}
+.sort-item svg { width: 100%; height: 100%; }
+.crate-btn {
+  position: absolute; bottom: 40px;
+  width: 260px; padding: 0;
+  border: none; background: none; cursor: pointer;
+  display: grid; justify-items: center; gap: 4px;
+  font-family: inherit; z-index: 20;
+  transition: transform .1s ease;
+}
+.crate-btn.left { left: 90px; }
+.crate-btn.right { right: 90px; }
+.crate-btn svg { width: 208px; height: auto;
+  filter: drop-shadow(0 3px 0 rgba(43,35,64,.35)) drop-shadow(0 10px 12px rgba(20,50,35,.35)); }
+.crate-btn b {
+  font-size: 30px; font-weight: 900; color: #fff;
+  background: rgba(43, 35, 64, .62); padding: 6px 26px; border-radius: 999px;
+}
+.crate-btn:hover { transform: translateY(-4px); }
+.crate-btn:active { transform: translateY(4px); }
+.sort-actions {
+  position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 12px; z-index: 30;
+}
+.sort-actions .mid-btn { flex: none; }
+.mid-btn.corner { position: absolute; left: 20px; top: 84px; flex: none; z-index: 30; }

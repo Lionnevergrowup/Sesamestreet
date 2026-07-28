@@ -21,7 +21,9 @@
     forage: null,
     cook: null,
     serve: null,
-    drive: null
+    drive: null,
+    mem: null,
+    sort: null
   };
 
   const level = () => LEVELS[S.level];
@@ -239,6 +241,7 @@
           <div class="btn-row">
             <button class="mid-btn" id="pick">${t('pickLevel')}</button>
             <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
+            <button class="mid-btn warm" id="mini">${t('miniGames')}</button>
           </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
@@ -251,6 +254,7 @@
       on('#play', () => { S.level = firstUndone(); startLevel(); });
       on('#pick', renderLevelSelect);
       on('#free', renderFree);
+      on('#mini', renderMiniMenu);
     });
   }
 
@@ -682,6 +686,193 @@
   }
 
   /* ================================================================
+     1c. 小游戏 —— 练的是跟做菜完全不同的两种本事
+  ================================================================ */
+  function renderMiniMenu() {
+    S.phase = 'mini';
+    paint('sc-mini', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('miniGames')}</div>
+        <div class="mini-grid">
+          <button class="mini-card" id="goMem">
+            <span class="mini-art">${Art.cardBack()}${Art.cardBack()}</span>
+            <b>${t('memTitle')}</b><span>${t('memDesc')}</span>
+          </button>
+          <button class="mini-card" id="goSort">
+            <span class="mini-art">${Art.crate('fruit')}${Art.crate('veg')}</span>
+            <b>${t('sortTitle')}</b><span>${t('sortDesc')}</span>
+          </button>
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => {
+      on('#goMem', () => renderMemory(4));
+      on('#goSort', () => renderSort(true));
+      on('#backHome', renderTitle);
+    });
+  }
+
+  /* ---------------- 记忆配对 ---------------- */
+  function renderMemory(pairs, fresh = true) {
+    S.phase = 'memory';
+    if (fresh || !S.mem || S.mem.pairs !== pairs) {
+      const ids = shuffle(FREE_INGREDIENTS).slice(0, pairs);
+      S.mem = {
+        pairs,
+        cards: shuffle([...ids, ...ids]).map(id => ({ id, up: false, done: false })),
+        open: [],       // 当前翻开还没判定的
+        found: 0,
+        locked: false   // 两张翻开、正在等着盖回去
+      };
+    }
+    const M = S.mem;
+    const won = M.found >= M.pairs;
+
+    paint('sc-memory', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${won ? t('memWin') : t('memFound', { a: M.found, b: M.pairs - M.found })}</div>
+        <div class="mem-board">
+          ${M.cards.map((c, i) => `
+            <button class="mem-card${c.up || c.done ? ' up' : ''}${c.done ? ' done' : ''}"
+                    data-i="${i}" aria-label="${c.up || c.done ? I18N.ing(c.id) : t('memTitle')}">
+              <span class="mem-face back">${Art.cardBack()}</span>
+              <span class="mem-face front">${Art.ingredient(c.id)}</span>
+            </button>`).join('')}
+        </div>
+        <div class="mem-levels">
+          ${[[3, 'memEasy'], [4, 'memMid'], [6, 'memHard']].map(([n, k]) =>
+            `<button class="mid-btn${n === M.pairs ? ' on' : ''}" data-p="${n}">${t(k)}</button>`).join('')}
+          <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+        </div>
+        ${won ? `<div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>` : ''}
+      </div>
+    `, () => {
+      sceneEl.querySelectorAll('.mem-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (busy || M.locked) return;
+          const i = +btn.dataset.i, c = M.cards[i];
+          if (c.up || c.done) return;
+
+          c.up = true;
+          btn.classList.add('up');
+          btn.setAttribute('aria-label', I18N.ing(c.id));
+          M.open.push(i);
+          Sound.tap();
+
+          if (M.open.length < 2) return;
+
+          const [a, b] = M.open;
+          M.open = [];
+          if (M.cards[a].id === M.cards[b].id) {
+            /* 配上了 */
+            M.cards[a].done = M.cards[b].done = true;
+            M.found++;
+            Sound.pick(M.found - 1);
+            sceneEl.querySelectorAll('.mem-card').forEach(el => {
+              if (+el.dataset.i === a || +el.dataset.i === b) { el.classList.add('done'); burst(el, 8); }
+            });
+            const bn = $('.banner');
+            if (M.found >= M.pairs) {
+              Sound.fanfare();
+              later(() => renderMemory(M.pairs, false), 700);
+            } else if (bn) {
+              bn.textContent = t('memFound', { a: M.found, b: M.pairs - M.found });
+            }
+          } else {
+            /* 没配上，盖回去 —— 留够看清的时间 */
+            M.locked = true;
+            Sound.oops();
+            later(() => {
+              M.cards[a].up = M.cards[b].up = false;
+              M.locked = false;
+              sceneEl.querySelectorAll('.mem-card').forEach(el => {
+                const j = +el.dataset.i;
+                if (j === a || j === b) {
+                  el.classList.remove('up');
+                  el.setAttribute('aria-label', t('memTitle'));
+                }
+              });
+            }, 1000);
+          }
+        });
+      });
+
+      sceneEl.querySelectorAll('.mem-levels .mid-btn[data-p]').forEach(b =>
+        b.addEventListener('click', () => { if (!busy) { Sound.tap(); renderMemory(+b.dataset.p); } }));
+      on('#backMini', renderMiniMenu);
+    });
+  }
+
+  /* ---------------- 水果还是蔬菜 ---------------- */
+  function renderSort(fresh = true) {
+    S.phase = 'sort';
+    if (fresh || !S.sort) {
+      S.sort = {
+        queue: shuffle([...shuffle(FRUITS).slice(0, 5), ...shuffle(VEGGIES).slice(0, 5)]),
+        done: 0
+      };
+    }
+    const So = S.sort;
+    const cur = So.queue[0];
+    const won = !cur;
+
+    paint('sc-sort', `
+      <div class="bg">${Art.kitchen()}</div>
+      <div class="layer">
+        <div class="banner">${won ? t('sortWin') : t('sortTitle')}</div>
+        ${won ? '' : `<div class="chip">${t('sortLeft', { n: So.queue.length })}</div>`}
+
+        ${cur ? `<div class="pos sort-item pop-in" id="sortItem">${Art.ingredient(cur)}</div>` : ''}
+
+        <button class="crate-btn left" data-kind="fruit" aria-label="${t('sortFruit')}">
+          ${Art.crate('fruit')}<b>${t('sortFruit')}</b>
+        </button>
+        <button class="crate-btn right" data-kind="veg" aria-label="${t('sortVeg')}">
+          ${Art.crate('veg')}<b>${t('sortVeg')}</b>
+        </button>
+
+        ${won ? `
+          <div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>
+          <div class="sort-actions">
+            <button class="big-btn" id="sortAgain">${t('memAgain')}</button>
+            <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+          </div>`
+        : `<button class="mid-btn alt corner" id="backMini">${t('backHome')}</button>`}
+      </div>
+    `, () => {
+      const item = $('#sortItem');
+      sceneEl.querySelectorAll('.crate-btn').forEach(cb => {
+        cb.addEventListener('click', () => {
+          if (busy || !cur) return;
+          const right = (cb.dataset.kind === 'fruit') === FRUITS.includes(cur);
+          if (!right) {
+            shake(cb);
+            Sound.oops();
+            toast(t('sortOops', { ing: I18N.ing(cur) }), 'warn');
+            return;
+          }
+          So.queue.shift();
+          So.done++;
+          Sound.pick(Math.min(So.done - 1, 7));
+          if (item) item.style.visibility = 'hidden';
+          flyItem(Art.ingredient(cur), item || cb, cb, {
+            endScale: 0.4,
+            onDone: () => {
+              burst(cb, 10);
+              Sound.plop();
+              later(() => renderSort(false), 140);
+            }
+          });
+        });
+      });
+      on('#sortAgain', () => renderSort(true));
+      on('#backMini', renderMiniMenu);
+    });
+  }
+
+  /* ================================================================
      6b. 自由厨房 —— 想放什么放什么，没有对错，做完请客人吃
   ================================================================ */
   const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
@@ -872,6 +1063,8 @@
   function repaint() {
     ({
       title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
+      mini: renderMiniMenu, memory: () => renderMemory(S.mem ? S.mem.pairs : 4, false),
+      sort: () => renderSort(false),
       order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();

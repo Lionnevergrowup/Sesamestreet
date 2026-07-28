@@ -190,3 +190,7 @@ const ING_COLOR = {
 
 /* 自由厨房里可以随便拿的食材（不含虫子和橡果） */
 const FREE_INGREDIENTS = Object.keys(ING_COLOR);
+
+/* 分类小游戏用：这些是水果，那些是蔬菜 */
+const FRUITS = ['banana', 'strawberry', 'blueberry', 'apple', 'lemon', 'grape', 'peach'];
+const VEGGIES = ['tomato', 'carrot', 'corn', 'pumpkin', 'mushroom'];

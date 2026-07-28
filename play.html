@@ -643,6 +643,101 @@ body.muted .ico-off { display: block; }
 .skip-btn:active { transform: translateY(3px); }
 
 .chef-free { left: 840px; bottom: 236px; width: 208px; z-index: 12; }
+
+.mid-btn.warm { background: linear-gradient(180deg, #f4842c, #d96a15); box-shadow: 0 5px 0 #ad5310; }
+.mid-btn.warm:active { box-shadow: 0 1px 0 #ad5310; }
+.mid-btn.on { background: linear-gradient(180deg, #ffd23f, #f0b81e); color: var(--deep); box-shadow: 0 5px 0 #c9911c; }
+.btn-row .mid-btn { font-size: 18px; padding: 12px 10px; }
+
+.mini-grid {
+  position: absolute; left: 50%; top: 130px; transform: translateX(-50%);
+  display: flex; gap: 40px; z-index: 10;
+}
+.mini-card {
+  width: 400px; padding: 26px 22px 22px;
+  border: none; border-radius: 30px; background: var(--cream);
+  box-shadow: 0 10px 0 rgba(43, 35, 64, .25);
+  cursor: pointer; font-family: inherit;
+  display: grid; justify-items: center; gap: 6px;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.mini-card:hover { transform: translateY(-4px); box-shadow: 0 14px 0 rgba(43, 35, 64, .25); }
+.mini-card:active { transform: translateY(4px); box-shadow: 0 3px 0 rgba(43, 35, 64, .25); }
+.mini-art { display: flex; gap: 14px; align-items: flex-end; height: 150px; margin-bottom: 10px; }
+.mini-art svg { height: 100%; width: auto; }
+.mini-art svg:first-child { transform: rotate(-8deg); }
+.mini-art svg:last-child { transform: rotate(8deg); }
+.mini-card b { font-size: 27px; color: var(--deep); }
+.mini-card span:last-child { font-size: 18px; font-weight: 700; color: #7a6a55; }
+
+.mem-board {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; grid-template-columns: repeat(4, 132px); gap: 14px; z-index: 10;
+}
+.mem-card {
+  position: relative; aspect-ratio: 1;
+  border: none; background: none; padding: 0;
+  cursor: pointer; border-radius: 18px;
+  transition: transform .15s ease;
+}
+.mem-face {
+  position: absolute; inset: 0;
+  border-radius: 18px; overflow: hidden;
+  display: grid; place-items: center;
+  transition: opacity .18s ease, transform .25s ease;
+  backface-visibility: hidden;
+}
+.mem-face svg { width: 100%; height: 100%; }
+.mem-face.front {
+  background: #fffdf7; padding: 10px;
+  box-shadow: 0 5px 0 rgba(43, 35, 64, .2);
+  opacity: 0; transform: rotateY(90deg);
+}
+.mem-face.back { box-shadow: 0 5px 0 rgba(43, 35, 64, .25); }
+.mem-card.up .front { opacity: 1; transform: rotateY(0); }
+.mem-card.up .back { opacity: 0; transform: rotateY(-90deg); }
+.mem-card.done { cursor: default; }
+.mem-card.done .front { background: #eaf7ee; box-shadow: 0 0 0 4px rgba(74,168,107,.55); }
+.mem-card:not(.done):hover { transform: translateY(-3px); }
+
+.mem-levels {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  display: flex; gap: 10px; z-index: 20;
+}
+.mem-levels .mid-btn { flex: none; min-width: 118px; }
+.chef-mini { right: 40px; bottom: 110px; width: 180px; z-index: 25; }
+
+.sort-item {
+  left: 50%; top: 152px; margin-left: -105px;
+  width: 210px; height: 210px; z-index: 20;
+  filter: drop-shadow(0 10px 12px rgba(20,50,35,.3));
+  animation: popIn .4s cubic-bezier(.2,1.5,.4,1) both, float 2.6s ease-in-out .4s infinite;
+}
+.sort-item svg { width: 100%; height: 100%; }
+.crate-btn {
+  position: absolute; bottom: 40px;
+  width: 260px; padding: 0;
+  border: none; background: none; cursor: pointer;
+  display: grid; justify-items: center; gap: 4px;
+  font-family: inherit; z-index: 20;
+  transition: transform .1s ease;
+}
+.crate-btn.left { left: 90px; }
+.crate-btn.right { right: 90px; }
+.crate-btn svg { width: 208px; height: auto;
+  filter: drop-shadow(0 3px 0 rgba(43,35,64,.35)) drop-shadow(0 10px 12px rgba(20,50,35,.35)); }
+.crate-btn b {
+  font-size: 30px; font-weight: 900; color: #fff;
+  background: rgba(43, 35, 64, .62); padding: 6px 26px; border-radius: 999px;
+}
+.crate-btn:hover { transform: translateY(-4px); }
+.crate-btn:active { transform: translateY(4px); }
+.sort-actions {
+  position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 12px; z-index: 30;
+}
+.sort-actions .mid-btn { flex: none; }
+.mid-btn.corner { position: absolute; left: 20px; top: 84px; flex: none; z-index: 30; }
 </style>
 
 <div id="viewport">
@@ -1955,6 +2050,39 @@ const Art = (() => {
     `, '0 0 1280 720', 'art-bg');
   }
 
+  /* \u8bb0\u5fc6\u914d\u5bf9\u7684\u5361\u80cc \u2014\u2014 \u7528\u56f4\u88d9\u4e0a\u90a3\u4e2a\u5708\u4f5c\u56fe\u6848\uff0c\u548c\u4e3b\u53a8\u662f\u4e00\u5957 */
+  const cardBack = () => svg(`
+    <rect width="100" height="100" rx="16" fill="#8b5fe0"/>
+    <rect x="7" y="7" width="86" height="86" rx="11" fill="#a888f0"/>
+    <circle cx="50" cy="50" r="24" fill="none" stroke="#fff6e6" stroke-width="7"/>
+    <path d="M50 34v32M34 50h32" stroke="#fff6e6" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#fff6e6" opacity=".5">
+      <circle cx="19" cy="19" r="5"/><circle cx="81" cy="19" r="5"/>
+      <circle cx="19" cy="81" r="5"/><circle cx="81" cy="81" r="5"/>
+    </g>
+  `, '0 0 100 100', 'art-card');
+
+  /* \u5206\u7c7b\u6e38\u620f\u7684\u4e24\u4e2a\u7b50\uff0c\u989c\u8272\u548c\u6807\u7b7e\u90fd\u4e0d\u4e00\u6837\uff0c\u4e00\u773c\u80fd\u5206\u6e05 */
+  const crate = (kind) => {
+    const k = kind === 'fruit'
+      ? { body: '#ef4b52', dark: '#c93b42' }
+      : { body: '#4aa86b', dark: '#3a8f58' };
+    const mark = kind === 'fruit'
+      ? `<circle cx="60" cy="36" r="19" fill="#ffd23f"/>
+         <path d="M60 17c9-9 19-8 22-6-3 9-13 11-22 6Z" fill="#4fae63"/>`
+      : `<path d="M60 58 44 20c-3-7 3-12 16-12s19 5 16 12Z" fill="#f4842c"/>
+         <path d="M60 10c-3-11-11-16-19-16 2 10 7 15 19 16Z" fill="#3d8a4e"/>`;
+    return svg(`
+      ${mark}
+      <path d="M14 66h92l-11 54a14 14 0 0 1-14 11H39a14 14 0 0 1-14-11Z" fill="${k.body}"/>
+      <path d="M14 66h92l-3 15H17Z" fill="${k.dark}"/>
+      <path d="M8 70h104" stroke="${k.dark}" stroke-width="12" stroke-linecap="round"/>
+      <g stroke="${k.dark}" stroke-width="4" opacity=".55">
+        <path d="M36 84l5 44M60 84v46M84 84l-5 44"/>
+      </g>
+    `, '0 0 120 140', 'art-crate');
+  };
+
   /* \u7bee\u5b50\uff1a\u91c7\u96c6\u573a\u666f\u91cc\u88c5\u6218\u5229\u54c1 */
   const basket = () => svg(`
     <path d="M10 30h100l-12 56a14 14 0 0 1-14 12H36a14 14 0 0 1-14-12Z" fill="#c98a4b"/>
@@ -1969,7 +2097,7 @@ const Art = (() => {
       '0 0 100 100', 'art-star');
 
   return { svg, chef, customer, ingredient, dish, creation, blend, appliance, truck,
-           backdrop, street, road, kitchen, basket, star, leaf };
+           backdrop, street, road, kitchen, basket, cardBack, crate, star, leaf };
 })();
 </script>
 
@@ -2166,6 +2294,10 @@ const ING_COLOR = {
 
 /* \u81ea\u7531\u53a8\u623f\u91cc\u53ef\u4ee5\u968f\u4fbf\u62ff\u7684\u98df\u6750\uff08\u4e0d\u542b\u866b\u5b50\u548c\u6a61\u679c\uff09 */
 const FREE_INGREDIENTS = Object.keys(ING_COLOR);
+
+/* \u5206\u7c7b\u5c0f\u6e38\u620f\u7528\uff1a\u8fd9\u4e9b\u662f\u6c34\u679c\uff0c\u90a3\u4e9b\u662f\u852c\u83dc */
+const FRUITS = ['banana', 'strawberry', 'blueberry', 'apple', 'lemon', 'grape', 'peach'];
+const VEGGIES = ['tomato', 'carrot', 'corn', 'pumpkin', 'mushroom'];
 </script>
 
 <script>
@@ -2191,6 +2323,19 @@ const I18N = (() => {
       freeClear: '\u5012\u6389\u91cd\u6765',
       freeDone: '\u51fa\u9505\u5566\uff01\u8fd9\u662f\u4f60\u81ea\u5df1\u60f3\u51fa\u6765\u7684',
       freeAgain: '\u518d\u505a\u4e00\u4e2a',
+      miniGames: '\u5c0f\u6e38\u620f',
+      memTitle: '\u7ffb\u724c\u627e\u4e00\u6837\u7684',
+      memDesc: '\u8bb0\u4f4f\u5b83\u4eec\u5728\u54ea\u513f',
+      memEasy: '\u5bb9\u6613', memMid: '\u4e00\u822c', memHard: '\u6709\u70b9\u96be',
+      memFound: '\u627e\u5230{a}\u5bf9\uff0c\u8fd8\u5269{b}\u5bf9',
+      memWin: '\u5168\u90e8\u627e\u5230\u5566\uff01',
+      memAgain: '\u518d\u6765\u4e00\u5c40',
+      sortTitle: '\u8fd9\u662f\u6c34\u679c\u8fd8\u662f\u852c\u83dc\uff1f',
+      sortDesc: '\u653e\u8fdb\u5bf9\u7684\u7b50\u91cc',
+      sortFruit: '\u6c34\u679c', sortVeg: '\u852c\u83dc',
+      sortOops: '\u518d\u60f3\u60f3\uff0c{ing}\u653e\u54ea\u4e2a\u7b50\uff1f',
+      sortLeft: '\u8fd8\u5269{n}\u4e2a',
+      sortWin: '\u5168\u90fd\u5206\u597d\u5566\uff01',
       how1: '\u542c\u542c\u5ba2\u4eba\u60f3\u5403\u4ec0\u4e48',
       how2: '\u5f00\u8f66\u53bb\u628a\u65b0\u9c9c\u98df\u6750\u6458\u56de\u6765',
       how3: '\u7167\u7740\u98df\u8c31\u4e00\u6b65\u4e00\u6b65\u505a',
@@ -2240,6 +2385,19 @@ const I18N = (() => {
       freeClear: 'Tip it out',
       freeDone: 'Served! You invented this one',
       freeAgain: 'Make another',
+      miniGames: 'Mini games',
+      memTitle: 'Find the pairs',
+      memDesc: 'Remember where they are',
+      memEasy: 'Easy', memMid: 'Medium', memHard: 'Tricky',
+      memFound: '{a} found, {b} to go',
+      memWin: 'You found them all!',
+      memAgain: 'Play again',
+      sortTitle: 'Fruit or vegetable?',
+      sortDesc: 'Drop it in the right crate',
+      sortFruit: 'Fruit', sortVeg: 'Vegetable',
+      sortOops: 'Have another think \u2014 where does the {ing} go?',
+      sortLeft: '{n} to go',
+      sortWin: 'All sorted!',
       how1: 'Listen to what the customer wants',
       how2: 'Drive out and pick fresh ingredients',
       how3: 'Follow the recipe step by step',
@@ -2325,7 +2483,9 @@ const I18N = (() => {
     forage: null,
     cook: null,
     serve: null,
-    drive: null
+    drive: null,
+    mem: null,
+    sort: null
   };
 
   const level = () => LEVELS[S.level];
@@ -2543,6 +2703,7 @@ const I18N = (() => {
           <div class="btn-row">
             <button class="mid-btn" id="pick">${t('pickLevel')}</button>
             <button class="mid-btn alt" id="free">${t('freeKitchen')}</button>
+            <button class="mid-btn warm" id="mini">${t('miniGames')}</button>
           </div>
           <div class="how">
             ${steps.map(([art, label], i) => `
@@ -2555,6 +2716,7 @@ const I18N = (() => {
       on('#play', () => { S.level = firstUndone(); startLevel(); });
       on('#pick', renderLevelSelect);
       on('#free', renderFree);
+      on('#mini', renderMiniMenu);
     });
   }
 
@@ -2986,6 +3148,193 @@ const I18N = (() => {
   }
 
   /* ================================================================
+     1c. \u5c0f\u6e38\u620f \u2014\u2014 \u7ec3\u7684\u662f\u8ddf\u505a\u83dc\u5b8c\u5168\u4e0d\u540c\u7684\u4e24\u79cd\u672c\u4e8b
+  ================================================================ */
+  function renderMiniMenu() {
+    S.phase = 'mini';
+    paint('sc-mini', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${t('miniGames')}</div>
+        <div class="mini-grid">
+          <button class="mini-card" id="goMem">
+            <span class="mini-art">${Art.cardBack()}${Art.cardBack()}</span>
+            <b>${t('memTitle')}</b><span>${t('memDesc')}</span>
+          </button>
+          <button class="mini-card" id="goSort">
+            <span class="mini-art">${Art.crate('fruit')}${Art.crate('veg')}</span>
+            <b>${t('sortTitle')}</b><span>${t('sortDesc')}</span>
+          </button>
+        </div>
+        <button class="big-btn bottom" id="backHome">${t('backHome')}</button>
+      </div>
+    `, () => {
+      on('#goMem', () => renderMemory(4));
+      on('#goSort', () => renderSort(true));
+      on('#backHome', renderTitle);
+    });
+  }
+
+  /* ---------------- \u8bb0\u5fc6\u914d\u5bf9 ---------------- */
+  function renderMemory(pairs, fresh = true) {
+    S.phase = 'memory';
+    if (fresh || !S.mem || S.mem.pairs !== pairs) {
+      const ids = shuffle(FREE_INGREDIENTS).slice(0, pairs);
+      S.mem = {
+        pairs,
+        cards: shuffle([...ids, ...ids]).map(id => ({ id, up: false, done: false })),
+        open: [],       // \u5f53\u524d\u7ffb\u5f00\u8fd8\u6ca1\u5224\u5b9a\u7684
+        found: 0,
+        locked: false   // \u4e24\u5f20\u7ffb\u5f00\u3001\u6b63\u5728\u7b49\u7740\u76d6\u56de\u53bb
+      };
+    }
+    const M = S.mem;
+    const won = M.found >= M.pairs;
+
+    paint('sc-memory', `
+      <div class="bg">${Art.street()}</div>
+      <div class="layer dim">
+        <div class="banner">${won ? t('memWin') : t('memFound', { a: M.found, b: M.pairs - M.found })}</div>
+        <div class="mem-board">
+          ${M.cards.map((c, i) => `
+            <button class="mem-card${c.up || c.done ? ' up' : ''}${c.done ? ' done' : ''}"
+                    data-i="${i}" aria-label="${c.up || c.done ? I18N.ing(c.id) : t('memTitle')}">
+              <span class="mem-face back">${Art.cardBack()}</span>
+              <span class="mem-face front">${Art.ingredient(c.id)}</span>
+            </button>`).join('')}
+        </div>
+        <div class="mem-levels">
+          ${[[3, 'memEasy'], [4, 'memMid'], [6, 'memHard']].map(([n, k]) =>
+            `<button class="mid-btn${n === M.pairs ? ' on' : ''}" data-p="${n}">${t(k)}</button>`).join('')}
+          <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+        </div>
+        ${won ? `<div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>` : ''}
+      </div>
+    `, () => {
+      sceneEl.querySelectorAll('.mem-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (busy || M.locked) return;
+          const i = +btn.dataset.i, c = M.cards[i];
+          if (c.up || c.done) return;
+
+          c.up = true;
+          btn.classList.add('up');
+          btn.setAttribute('aria-label', I18N.ing(c.id));
+          M.open.push(i);
+          Sound.tap();
+
+          if (M.open.length < 2) return;
+
+          const [a, b] = M.open;
+          M.open = [];
+          if (M.cards[a].id === M.cards[b].id) {
+            /* \u914d\u4e0a\u4e86 */
+            M.cards[a].done = M.cards[b].done = true;
+            M.found++;
+            Sound.pick(M.found - 1);
+            sceneEl.querySelectorAll('.mem-card').forEach(el => {
+              if (+el.dataset.i === a || +el.dataset.i === b) { el.classList.add('done'); burst(el, 8); }
+            });
+            const bn = $('.banner');
+            if (M.found >= M.pairs) {
+              Sound.fanfare();
+              later(() => renderMemory(M.pairs, false), 700);
+            } else if (bn) {
+              bn.textContent = t('memFound', { a: M.found, b: M.pairs - M.found });
+            }
+          } else {
+            /* \u6ca1\u914d\u4e0a\uff0c\u76d6\u56de\u53bb \u2014\u2014 \u7559\u591f\u770b\u6e05\u7684\u65f6\u95f4 */
+            M.locked = true;
+            Sound.oops();
+            later(() => {
+              M.cards[a].up = M.cards[b].up = false;
+              M.locked = false;
+              sceneEl.querySelectorAll('.mem-card').forEach(el => {
+                const j = +el.dataset.i;
+                if (j === a || j === b) {
+                  el.classList.remove('up');
+                  el.setAttribute('aria-label', t('memTitle'));
+                }
+              });
+            }, 1000);
+          }
+        });
+      });
+
+      sceneEl.querySelectorAll('.mem-levels .mid-btn[data-p]').forEach(b =>
+        b.addEventListener('click', () => { if (!busy) { Sound.tap(); renderMemory(+b.dataset.p); } }));
+      on('#backMini', renderMiniMenu);
+    });
+  }
+
+  /* ---------------- \u6c34\u679c\u8fd8\u662f\u852c\u83dc ---------------- */
+  function renderSort(fresh = true) {
+    S.phase = 'sort';
+    if (fresh || !S.sort) {
+      S.sort = {
+        queue: shuffle([...shuffle(FRUITS).slice(0, 5), ...shuffle(VEGGIES).slice(0, 5)]),
+        done: 0
+      };
+    }
+    const So = S.sort;
+    const cur = So.queue[0];
+    const won = !cur;
+
+    paint('sc-sort', `
+      <div class="bg">${Art.kitchen()}</div>
+      <div class="layer">
+        <div class="banner">${won ? t('sortWin') : t('sortTitle')}</div>
+        ${won ? '' : `<div class="chip">${t('sortLeft', { n: So.queue.length })}</div>`}
+
+        ${cur ? `<div class="pos sort-item pop-in" id="sortItem">${Art.ingredient(cur)}</div>` : ''}
+
+        <button class="crate-btn left" data-kind="fruit" aria-label="${t('sortFruit')}">
+          ${Art.crate('fruit')}<b>${t('sortFruit')}</b>
+        </button>
+        <button class="crate-btn right" data-kind="veg" aria-label="${t('sortVeg')}">
+          ${Art.crate('veg')}<b>${t('sortVeg')}</b>
+        </button>
+
+        ${won ? `
+          <div class="pos chef-mini pop-in bob">${Art.chef('cheer')}</div>
+          <div class="sort-actions">
+            <button class="big-btn" id="sortAgain">${t('memAgain')}</button>
+            <button class="mid-btn alt" id="backMini">${t('backHome')}</button>
+          </div>`
+        : `<button class="mid-btn alt corner" id="backMini">${t('backHome')}</button>`}
+      </div>
+    `, () => {
+      const item = $('#sortItem');
+      sceneEl.querySelectorAll('.crate-btn').forEach(cb => {
+        cb.addEventListener('click', () => {
+          if (busy || !cur) return;
+          const right = (cb.dataset.kind === 'fruit') === FRUITS.includes(cur);
+          if (!right) {
+            shake(cb);
+            Sound.oops();
+            toast(t('sortOops', { ing: I18N.ing(cur) }), 'warn');
+            return;
+          }
+          So.queue.shift();
+          So.done++;
+          Sound.pick(Math.min(So.done - 1, 7));
+          if (item) item.style.visibility = 'hidden';
+          flyItem(Art.ingredient(cur), item || cb, cb, {
+            endScale: 0.4,
+            onDone: () => {
+              burst(cb, 10);
+              Sound.plop();
+              later(() => renderSort(false), 140);
+            }
+          });
+        });
+      });
+      on('#sortAgain', () => renderSort(true));
+      on('#backMini', renderMiniMenu);
+    });
+  }
+
+  /* ================================================================
      6b. \u81ea\u7531\u53a8\u623f \u2014\u2014 \u60f3\u653e\u4ec0\u4e48\u653e\u4ec0\u4e48\uff0c\u6ca1\u6709\u5bf9\u9519\uff0c\u505a\u5b8c\u8bf7\u5ba2\u4eba\u5403
   ================================================================ */
   const APPLIANCES = ['blender', 'pot', 'griddle', 'oven', 'freezer'];
@@ -3176,6 +3525,8 @@ const I18N = (() => {
   function repaint() {
     ({
       title: renderTitle, select: renderLevelSelect, free: () => renderFree(false),
+      mini: renderMiniMenu, memory: () => renderMemory(S.mem ? S.mem.pairs : 4, false),
+      sort: () => renderSort(false),
       order: renderOrder, drive: renderDrive, forage: renderForage,
       cook: renderCook, serve: renderServe, finale: renderFinale
     }[S.phase] || renderTitle)();
