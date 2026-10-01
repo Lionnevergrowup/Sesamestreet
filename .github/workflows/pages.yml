@@ -23,7 +23,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # 版本号要数提交总数，所以得拉完整历史（默认只拉 1 个提交会数成 v1）
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -31,8 +34,10 @@ jobs:
 
       # 单文件版本在这里重新生成，保证线上的 play.html 一定跟源码一致，
       # 不会因为有人忘了跑 build.js 而发布旧的那份。
+      # 先盖版本号再打包，这样多文件版和单文件版显示的是同一个版本。
       - name: Assemble the site
         run: |
+          node stamp.js
           node build.js
           mkdir -p _site
           cp index.html play.html _site/

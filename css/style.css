@@ -63,6 +63,19 @@ html, body {
 
 #fx { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
 
+/*
+  版本号：右下角贴边的一行小字，只是给"我现在看的是哪一版"用的。
+  pointer-events: none 不能省 —— 它压在各场景的右下角，不能吞掉任何点击。
+  高度只有 16px，贴着底边，在跳过按钮（离底 26px）之下。
+*/
+#version {
+  position: absolute; right: 14px; bottom: 5px; z-index: 45;
+  font-size: 12px; font-weight: 700; letter-spacing: .02em; line-height: 16px;
+  color: rgba(255, 255, 255, .8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+  pointer-events: none;
+}
+
 /* ---------------- HUD ---------------- */
 
 #hud {

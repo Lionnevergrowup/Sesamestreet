@@ -1379,6 +1379,14 @@
     if (!document.hidden && Sound.enabled && !Sound.running) Sound.unlock();
   });
 
+  /* ---------------- 版本号 ---------------- */
+  /* 没打包的（本地直接打开）显示 dev；发布出去的是 v提交数 · 提交号 · 日期 */
+  const versionText = VERSION.sha === 'dev'
+    ? 'dev'
+    : `v${VERSION.build} · ${VERSION.sha} · ${VERSION.date}`;
+  document.getElementById('version').textContent = versionText;
+  document.documentElement.dataset.version = versionText;
+
   /* ---------------- 启动 ---------------- */
   fit();
   updateStars();

@@ -14,7 +14,7 @@ const path = require('path');
 const root = __dirname;
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 
-const SCRIPTS = ['js/store.js', 'js/audio.js', 'js/art.js', 'js/recipes.js', 'js/i18n.js', 'js/game.js'];
+const SCRIPTS = ['js/version.js', 'js/store.js', 'js/audio.js', 'js/art.js', 'js/recipes.js', 'js/i18n.js', 'js/game.js'];
 
 const html = read('index.html');
 

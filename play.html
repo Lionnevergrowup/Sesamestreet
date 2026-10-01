@@ -60,6 +60,14 @@ html, body {
 
 #fx { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
 
+#version {
+  position: absolute; right: 14px; bottom: 5px; z-index: 45;
+  font-size: 12px; font-weight: 700; letter-spacing: .02em; line-height: 16px;
+  color: rgba(255, 255, 255, .8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+  pointer-events: none;
+}
+
 #hud {
   position: absolute;
   inset: 14px 16px auto 16px;
@@ -881,6 +889,7 @@ button.chef-title:focus-visible { outline: 5px solid var(--cream); outline-offse
     </div>
 
     <div id="fx" aria-hidden="true"></div>
+    <div id="version" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -890,6 +899,14 @@ button.chef-title:focus-visible { outline: 5px solid var(--cream); outline-offse
     <p data-i18n="rotate">&#25226;&#35774;&#22791;&#27178;&#36807;&#26469;&#29609;&#26356;&#22909;&#21734;&#65281;</p>
   </div>
 </div>
+
+<script>
+/*
+  \u7248\u672c\u4fe1\u606f\u3002\u672c\u5730\u76f4\u63a5\u6253\u5f00\u65f6\u663e\u793a dev\uff1b
+  \u53d1\u5e03\u65f6 stamp.js \u4f1a\u628a\u5b83\u6539\u5199\u6210\u771f\u5b9e\u7684\u63d0\u4ea4\u53f7\uff0c\u9875\u9762\u53f3\u4e0b\u89d2\u5c31\u80fd\u770b\u5230\u3002
+*/
+const VERSION = { build: 0, sha: 'dev', date: '' };
+</script>
 
 <script>
 /* ------------------------------------------------------------------
@@ -4015,6 +4032,14 @@ const I18N = (() => {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && Sound.enabled && !Sound.running) Sound.unlock();
   });
+
+  /* ---------------- \u7248\u672c\u53f7 ---------------- */
+  /* \u6ca1\u6253\u5305\u7684\uff08\u672c\u5730\u76f4\u63a5\u6253\u5f00\uff09\u663e\u793a dev\uff1b\u53d1\u5e03\u51fa\u53bb\u7684\u662f v\u63d0\u4ea4\u6570 \u00b7 \u63d0\u4ea4\u53f7 \u00b7 \u65e5\u671f */
+  const versionText = VERSION.sha === 'dev'
+    ? 'dev'
+    : `v${VERSION.build} \u00b7 ${VERSION.sha} \u00b7 ${VERSION.date}`;
+  document.getElementById('version').textContent = versionText;
+  document.documentElement.dataset.version = versionText;
 
   /* ---------------- \u542f\u52a8 ---------------- */
   fit();
