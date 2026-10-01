@@ -1365,17 +1365,19 @@
   /*
     浏览器要求先有用户交互才让出声。
     键盘也算交互 —— 只听 pointerdown 的话，纯键盘玩的人一路是静音的。
-    另外首次不一定成功（音频上下文可能还没就绪），所以确认响起来了才撤监听。
+    另外首次不一定成功（音频上下文可能还没就绪）。
+    监听不撤了：iOS 切走应用 / 来电 / 锁屏后上下文会被系统打断，
+    以前撤掉监听就没人再去唤醒它，回来之后整局无声。
+    现在每次点击只在"没在响"的时候才去唤醒，平时一个判断，几乎没开销。
+    click / touchend 也听 —— Safari 只认这两个算"用户手势"，pointerdown 有时不算。
   */
-  const unlockAudio = () => {
-    Sound.unlock();
-    if (Sound.running) {
-      window.removeEventListener('pointerdown', unlockAudio);
-      window.removeEventListener('keydown', unlockAudio);
-    }
-  };
-  window.addEventListener('pointerdown', unlockAudio);
-  window.addEventListener('keydown', unlockAudio);
+  const unlockAudio = () => { if (!Sound.running) Sound.unlock(); };
+  ['pointerdown', 'touchend', 'click', 'keydown'].forEach(ev =>
+    window.addEventListener(ev, unlockAudio, true));
+  /* 从后台切回来也主动试一次（不一定被允许，但被允许的话就不用等下一次点击了） */
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && Sound.enabled && !Sound.running) Sound.unlock();
+  });
 
   /* ---------------- 启动 ---------------- */
   fit();

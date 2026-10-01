@@ -18,6 +18,13 @@ const Sound = (() => {
       if (!AC) return null;
       try { ctx = new AC(); } catch (e) { return null; }
 
+      /*
+        iOS 的静音拨片默认会把网页声音一并静掉。
+        声明成"播放"类音频（Safari 16.4+）就不受拨片管了，
+        像游戏、视频那样；不支持的浏览器直接忽略。
+      */
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* 忽略 */ }
+
       /* 压缩器兜底：同时响好几个音也不会削顶 */
       master = ctx.createDynamicsCompressor();
       master.threshold.value = -14;
@@ -34,7 +41,12 @@ const Sound = (() => {
       musicBus.gain.value = 0.34;      // 音乐要垫在底下，别盖住音效
       musicBus.connect(master);
     }
-    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    /*
+      只要不是 running 就去恢复，不光是 suspended。
+      iOS 上切走应用、来电、锁屏之后状态会变成 'interrupted'，
+      以前只认 suspended，结果那之后整局游戏就永远哑了。
+    */
+    if (ctx.state !== 'running') ctx.resume().catch(() => {});
     return ctx;
   }
 
