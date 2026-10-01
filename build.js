@@ -49,8 +49,17 @@ const asciiHTML = s => s.replace(/[^\x00-\x7F]/gu,
 */
 const css = read('css/style.css').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\n{3,}/g, '\n\n').trim();
 
+/*
+  单文件版没有旁边的 icons/ 目录可引用，图标只能内联成 data 地址。
+  SVG 比 PNG 小得多，浏览器标签页用它足够；转义后是纯 ASCII，不破坏"整个文件都是 ASCII"的保证。
+  （iOS 添加到主屏幕要的 PNG 只有多文件版带 —— 单文件版是拿来发给人直接打开的。）
+*/
+const iconSvg = read('icons/icon.svg').replace(/>\s+</g, '><').replace(/\s+/g, ' ').trim();
+const iconHref = 'data:image/svg+xml,' + encodeURIComponent(iconSvg);
+
 const out = `<meta charset="utf-8">
 <title>${asciiHTML(title)}</title>
+<link rel="icon" type="image/svg+xml" href="${iconHref}">
 
 <style>
 ${css}

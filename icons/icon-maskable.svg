@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset="1" stop-color="#ffc42e"/></linearGradient></defs><rect width="512" height="512" fill="url(#g)"/><g transform="translate(256 256) scale(0.74) translate(-256 -256)">
+  <!-- 身体毛边：一圈小圆，近看是毛茸茸，远看就是一个圆 -->
+  <g fill="#8b5fe0">
+    <circle cx="402.0" cy="312.0" r="30"/><circle cx="393.2" cy="359.9" r="30"/><circle cx="367.8" cy="402.0" r="30"/><circle cx="329.0" cy="433.2" r="30"/><circle cx="281.4" cy="449.9" r="30"/><circle cx="230.6" cy="449.9" r="30"/><circle cx="183.0" cy="433.2" r="30"/><circle cx="144.2" cy="402.0" r="30"/><circle cx="118.8" cy="359.9" r="30"/><circle cx="110.0" cy="312.0" r="30"/><circle cx="118.8" cy="264.1" r="30"/><circle cx="144.2" cy="222.0" r="30"/><circle cx="183.0" cy="190.8" r="30"/><circle cx="230.6" cy="174.1" r="30"/><circle cx="281.4" cy="174.1" r="30"/><circle cx="329.0" cy="190.8" r="30"/><circle cx="367.8" cy="222.0" r="30"/><circle cx="393.2" cy="264.1" r="30"/>
+    <ellipse cx="256" cy="312" rx="148" ry="142"/>
+  </g>
+  <!-- 脸颊 -->
+  <ellipse cx="148" cy="352" rx="28" ry="19" fill="#f4718f" opacity=".55"/>
+  <ellipse cx="364" cy="352" rx="28" ry="19" fill="#f4718f" opacity=".55"/>
+  <!-- 眼睛 -->
+  <circle cx="198" cy="296" r="40" fill="#fff"/>
+  <circle cx="314" cy="296" r="40" fill="#fff"/>
+  <circle cx="206" cy="302" r="21" fill="#2b2340"/>
+  <circle cx="322" cy="302" r="21" fill="#2b2340"/>
+  <circle cx="214" cy="293" r="7" fill="#fff"/>
+  <circle cx="330" cy="293" r="7" fill="#fff"/>
+  <!-- 笑 -->
+  <path d="M196 372q60 62 120 0" fill="none" stroke="#2b2340" stroke-width="20" stroke-linecap="round"/>
+  <!-- 厨师帽：描一圈浅米色边，白帽子压在黄底上才看得清 -->
+  <g fill="#fffdf7" stroke="#e3d6bb" stroke-width="8">
+    <circle cx="188" cy="124" r="52"/>
+    <circle cx="324" cy="124" r="52"/>
+    <circle cx="256" cy="98" r="64"/>
+    <rect x="150" y="124" width="212" height="76" rx="24"/>
+  </g>
+  <rect x="150" y="176" width="212" height="24" rx="12" fill="#ffb03a"/>
+</g></svg>

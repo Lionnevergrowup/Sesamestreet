@@ -103,6 +103,8 @@
 
 ```
 index.html          页面骨架和 HUD（开发时用这个）
+manifest.webmanifest  网页清单：加到手机主屏幕时的名字、图标、横屏全屏
+icons/              网站图标（咕噜戴厨师帽的脸）：SVG 源文件 + 各尺寸 PNG
 build.js            打包脚本：node build.js → play.html
 stamp.js            发布时把提交号写进 js/version.js（部署流程自动跑，平时不用管）
 play.html           单文件版本（所有样式和脚本内联），部署用的就是它
@@ -117,7 +119,7 @@ js/game.js          场景状态机与交互
 .github/workflows/  推到 main 自动发布到 GitHub Pages
 ```
 
-没有依赖、没有第三方库、没有任何外部请求。游戏本体是 9 个文件（`index.html` + 样式 + 7 个脚本），
+没有依赖、没有第三方库、没有任何外部请求。游戏本体是 `index.html` + 样式 + 7 个脚本，外加图标和清单，
 `build.js` 和 `play.html` 只是为了部署方便。
 
 ## 本地运行
@@ -130,6 +132,17 @@ python3 -m http.server 8000
 # 改完源文件后重新打包单文件版：
 node build.js
 ```
+
+### 网站图标
+
+浏览器标签页、收藏夹、手机主屏幕用的是同一个图标：咕噜戴着厨师帽的脸，黄底。
+图标是原创的，和游戏里的咕噜同一套配色，线条画得粗，缩到 16 像素也认得出。
+
+- `icons/icon.svg` 是源文件，标签页直接用它（任意尺寸都清楚）；
+- `favicon-32.png` / `apple-touch-icon.png`（180）给不认 SVG 图标的浏览器和 iOS；
+- `icon-192.png` / `icon-512.png` / `icon-maskable-512.png` 给 Android 和"添加到主屏幕"，
+  其中 maskable 那张把内容缩进了安全区，被系统裁成圆形也不会切掉帽子；
+- 单文件版 `play.html` 没有旁边的目录可引用，所以把 SVG 内联成 data 地址放进去了。
 
 ### 版本号
 

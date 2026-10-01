@@ -40,8 +40,8 @@ jobs:
           node stamp.js
           node build.js
           mkdir -p _site
-          cp index.html play.html _site/
-          cp -r css js _site/
+          cp index.html play.html manifest.webmanifest _site/
+          cp -r css js icons _site/
 
       - uses: actions/configure-pages@v5
         with:
