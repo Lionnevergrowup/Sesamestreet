@@ -46,9 +46,53 @@ const Sound = (() => {
       iOS 上切走应用、来电、锁屏之后状态会变成 'interrupted'，
       以前只认 suspended，结果那之后整局游戏就永远哑了。
     */
-    if (ctx.state !== 'running') ctx.resume().catch(() => {});
+    if (ctx.state !== 'running') {
+      try { const r = ctx.resume(); if (r && r.catch) r.catch(() => {}); } catch (e) { /* 忽略 */ }
+    }
     return ctx;
   }
+
+  /*
+    iOS 静音拨片的老办法。
+    拨片拨到静音时，网页里 WebAudio 的声音会被整个吞掉 —— 游戏里"所有操作都没声音"
+    最典型的就是这个原因。audioSession（上面那个）只有 iOS 16.4+ 才认；
+    更早的系统要靠这一招：同时循环播放一段无声的 <audio>，
+    系统就把这个页面当成"在播放媒体"，不再受拨片管。
+    内容是纯静音（0x80 = 8 位无符号 PCM 的零点），所以不会真的出声；
+    只在声音开着、页面看得见的时候放，别白占着音频会话。
+  */
+  let keepAlive = null;
+  function silentWavURI() {
+    const n = 800, bytes = new Uint8Array(44 + n);
+    const dv = new DataView(bytes.buffer);
+    const str = (o, t) => { for (let i = 0; i < t.length; i++) bytes[o + i] = t.charCodeAt(i); };
+    str(0, 'RIFF'); dv.setUint32(4, 36 + n, true); str(8, 'WAVE'); str(12, 'fmt ');
+    dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);   // PCM 单声道
+    dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true);                          // 8kHz
+    dv.setUint16(32, 1, true); dv.setUint16(34, 8, true);                                // 8 位
+    str(36, 'data'); dv.setUint32(40, n, true);
+    bytes.fill(0x80, 44);
+    let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return 'data:audio/wav;base64,' + btoa(bin);
+  }
+  function keepAliveOn() {
+    if (!enabled) return;
+    try {
+      if (!keepAlive) {
+        keepAlive = document.createElement('audio');
+        keepAlive.setAttribute('playsinline', '');
+        keepAlive.setAttribute('aria-hidden', 'true');
+        keepAlive.loop = true;
+        keepAlive.src = silentWavURI();
+      }
+      if (keepAlive.paused) {
+        const r = keepAlive.play();
+        if (r && r.catch) r.catch(() => {});      // 没有用户手势时会被拒，下次点击再试
+      }
+    } catch (e) { /* 没有就算了，只是少一层保险 */ }
+  }
+  function keepAliveOff() { try { if (keepAlive && !keepAlive.paused) keepAlive.pause(); } catch (e) { /* 忽略 */ } }
+  document.addEventListener('visibilitychange', () => { document.hidden ? keepAliveOff() : keepAliveOn(); });
 
   /* 一个音符。when 给绝对时间（音乐用），不给就是"马上"（音效用）。 */
   function note(freq, {
@@ -65,7 +109,8 @@ const Sound = (() => {
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(gain, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g).connect(bus || sfxBus);
+    osc.connect(g);
+    g.connect(bus || sfxBus);
     osc.start(t);
     osc.stop(t + dur + 0.02);
   }
@@ -87,7 +132,9 @@ const Sound = (() => {
     const g = ctx.createGain();
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(filter).connect(g).connect(bus || sfxBus);
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(bus || sfxBus);
     src.start(t);
     src.stop(t + dur);
   }
@@ -157,13 +204,20 @@ const Sound = (() => {
     toggle() {
       enabled = !enabled;
       Store.set('gulu.sound', enabled ? 'on' : 'off');
-      if (enabled) { ensure(); this.tap(); if (musicWanted) startMusic(); }
-      else stopMusic();
+      if (enabled) { ensure(); keepAliveOn(); this.tap(); if (musicWanted) startMusic(); }
+      else { stopMusic(); keepAliveOff(); }
       return enabled;
     },
 
     /* 浏览器要求首次交互后才能出声 */
-    unlock() { ensure(); startMusic(); },
+    unlock() { ensure(); startMusic(); keepAliveOn(); },
+
+    /* 给页面右下角的状态字用：muted / none / idle / running / suspended / interrupted */
+    status() {
+      if (!enabled) return 'muted';
+      if (!(window.AudioContext || window.webkitAudioContext)) return 'none';
+      return ctx ? ctx.state : 'idle';
+    },
 
     /* 声音是不是真的跑起来了 —— 解锁那边靠这个判断要不要再试 */
     get running() { return !!ctx && ctx.state === 'running'; },

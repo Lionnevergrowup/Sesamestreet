@@ -1384,8 +1384,21 @@
   const versionText = VERSION.sha === 'dev'
     ? 'dev'
     : `v${VERSION.build} · ${VERSION.sha} · ${VERSION.date}`;
-  document.getElementById('version').textContent = versionText;
+  const versionEl = document.getElementById('version');
   document.documentElement.dataset.version = versionText;
+  /*
+    版本号后面跟一个声音状态。"没声音"这种事我在电脑上复现不出来，
+    但家长拍张屏幕给我，这一行就能说清是静音了、没解锁，还是被系统挂起了。
+  */
+  const AUDIO_LABEL = { running: '\u266a on', idle: '\u266a tap to start', suspended: '\u266a blocked',
+                        interrupted: '\u266a interrupted', muted: '\u266a muted', none: '\u266a n/a', closed: '\u266a closed' };
+  let shownText = '';
+  const showVersion = () => {
+    const txt = versionText + ' \u00b7 ' + (AUDIO_LABEL[Sound.status()] || ('\u266a ' + Sound.status()));
+    if (txt !== shownText) { shownText = txt; versionEl.textContent = txt; }
+  };
+  showVersion();
+  setInterval(showVersion, 1000);
 
   /* ---------------- 启动 ---------------- */
   fit();

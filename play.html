@@ -1006,9 +1006,53 @@ const Sound = (() => {
       iOS \u4e0a\u5207\u8d70\u5e94\u7528\u3001\u6765\u7535\u3001\u9501\u5c4f\u4e4b\u540e\u72b6\u6001\u4f1a\u53d8\u6210 'interrupted'\uff0c
       \u4ee5\u524d\u53ea\u8ba4 suspended\uff0c\u7ed3\u679c\u90a3\u4e4b\u540e\u6574\u5c40\u6e38\u620f\u5c31\u6c38\u8fdc\u54d1\u4e86\u3002
     */
-    if (ctx.state !== 'running') ctx.resume().catch(() => {});
+    if (ctx.state !== 'running') {
+      try { const r = ctx.resume(); if (r && r.catch) r.catch(() => {}); } catch (e) { /* \u5ffd\u7565 */ }
+    }
     return ctx;
   }
+
+  /*
+    iOS \u9759\u97f3\u62e8\u7247\u7684\u8001\u529e\u6cd5\u3002
+    \u62e8\u7247\u62e8\u5230\u9759\u97f3\u65f6\uff0c\u7f51\u9875\u91cc WebAudio \u7684\u58f0\u97f3\u4f1a\u88ab\u6574\u4e2a\u541e\u6389 \u2014\u2014 \u6e38\u620f\u91cc"\u6240\u6709\u64cd\u4f5c\u90fd\u6ca1\u58f0\u97f3"
+    \u6700\u5178\u578b\u7684\u5c31\u662f\u8fd9\u4e2a\u539f\u56e0\u3002audioSession\uff08\u4e0a\u9762\u90a3\u4e2a\uff09\u53ea\u6709 iOS 16.4+ \u624d\u8ba4\uff1b
+    \u66f4\u65e9\u7684\u7cfb\u7edf\u8981\u9760\u8fd9\u4e00\u62db\uff1a\u540c\u65f6\u5faa\u73af\u64ad\u653e\u4e00\u6bb5\u65e0\u58f0\u7684 <audio>\uff0c
+    \u7cfb\u7edf\u5c31\u628a\u8fd9\u4e2a\u9875\u9762\u5f53\u6210"\u5728\u64ad\u653e\u5a92\u4f53"\uff0c\u4e0d\u518d\u53d7\u62e8\u7247\u7ba1\u3002
+    \u5185\u5bb9\u662f\u7eaf\u9759\u97f3\uff080x80 = 8 \u4f4d\u65e0\u7b26\u53f7 PCM \u7684\u96f6\u70b9\uff09\uff0c\u6240\u4ee5\u4e0d\u4f1a\u771f\u7684\u51fa\u58f0\uff1b
+    \u53ea\u5728\u58f0\u97f3\u5f00\u7740\u3001\u9875\u9762\u770b\u5f97\u89c1\u7684\u65f6\u5019\u653e\uff0c\u522b\u767d\u5360\u7740\u97f3\u9891\u4f1a\u8bdd\u3002
+  */
+  let keepAlive = null;
+  function silentWavURI() {
+    const n = 800, bytes = new Uint8Array(44 + n);
+    const dv = new DataView(bytes.buffer);
+    const str = (o, t) => { for (let i = 0; i < t.length; i++) bytes[o + i] = t.charCodeAt(i); };
+    str(0, 'RIFF'); dv.setUint32(4, 36 + n, true); str(8, 'WAVE'); str(12, 'fmt ');
+    dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);   // PCM \u5355\u58f0\u9053
+    dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true);                          // 8kHz
+    dv.setUint16(32, 1, true); dv.setUint16(34, 8, true);                                // 8 \u4f4d
+    str(36, 'data'); dv.setUint32(40, n, true);
+    bytes.fill(0x80, 44);
+    let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return 'data:audio/wav;base64,' + btoa(bin);
+  }
+  function keepAliveOn() {
+    if (!enabled) return;
+    try {
+      if (!keepAlive) {
+        keepAlive = document.createElement('audio');
+        keepAlive.setAttribute('playsinline', '');
+        keepAlive.setAttribute('aria-hidden', 'true');
+        keepAlive.loop = true;
+        keepAlive.src = silentWavURI();
+      }
+      if (keepAlive.paused) {
+        const r = keepAlive.play();
+        if (r && r.catch) r.catch(() => {});      // \u6ca1\u6709\u7528\u6237\u624b\u52bf\u65f6\u4f1a\u88ab\u62d2\uff0c\u4e0b\u6b21\u70b9\u51fb\u518d\u8bd5
+      }
+    } catch (e) { /* \u6ca1\u6709\u5c31\u7b97\u4e86\uff0c\u53ea\u662f\u5c11\u4e00\u5c42\u4fdd\u9669 */ }
+  }
+  function keepAliveOff() { try { if (keepAlive && !keepAlive.paused) keepAlive.pause(); } catch (e) { /* \u5ffd\u7565 */ } }
+  document.addEventListener('visibilitychange', () => { document.hidden ? keepAliveOff() : keepAliveOn(); });
 
   /* \u4e00\u4e2a\u97f3\u7b26\u3002when \u7ed9\u7edd\u5bf9\u65f6\u95f4\uff08\u97f3\u4e50\u7528\uff09\uff0c\u4e0d\u7ed9\u5c31\u662f"\u9a6c\u4e0a"\uff08\u97f3\u6548\u7528\uff09\u3002 */
   function note(freq, {
@@ -1025,7 +1069,8 @@ const Sound = (() => {
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(gain, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(g).connect(bus || sfxBus);
+    osc.connect(g);
+    g.connect(bus || sfxBus);
     osc.start(t);
     osc.stop(t + dur + 0.02);
   }
@@ -1047,7 +1092,9 @@ const Sound = (() => {
     const g = ctx.createGain();
     g.gain.setValueAtTime(gain, t);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(filter).connect(g).connect(bus || sfxBus);
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(bus || sfxBus);
     src.start(t);
     src.stop(t + dur);
   }
@@ -1117,13 +1164,20 @@ const Sound = (() => {
     toggle() {
       enabled = !enabled;
       Store.set('gulu.sound', enabled ? 'on' : 'off');
-      if (enabled) { ensure(); this.tap(); if (musicWanted) startMusic(); }
-      else stopMusic();
+      if (enabled) { ensure(); keepAliveOn(); this.tap(); if (musicWanted) startMusic(); }
+      else { stopMusic(); keepAliveOff(); }
       return enabled;
     },
 
     /* \u6d4f\u89c8\u5668\u8981\u6c42\u9996\u6b21\u4ea4\u4e92\u540e\u624d\u80fd\u51fa\u58f0 */
-    unlock() { ensure(); startMusic(); },
+    unlock() { ensure(); startMusic(); keepAliveOn(); },
+
+    /* \u7ed9\u9875\u9762\u53f3\u4e0b\u89d2\u7684\u72b6\u6001\u5b57\u7528\uff1amuted / none / idle / running / suspended / interrupted */
+    status() {
+      if (!enabled) return 'muted';
+      if (!(window.AudioContext || window.webkitAudioContext)) return 'none';
+      return ctx ? ctx.state : 'idle';
+    },
 
     /* \u58f0\u97f3\u662f\u4e0d\u662f\u771f\u7684\u8dd1\u8d77\u6765\u4e86 \u2014\u2014 \u89e3\u9501\u90a3\u8fb9\u9760\u8fd9\u4e2a\u5224\u65ad\u8981\u4e0d\u8981\u518d\u8bd5 */
     get running() { return !!ctx && ctx.state === 'running'; },
@@ -4039,8 +4093,21 @@ const I18N = (() => {
   const versionText = VERSION.sha === 'dev'
     ? 'dev'
     : `v${VERSION.build} \u00b7 ${VERSION.sha} \u00b7 ${VERSION.date}`;
-  document.getElementById('version').textContent = versionText;
+  const versionEl = document.getElementById('version');
   document.documentElement.dataset.version = versionText;
+  /*
+    \u7248\u672c\u53f7\u540e\u9762\u8ddf\u4e00\u4e2a\u58f0\u97f3\u72b6\u6001\u3002"\u6ca1\u58f0\u97f3"\u8fd9\u79cd\u4e8b\u6211\u5728\u7535\u8111\u4e0a\u590d\u73b0\u4e0d\u51fa\u6765\uff0c
+    \u4f46\u5bb6\u957f\u62cd\u5f20\u5c4f\u5e55\u7ed9\u6211\uff0c\u8fd9\u4e00\u884c\u5c31\u80fd\u8bf4\u6e05\u662f\u9759\u97f3\u4e86\u3001\u6ca1\u89e3\u9501\uff0c\u8fd8\u662f\u88ab\u7cfb\u7edf\u6302\u8d77\u4e86\u3002
+  */
+  const AUDIO_LABEL = { running: '\u266a on', idle: '\u266a tap to start', suspended: '\u266a blocked',
+                        interrupted: '\u266a interrupted', muted: '\u266a muted', none: '\u266a n/a', closed: '\u266a closed' };
+  let shownText = '';
+  const showVersion = () => {
+    const txt = versionText + ' \u00b7 ' + (AUDIO_LABEL[Sound.status()] || ('\u266a ' + Sound.status()));
+    if (txt !== shownText) { shownText = txt; versionEl.textContent = txt; }
+  };
+  showVersion();
+  setInterval(showVersion, 1000);
 
   /* ---------------- \u542f\u52a8 ---------------- */
   fit();
